@@ -1,20 +1,21 @@
 import sys
 # from al import build_lexer, parser
 from ply import lex
+from prettytable import PrettyTable
 
 
 def build_lexer(input):
 
-    #============ OPERADORES ============#
+    #============ OP ============#
 
-    # Aritméticos
+    # Arithmetics
     t_PLUS = r'\+'
     t_MINUS = r'-'
     t_TIMES = r'\*'
     t_DIVIDE = r'/'
     t_MOD = r'%'
 
-    # Relacionais
+    # Relationals
     t_EQUAL = r'=='
     t_DIFFERENT = r'!='
     t_LT = r'<'
@@ -23,7 +24,7 @@ def build_lexer(input):
     t_GE = r'>='
     t_ASSIGN = r'='
 
-    # Outros
+    # Other
     t_COMMA = r','
     t_SEMICOLON = r';'
     t_RPARENTHESES = r'\)'
@@ -34,53 +35,70 @@ def build_lexer(input):
     t_LEFTBRACE = r'{'
     t_DOT = r'\.'
 
-    # t_LINEBREAK = r'\n'
-
+    # Linebreak
+    # - Doesn't return token
+    # - Count as a new line for the lexer
     def t_LINEBREAK(t):
         r'\n+'
         t.lexer.lineno += len(t.value)
-        return t
+        pass
 
-    # float tem que ir antes
+    # Float
+    # - Has to come before Int
     def t_FLOATCONSTANT(t):
         r'\d+\.\d+'
-        t.value = float(t.value)
+        # t.value = float(t.value)
         return t
 
+    # Int
+    # - Get's all Integer numbers (decimal, octal, hexadecimal and binary)
     def t_INTCONSTANT(t):
         r'[0-9A-F]+[hH]|[0-7]+[oO]|[01]+[bB]|[0-9]+'
         # t.value = int(t.value)
         return t
 
+    # String
+    # - Any characters inside double quotes ("")
     def t_STRINGCONSTANT(t):
         r'"[^\n"\r]*"'
         return t
 
-    # ident has to come after the string constant, or else the
-    # rule "<ident>" would be true
+    # Identification
+    # - Has to come after the string constant, or else the rule "<ident>" would be true
+    # - Before returning, checks if the string perceived as Id is not a reserved word.
+    # --> If it is, returns the token type as the reserved word instead of 'IDENT'
     def t_IDENT(t):
         r'[A-Za-z][A-Za-z0-9]*'
         t.type = reserved.get(t.value, 'IDENT')    # Check for reserved words
         return t
 
+    # Comment
+    # Get's anything between /* ... */, for multiline comments,
+    # or after // for single line comments
+    # - Doesn't return anything, the "token" is discarded
     def t_COMMENT(t):
         r'(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/)|(\/\/.*)'
         pass
-        # No return value. Token discarded
 
+    # Ignores spaces
     t_ignore = ' \t'
 
-    # ERRO
+    # Error
+    # - Called when a token is not recognized by any of the rules
+    # - Calls find_column to get the column in the line of the error
+    # - Prints the character, line and column of the lexical error
     def t_error(t):
         column = find_column(input, t)
         print()
-        print("| Erro léxico em:    '%s'" % t.value[0])
-        print("|   -> Linha:        '%s'" % t.lexer.lineno)
-        print("|       -> Coluna:   '%s'" % column)
+        print('\x1b[7;31;47m' +
+              "|        ERRO LÉXICO ENCONTRADO        |" + '\x1b[0m')
+        print("|      -> Caracter:  '%s'" % t.value[0])
+        print("|      -> Linha:      %s" % t.lexer.lineno)
+        print("|      -> Coluna:     %s" % column)
         print()
         t.lexer.skip(1)
 
-    # palavras reservadas
+    # Reserved words
     reserved = {
         'int': 'INT',
         'float': 'FLOAT',
@@ -103,12 +121,12 @@ def build_lexer(input):
                                         'LEFTBRACE', 'DOT', 'FLOATCONSTANT', 'INTCONSTANT',
                                         'STRINGCONSTANT', 'LINEBREAK', 'IDENT']
 
-    # ------------------------------------------------------------------------------
-    # Build the lexer
+    # =================================================================================
+    # Builds the lexer
     lexer = lex.lex()
 
     return lexer
-    # ------------------------------------------------------------------------------
+    # =================================================================================
 
 # https://www.dabeaz.com/ply/ply.html#ply_nn9
 # Compute column.
@@ -122,23 +140,50 @@ def find_column(input, token):
 
 
 def parser(data, lexer):
-    # lexer = build_lexer()
+    # simple list of tokens, consisting of an array
+    # of token values
+    token_list = []
+
+    # symbol table on the form of
+    # {type, value}
+    symbol_table = []
+
     lexer.input(data)
     while True:
         tok = lexer.token()
         if not tok:
             break  # when tok receives NONE, which means end of file
-        print(tok)
+        token_list.append(tok.value)
+        symbol_table.append({'token': tok.type, 'value': tok.value})
 
+    return token_list, symbol_table
+
+
+def print_symbol_table(symbol_table):
+    print("========= Symbol Table =========")
+    t = PrettyTable(['TOKEN', 'VALUE'])
+    for entrie in symbol_table:
+        t.add_row([entrie['token'], entrie['value']])
+    print(t)
+    print()
+    print()
+
+def print_token_list(token_list):
+    print("========= Token List =========")
+    for tok in token_list:
+        print(tok)
+    print()
+    print()
 
 def main(data):
     lexer = build_lexer(data)
-    parser(data, lexer)
-
+    token_list, symbol_table = parser(data, lexer)
+    print_symbol_table(symbol_table)
+    print_token_list(token_list)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Por favor, passe o PATH do arquivo como argumento")
+        print("No PATH received as argument.")
     else:
         input_file = open(sys.argv[1])
         data = input_file.read()
