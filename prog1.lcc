@@ -1,1 +1,10 @@
-a = 3.4
+def functionName(int a) {
+  new b;
+  b = a + 2;
+  print(b);
+  Ident1 = "asfn";
+}
+6546;
+5A3B2C2FFH;
+23136547o;
+010010110b;
