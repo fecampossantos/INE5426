@@ -60,8 +60,13 @@ def build_lexer(input):
     # rule "<ident>" would be true
     def t_IDENT(t):
         r'[A-Za-z][A-Za-z0-9]*'
-        t.type = reserved.get(t.value,'IDENT')    # Check for reserved words
+        t.type = reserved.get(t.value, 'IDENT')    # Check for reserved words
         return t
+
+    def t_COMMENT(t):
+        r'(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/)|(\/\/.*)'
+        pass
+        # No return value. Token discarded
 
     t_ignore = ' \t'
 
@@ -92,11 +97,11 @@ def build_lexer(input):
 
     # Tokens
     tokens = list(reserved.values()) + ['PLUS', 'MINUS',
-              'TIMES', 'DIVIDE', 'MOD', 'EQUAL', 'DIFFERENT', 'LT', 'LE', 'GT',
-              'GE', 'ASSIGN', 'COMMA', 'SEMICOLON', 'RPARENTHESES',
-              'LPARENTHESES', 'LBRACKET', 'RBRACKET', 'RBRACE',
-              'LEFTBRACE', 'DOT', 'FLOATCONSTANT', 'INTCONSTANT',
-              'STRINGCONSTANT', 'LINEBREAK', 'IDENT']
+                                        'TIMES', 'DIVIDE', 'MOD', 'EQUAL', 'DIFFERENT', 'LT', 'LE', 'GT',
+                                        'GE', 'ASSIGN', 'COMMA', 'SEMICOLON', 'RPARENTHESES',
+                                        'LPARENTHESES', 'LBRACKET', 'RBRACKET', 'RBRACE',
+                                        'LEFTBRACE', 'DOT', 'FLOATCONSTANT', 'INTCONSTANT',
+                                        'STRINGCONSTANT', 'LINEBREAK', 'IDENT']
 
     # ------------------------------------------------------------------------------
     # Build the lexer
