@@ -1,3 +1,13 @@
+###############################################################
+#             Construção de Compiladores - INE5426            #  
+#               Construção de Analisador Léxico               #
+#                           2021.2                            #
+#                   Eduardo Gutterres [17200439]              #
+#                 Felipe de Campos Santos [17200441]          #
+#                   Ricardo Giuliani [17203922]               #
+###############################################################
+
+
 import sys
 # from al import build_lexer, parser
 from ply import lex
@@ -220,7 +230,7 @@ def print_symbols_table(symbols_table):
 def main(data):
     lexer = build_lexer(data)
     token_list, tokens_table, symbols_table = parser(data, lexer)
-    # print_tokens_table(tokens_table)
+    print_tokens_table(tokens_table)
     # print_token_list(token_list)
     print_symbols_table(symbols_table)
 
