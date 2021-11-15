@@ -1,0 +1,2 @@
+prettytable==2.4.0
+ply==3.11
