@@ -4,7 +4,7 @@ PYTHON = $(VENV)/bin/python3
 PIP = $(VENV)/bin/pip
 
 # Exemplo
-filepath=prog1.lcc 
+filepath=programas/prog1.lcc 
 
 run: 
 		python3 -m venv $(VENV)
