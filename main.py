@@ -112,6 +112,10 @@ def build_lexer(input):
         'if': 'IF',
         'else':'ELSE',
         'for': 'FOR',
+
+        #added later
+        'true':'TRUE',
+        'false':'FALSE'
     }
 
     # Tokens
@@ -216,7 +220,7 @@ def print_symbols_table(symbols_table):
 def main(data):
     lexer = build_lexer(data)
     token_list, tokens_table, symbols_table = parser(data, lexer)
-    print_tokens_table(tokens_table)
+    # print_tokens_table(tokens_table)
     # print_token_list(token_list)
     print_symbols_table(symbols_table)
 

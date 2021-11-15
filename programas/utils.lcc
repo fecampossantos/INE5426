@@ -1,0 +1,102 @@
+def calcAreaQuadrado(int lado){
+  int area;
+  area = lado * lado;
+  return area;
+}
+
+def calcPerimetroQuadrado(int lado){
+  int perimetro;
+  perimetro = lado * 4;
+  return perimetro;
+}
+
+def calcAreaRetangulo(int ladoA, int ladoB){
+  int area;
+  area = ladoA * ladoB;
+  return area;
+}
+
+def calcPerimetroRetangulo(int ladoA, int ladoB){
+  int perimetro;
+  perimetro = ladoA * 2 + ladoB * 2;
+  return perimetro;
+}
+
+def calcAreaTriangulo(int ladoA, int ladoB, int ladoC){
+  int area;
+
+  if(ladoA == ladoB){
+    if(ladoA == ladoC){
+      // equilatero
+      area = (ladoA*ladoA * 1,73) / 4
+    }
+    else {
+      // isosceles
+      int altura;
+      int base;
+      base = ladoC / 2;
+      altura = raiz(ladoA*ladoA - base*base);
+      area = (altura * ladoC) / 2;
+    }
+  }
+  else {
+    // escaleno
+    print("para calcular a area do triangulo escaleno, precisamos saber algum dos angulos")
+  }
+}
+
+def calcPerimetroTriangulo(int ladoA, int ladoB, int ladoC){
+  int perimetro;
+  perimetro = ladoA + ladoB + ladoC;
+  return perimetro;
+}
+
+def celsiusParaFarenheit(float temp){
+  float farenheit;
+  farenheit = ((temp*9)/5)+32;
+  return farenheit;
+}
+
+def farenheitParaCelsius(float temp){
+  int celsius;
+  celsius = 5 * ((farenheit - 32) / 9);
+  return celsius;
+}
+
+def bhaskara(float a, float b, float c){
+  float delta;
+  float raiz1;
+  float raiz2;
+
+  delta = (b*b) - (4*a*c);
+
+  if(delta == 0){
+    raiz1 = (-b + raiz(delta)) / (2*a);
+    raiz2 = raiz1;
+  }
+
+  if(delta < 0){
+    print("Não existem raízes reais")
+  }
+
+  if(delta > 0){
+    raiz1 = (-b + raiz(delta)) / (2*a);
+    raiz2 = (-b - raiz(delta)) / (2*a);
+  }
+
+  return raiz1, raiz2;
+}
+
+def raiz(int a){
+  // função que calcula raiz
+}
+
+def verificaPrimo(int n){
+  for (int i = 2; i <= n/2; i = i + 1){
+    if(n%i == 0){
+      return true;
+    }
+  }
+
+  return false;
+}
