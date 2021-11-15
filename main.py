@@ -110,6 +110,7 @@ def build_lexer(input):
         'return': 'RETURN',
         'read': 'READ',
         'if': 'IF',
+        'else':'ELSE',
         'for': 'FOR',
     }
 
@@ -140,33 +141,60 @@ def find_column(input, token):
 
 
 def parser(data, lexer):
+    TYPES_CHECK = ['int', 'float', 'string', 'def']
     # simple list of tokens, consisting of an array
     # of token values
     token_list = []
 
-    # symbol table on the form of
-    # {type, value}
-    symbol_table = []
+    # tokens table on the form of
+    # {type, value, line, column}
+    tokens_table = []
+
+    # symbols table on the form
+    # {name, type, declared_line, referenced_lines}
+    symbols_table = {}
 
     lexer.input(data)
+    tok = ''
+
     while True:
+        last_tok = tok
         tok = lexer.token()
         if not tok:
             break  # when tok receives NONE, which means end of file
         token_list.append(tok.value)
-        symbol_table.append({'token': tok.type, 'value': tok.value})
+        tokens_table.append({'token': tok.type, 'value': tok.value,
+                            'line': tok.lineno, 'column': find_column(data, tok)})
+        if tok.type == 'IDENT':
+            # being declared
+            if last_tok.value in TYPES_CHECK:
+                # already been referenced before
+                if tok.value in symbols_table:
+                    symbols_table[tok.value]['type'] = last_tok.value
+                    symbols_table[tok.value]['declared_line'] = tok.lineno
+                else: # hasnt been referenced yet
+                    symbols_table[tok.value] = {'name': tok.value, 'type': last_tok.value, 'declared_line': tok.lineno, 'referenced_lines': []}
+            else:
+                # it is only being referenced
+                # already been declared before
+                if tok.value in symbols_table:
+                    symbols_table[tok.value]['referenced_lines'].append(tok.lineno) 
+                else: # hasnt been referenced yet
+                    symbols_table[tok.value] = {'name': tok.value, 'type': 'NO_TYPE', 'declared_line': 'NOT_DECLARED', 'referenced_lines': [tok.lineno]}
 
-    return token_list, symbol_table
+    return token_list, tokens_table, symbols_table
 
 
-def print_symbol_table(symbol_table):
-    print("========= Symbol Table =========")
-    t = PrettyTable(['TOKEN', 'VALUE'])
-    for entrie in symbol_table:
-        t.add_row([entrie['token'], entrie['value']])
+def print_tokens_table(tokens_table):
+    print("========= Tokens Table =========")
+    t = PrettyTable(['TOKEN', 'VALUE', 'LINE', 'COLUMN'])
+    for entrie in tokens_table:
+        t.add_row([entrie['token'], entrie['value'],
+                  entrie['line'], entrie['column']])
     print(t)
     print()
     print()
+
 
 def print_token_list(token_list):
     print("========= Token List =========")
@@ -175,11 +203,22 @@ def print_token_list(token_list):
     print()
     print()
 
+def print_symbols_table(symbols_table):
+    print("========= Symbols Table =========")
+    t = PrettyTable(['NAME', 'TYPE', 'DECLARED', 'REFERENCED'])
+    for key in symbols_table:
+        symbol = symbols_table[key]
+        t.add_row([symbol['name'],symbol['type'],symbol['declared_line'],symbol['referenced_lines']])
+    print(t)
+    print()
+    print()
+
 def main(data):
     lexer = build_lexer(data)
-    token_list, symbol_table = parser(data, lexer)
-    print_symbol_table(symbol_table)
-    print_token_list(token_list)
+    token_list, tokens_table, symbols_table = parser(data, lexer)
+    print_tokens_table(tokens_table)
+    # print_token_list(token_list)
+    print_symbols_table(symbols_table)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
