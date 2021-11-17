@@ -41,7 +41,7 @@ def build_lexer(input):
     t_LPARENTHESES = r'\('
     t_LBRACKET = r'\['
     t_RBRACKET = r'\]'
-    t_RBRACE = '}'
+    t_RBRACE = r'}'
     t_LEFTBRACE = r'{'
     t_DOT = r'\.'
 
