@@ -1,16 +1,16 @@
 def functionName(int a) {
-  new b, z;
+  int b;
+  int z;
   b = a + 2;
-  print(b);
-  Ident1 = "asfn";
-}
-6546;
-5A3B2C2FFH;
-23136547o;
-010010110b;
+  z = b + 1;
 
-//comment 1
+  string message;
+  message = "mensagem";
+  print(message)
+  print(z);
+} |
 
-/*comment 2*/
+// esse comentario será ignorado
 
-|
+/* esse
+tambem */
