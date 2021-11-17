@@ -13,4 +13,7 @@ Caso não seja passado o caminho do arquivo para o `filepath`, por padrão será
 
 Exemplo de uso: `make run filepath=programas/utils.lcc`
 
+## Relatório
+O Relatório do trabalho se encontra no mesmo diretório deste ReadMe, assim como os diagramas de transição.
+
 
