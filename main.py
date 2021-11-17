@@ -24,6 +24,7 @@ def build_lexer(input):
     t_TIMES = r'\*'
     t_DIVIDE = r'/'
     t_MOD = r'%'
+    t_ASSIGN = r'='
 
     # Relationals
     t_EQUAL = r'=='
@@ -32,7 +33,6 @@ def build_lexer(input):
     t_LE = r'<='
     t_GT = r'>'
     t_GE = r'>='
-    t_ASSIGN = r'='
 
     # Other
     t_COMMA = r','
@@ -147,8 +147,6 @@ def build_lexer(input):
 # Compute column.
 #     input is the input text string
 #     token is a token instance
-
-
 def find_column(input, token):
     line_start = input.rfind('\n', 0, token.lexpos) + 1
     return (token.lexpos - line_start) + 1
