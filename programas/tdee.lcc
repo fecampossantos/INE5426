@@ -1,0 +1,105 @@
+def bmr(string gender, float weight, float height, int age, int activity){
+    float temp;
+
+    if(gender == "male") {
+        temp = 66 + (13.7 * weight) + (5 * height) - (6.8 * age);
+    }
+    else {
+        temp = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
+    }
+
+    // Sedentary
+    if (activity == 1) {
+        temp = temp *1.2;
+    }
+
+    // Lightly active
+    if (activity == 2) {
+        temp = temp * 1.375;
+    }
+
+    // Moderately active
+    if (activity == 3) {
+        temp = temp * 1.55;
+    }
+
+    // Very active
+    if (activity == 4) {
+        temp = temp * 1.725;
+    }
+
+    // Extra active
+    if (activity == 5) {
+        temp = temp * 1.9;
+    }
+
+    return temp;
+}
+
+def bmi(float weight, float height) {
+    float bmi;
+    bmi = weight / height * height;
+
+    if (bmi <= 18.5) {
+        print("Underweight");
+    }
+    else if (bmi <= 24.99) {
+        print("Normal weight");
+    }
+    else if (bmi <= 29.99) {
+        print("Overweihgt");
+    }
+    else {
+        print("Obese");
+    }
+}
+
+def calories(int protein, int fats, int carbs) {
+    int result;
+
+    // protein
+    result = result + protein * 4;
+
+    // fats
+    result = result + fats * 9;
+
+    // carbs
+    result = result + carbs * 4;
+
+    return result;
+}
+
+def kgToLbs(float mass) {
+    float result;
+
+    result = mass * 2.205;
+    return result;
+}
+
+def ounceToGram(float mass) {
+    float result;
+
+    result = mass * 28.35;
+    return result;
+}
+
+def meterToFeet(float length) {
+    float result;
+
+    result = length * 3.281;
+    return result;
+}
+
+def meterToInch(float length) {
+    float result;
+
+    result = length * 39.3701;
+    return result;
+}
+
+def kcalToKj(float energy) {
+    float result;
+
+    result = energy * 4.184;
+    return result;
+}
