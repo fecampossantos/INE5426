@@ -118,7 +118,8 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         # print("No PATH received as argument.")
         # path_ = 'D:/Documents/Git/UFSC/Compiladores/AL1/src/examples/exemplo2.lcc'
-        path = os.path.join(os.path.dirname(__file__),'examples','exemplo2.lcc')
+        # path = os.path.join(os.path.dirname(__file__),'examples','exemplo2.lcc')
+        path = os.path.join('examples','exemplo2.lcc')
         input_file = open(path)
         data = input_file.read()
         input_file.close()

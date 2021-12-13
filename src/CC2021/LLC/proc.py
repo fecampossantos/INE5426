@@ -21,8 +21,8 @@ class Proc:
 
     def create_llc(self, llc1):
         self.llc = llc1
-        self.firsts = get_firsts(self)
-        self.follows = get_follows(self)
+        self.firsts = self.get_firsts()
+        self.follows = self.get_follows()
 
     def read_llc(self, path):
         p = Parser()

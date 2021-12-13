@@ -56,7 +56,7 @@ STACK_TOKEN.type = 'STACK_TOK'
 
 class Parser:
   def __init__(self):
-    path = os.path.join(os.path.dirname(__file__), '..','examples','exemplo1.lcc')
+    path = os.path.join(os.path.dirname(__file__), '..','..','examples','exemplo1.lcc')
     proc = Proc()
 
     proc.read_llc(path)
