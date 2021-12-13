@@ -119,7 +119,7 @@ class Lexer:
                                         'GE', 'ASSIGN', 'COMMA', 'SEMICOLON', 'RPARENTHESES',
                                         'LPARENTHESES', 'LBRACKET', 'RBRACKET', 'RIGHTBRACE',
                                         'LEFTBRACE', 'DOT', 'FLOATCONSTANT', 'INTCONSTANT',
-                                        'STRINGCONSTANT', 'LINEBREAK', 'IDENT', 'NULL']
+                                        'STRINGCONSTANT', 'LINEBREAK', 'IDENT']
     # https://www.dabeaz.com/ply/ply.html#ply_nn9
     # Compute column.
     #     input is the input text string
