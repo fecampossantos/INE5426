@@ -75,25 +75,29 @@ def main(data):
     lexer.input(data)
 
     token_list, tokens_values, tokens_table, symbols_table = get_info(data, lexer)
-    # print_tokens_table(tokens_table)
-    # print_token_list(token_values)
-    # print_symbols_table(symbols_table)
-
-    check, wrong_token = parser.parse(tokens=token_list)
-
-    if not check:
-      print('Syntatic error on line %s' % wrong_token.lineno )
-      print('Token: %s' % wrong_token)
-      sys.exit(1)
+    print_tokens_table(tokens_table)
+    print_token_list(tokens_values)
+    print_symbols_table(symbols_table)
     
-    print('Syntatic Analysis succesfull! \n')
-    print('Running semantic analysis')
 
-    rslt_semantic = parse(data)
-    symbols_table = rslt_semantic['scopes']
-    num_expressions = rslt_semantic['num_expressions']
+    
+    # check, wrong_token = parser.parse(tokens=token_list)
 
-    print('Semantic analys successfull')
+    # if not check:
+    #   print('Syntatic error on line %s' % wrong_token.lineno )
+    #   print('Token: %s' % wrong_token)
+    #   sys.exit(1)
+    
+    # print('Syntatic Analysis succesfull! \n')
+    # print('Running semantic analysis')
+
+    # rslt_semantic = parse(data)
+    # symbols_table = rslt_semantic['scopes']
+    # num_expressions = rslt_semantic['num_expressions']
+
+    # print('Semantic analys successfull')
+
+
     # symbol_table_file = 'symbol_tables.json'
 
     # with open(symbol_table_file, 'w') as f:
@@ -105,13 +109,13 @@ def main(data):
     # with open(expressions_file, 'w') as f:
     #     json.dump(num_expressions, f, indent=2, sort_keys=False)
 
-    print('Running intermediary code generation...')
-    code = generate_code_from_source(data)
-    intermediary_code_file = 'intermediary_code.gic'
-    print('Exportind intermediary code to %s' % intermediary_code_file)
+    # print('Running intermediary code generation...')
+    # code = generate_code_from_source(data)
+    # intermediary_code_file = 'intermediary_code.gic'
+    # print('Exportind intermediary code to %s' % intermediary_code_file)
 
-    with open(intermediary_code_file, 'w') as f:
-        f.write(code)
+    # with open(intermediary_code_file, 'w') as f:
+    #     f.write(code)
 
 
 if __name__ == '__main__':

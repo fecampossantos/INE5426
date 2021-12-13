@@ -2,11 +2,11 @@
 from typing import List, Optional, Dict, Tuple
 from dataclasses import dataclass
 
-from ply import yacc
+from CC2021.ply import yacc
 
 from CC2021.strucs import Scope, ScopeStack, TableEntry, Node
 
-from CC2021.lexer import Lexer
+from CC2021.lexer.lexer import Lexer
 
 # Necessary for yacc instatiation
 lexer = Lexer()
@@ -31,7 +31,7 @@ def get_var_type(ident, lineno):
         if scope is None:
             break
 
-    raise VariableNotDeclared(f'{ident},{lineno}')
+    print('This variable wasnt declared!')
 
 
 def num_expressions_as_json() -> List[Dict]:
@@ -85,8 +85,8 @@ def check_type(left: Node, right: Node, operation: str, lineno: int) -> str:
         (left.result_type, operation, right.result_type), None)
 
     if result is None:
-        raise InvalidTypeOperationError(
-            f'{left.result_type},{right.result_type},{lineno}')
+        print('This operation is not supported')
+        print('%s and %s on line %s' % (left.result_type, right.result_type, lineno))
 
     return result
 
@@ -227,7 +227,7 @@ def p_statement_break(p: yacc.YaccProduction):
         current_scope = current_scope.upper_scope
 
         if current_scope is None:
-            raise BreakWithoutLoopError(p.lineno(2))
+            pass
 
 
 def p_statement_end(p: yacc.YaccProduction):

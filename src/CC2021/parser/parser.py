@@ -62,7 +62,7 @@ class Parser:
     proc.read_llc(path)
 
     self.llc = proc.llc
-    self.start_symbol = proc.llc.start_symbol
+    self.start_symbol = proc.llc.start_s
     self.empty_symbol = _EMPTY_SYMBOL
     self.table = proc.create_table()
 
