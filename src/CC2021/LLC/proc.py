@@ -168,7 +168,7 @@ class Proc:
         # if(p2 -*> &) then (first(p1) <intersection> follow(A) = empty)
 
         check = True
-        follow_head = self.follow[p1.head]
+        follow_head = self.follows[p1.head]
 
         p1_first = self.calculate_first_prod(p1.body)
         p2_first = self.calculate_first_prod(p2.body)
