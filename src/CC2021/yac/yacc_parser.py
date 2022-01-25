@@ -59,7 +59,7 @@ def p_empty(p: yacc.YaccProduction):
 
 def p_add_loop_label(p: yacc.YaccProduction):
     """add_loop_label :"""
-    loop_control.set_for_loop_next_label(new_label())
+    loop_control.set_next_label(new_label())
 
 
 def p_prog_statment(p: yacc.YaccProduction):
@@ -179,7 +179,7 @@ def p_statement_statelist(p: yacc.YaccProduction):
 
 def p_statement_break(p: yacc.YaccProduction):
     """STATEMENT : BREAK SEMICOLON"""
-    p[0] = {'code': f'goto {loop_control.get_for_loop_next_label()}\n'}
+    p[0] = {'code': f'goto {loop_control.get_next_label()}\n'}
 
 
 def p_statement_end(p: yacc.YaccProduction):
@@ -439,7 +439,7 @@ def p_opt_else(p: yacc.YaccProduction):
 def p_forstat(p: yacc.YaccProduction):
     """FORSTAT : add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE"""
     start_label = new_label()
-    next_label = loop_control.get_for_loop_next_label()
+    next_label = loop_control.get_next_label()
     cond_code_body = p[6]['code']
     cond_temp_var = p[6]['temp_var']
 
