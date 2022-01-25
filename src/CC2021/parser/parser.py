@@ -92,6 +92,7 @@ class Parser:
         # if not, applies production
         prod = self.table.get_prod(stack[-1], mapped_token)
         print('applied production')
+        print(prod)
         # if returns None, then it is a syntatic error
         if prod is None:
           print('prod is none')

@@ -176,11 +176,11 @@ class Proc:
         for prod in self.llc.prods:
             first_body = self.calculate_first_prod(prod.body)
 
-            for t in first_body - {_EMPTY_SYMBOL}:
-                table.add_prod(prod, t)
+            for t in first_body - {self.empty_symbol}:
+                table.add_prod(prod, t, prod.head)
 
-            if _EMPTY_SYMBOL in first_body:
+            if self.empty_symbol in first_body:
                 for t in self.follows[prod.head]:
-                    table.add_prod(prod, t)
+                    table.add_prod(prod, t, prod.head)
 
         return table
