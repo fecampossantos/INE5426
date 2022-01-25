@@ -5,8 +5,6 @@ from typing import List, Tuple, Optional
 from CC2021.ply.lex import LexToken
 from CC2021.LLC.proc import Proc
 
-
-_START_SYMBOL = 'A'
 _EMPTY_SYMBOL = '&'
 _END_SYMBOL = '$'
 
@@ -63,8 +61,8 @@ class Parser:
 
     self.llc = proc.llc
     self.start_symbol = proc.llc.start_s
-    self.empty_symbol = _EMPTY_SYMBOL
     self.table = proc.create_table()
+    self.empty_symbol = _EMPTY_SYMBOL
 
   def parse(self, tokens):
     stack = deque()
