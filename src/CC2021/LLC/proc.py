@@ -172,7 +172,7 @@ class Proc:
             print("Can't generate the syntatic analyser table for a non-LL(1) grammar")
             return False
 
-        table = TableSyntaticAnalyser(self.llc)
+        table = TableSyntaticAnalyser(self.llc.terminals, self.llc.non_terminals)
 
         for prod in self.llc.prods:
             print(prod)
