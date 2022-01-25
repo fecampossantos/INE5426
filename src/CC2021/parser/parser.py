@@ -56,7 +56,7 @@ STACK_TOKEN.type = 'STACK_TOK'
 
 class Parser:
   def __init__(self):
-    path = os.path.join(os.path.dirname(__file__), '..','..','examples','exemplo1.lcc')
+    path = os.path.join(os.path.dirname(__file__), '..','..','utils','grammar','cc2021.grammar')
     proc = Proc()
 
     proc.read_llc(path)
@@ -73,16 +73,16 @@ class Parser:
     stack.append(_START_SYMBOL)   # and then the starting symbol
 
     for tk in tokens  + [STACK_TOKEN]:
-      tk_map = _MAP[tk.type]
+      mapped_token = _MAP[tk.type]
 
       while True:
         # if the mapped token is the same as the last entrie (top) on the stack, pop
-        if tk_map == stack[-1]:
+        if mapped_token == stack[-1]:
           stack.pop()
           break
 
-        # if not, needs to apply production
-        prod = self.table.get_prod(stack[-1], tk_map)
+        # if not, applies production
+        prod = self.table.get_prod(stack[-1], mapped_token)
         # if returns None, then it is a syntatic error
         if prod is None:
           return(False, tk)

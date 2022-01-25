@@ -102,7 +102,7 @@ class Proc:
         return first
 
     # checking if LLC is LL(1)
-    def t_first_part(self, p1, p2):
+    def theorem_first_part(self, p1, p2):
         # checks if
         # first(p1) <intersection> first(p2) == empty
 
@@ -118,7 +118,7 @@ class Proc:
 
         return checks
 
-    def t_second_part(self, p1, p2):
+    def theorem_second_part(self, p1, p2):
         # checks if
         # for A -> p1 | p2
         # if(p1 -*> &) then (first(p2) <intersection> follow(A) = empty)
