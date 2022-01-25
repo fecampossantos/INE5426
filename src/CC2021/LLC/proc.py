@@ -208,7 +208,6 @@ class Proc:
         return True
 
     def create_table(self):
-        print('creating table')
         if not self.is_ll1():
             print("Can't generate the syntatic analyser table for a non-LL(1) grammar")
             return False

@@ -92,46 +92,7 @@ def main(data):
     print('Syntatic Analysis succesfull! \n')
 
 
-
-    # # # print('Running semantic analysis')
-
-    # # # rslt_semantic = parse(data)
-    # # # symbols_table = rslt_semantic['scopes']
-    # # # num_expressions = rslt_semantic['num_expressions']
-
-    # # # print('Semantic analys successfull')
-
-    # # # symbol_table_file = 'symbol_tables.json'
-
-    # # # with open(symbol_table_file, 'w') as f:
-    # # #     json.dump(symbol_tables, f, indent=2, sort_keys=False)
-
-    # # # expressions_file = 'expressions.json'
-    # # # print('Exporting symbol tables to %s' % expressions_file)
-
-    # # # with open(expressions_file, 'w') as f:
-    # # #     json.dump(num_expressions, f, indent=2, sort_keys=False)
-
-    # # # print('Running intermediary code generation...')
-    # # # code = generate_code_from_source(data)
-    # # # intermediary_code_file = 'intermediary_code.gic'
-    # # # print('Exportind intermediary code to %s' % intermediary_code_file)
-
-    # # # with open(intermediary_code_file, 'w') as f:
-    # # #     f.write(code)
-
-
 if __name__ == '__main__':
-    # if len(sys.argv) < 2:
-    #     # print("No PATH received as argument.")
-    #     # path_ = 'D:/Documents/Git/UFSC/Compiladores/AL1/src/examples/exemplo2.lcc'
-    #     # path = os.path.join(os.path.dirname(__file__),'examples','exemplo2.lcc')
-    #     path = os.path.join('examples','exemplo2.lcc')
-    #     input_file = open(path)
-    #     data = input_file.read()
-    #     input_file.close()
-    #     main(data)
-    # else:
     input_file = open(sys.argv[1])
     data = input_file.read()
     input_file.close()
