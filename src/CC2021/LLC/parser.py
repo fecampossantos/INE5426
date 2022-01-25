@@ -32,8 +32,8 @@ class Parser:
     if len(line.split(':')) == 2:
       # if this line represents the first prod
       h, b = line.split(':')
-      head = h.split()
-      body_set = b.split()
+      head = h.strip()
+      body_set = b.strip()
 
       self.current_symbol = head
 
