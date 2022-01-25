@@ -20,13 +20,13 @@ class Parser:
         self.terminals = set()
 
     def parse(self, path):
-        with open(path) as f:
-            for line in f:
+        with open(path) as _file:
+            for line in _file:
                 line = line.strip()
                 if not line:
                     continue
                 self.parse_line(line)
-        print(self.prods)
+        
         return LLC(start_s=self.start_symbol,
                    terminals=self.terminals,
                    non_terminals=self.non_terminals,
@@ -44,25 +44,30 @@ class Parser:
             if self.start_symbol is None:
                 # start symbol not set yet
                 self.start_symbol = head
+            self.create_production(head, body_set)
+        
+        else:
+          self.create_production(self.current_symbol, line.split('|')[-1])
+    
+    def create_production(self, head, body_set):
+      body = []
+      self.non_terminals.add(head)
 
-            body = []
+      for i in body_set.split():
+        item = i.strip()
+        if item == '':
+          continue
 
-            self.non_terminals.add(head)
-            items = body_set.split()
-            for i in items:
-                i = i.strip()
-                if i == '':
-                    continue
-
-                if i == self.empty_symbol:
-                    body.append(i)
-                elif (i[0] == '"' and i[-1] == '"'):
-                    # if item begins and ends with double quotes, remove them
-                    s = i[1:-1]
-                    body.append(s)
-                    self.terminals.add(s)
-                else:
-                    self.non_terminals.add(i)
-                    body.append(i)
-
-            self.prods.append(Production(head, body))
+        if item == self.empty_symbol:
+          body.append(item)
+        
+        elif (item[0] == '"' and item[-1] == '"'):
+          # if item begins and ends with double quotes, remove them
+          symb = item[1:-1]
+          body.append(symb)
+          self.terminals.add(symb)
+        else:
+          self.non_terminals.add(item)
+          body.append(item)
+      
+      self.prods.append(Production(head, body))
