@@ -32,7 +32,7 @@ class Proc:
 
         follow = {i: set() for i in self.llc.non_terminals}
         follow[self.empty_symbol] = {self.stack_bottom}
-        follow[self.llc.start_symbol] = {self.stack_bottom}
+        follow[self.llc.start_s] = {self.stack_bottom}
 
         epsilon = {self.empty_symbol}
 
