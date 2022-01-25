@@ -58,7 +58,7 @@ class Proc:
                         updated |= unite(follow[symbol], aux)
 
                     if symbol in epsilon:
-                        aux = aux.unite(first[symbol])
+                        aux = aux.union(first[symbol])
                     else:
                         aux = first[symbol]
 
