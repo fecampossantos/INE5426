@@ -21,7 +21,6 @@ TEMP_DEALLOC = []
 LABEL_N = 0
 
 
-
 def get_temp_var():
     if len(TEMP_DEALLOC) > 1:
         var = TEMP_DEALLOC.pop()
@@ -54,7 +53,7 @@ def new_label():
 
 
 def p_empty(p: yacc.YaccProduction):
-  """empty :"""
+    """empty :"""
     pass
 
 
@@ -619,6 +618,7 @@ def p_arithm_operators(p: yacc.YaccProduction):
                      | MINUS
     """
     p[0] = {'code': p[1]}
+
 
 def p_unary_operators(p: yacc.YaccProduction):
     """OPT_UNARY : TIMES
