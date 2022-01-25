@@ -20,11 +20,11 @@ class LLC:
   prods: List[Production]
 
 class TableSyntaticAnalyser:
-  def __init__(self, llc: LLC):
-      columns = llc.terminals | {'$'}
-      rows = llc.non_terminals
+  def __init__(self, terminals, non_terminals, stack_bottom='$' ):
+      columns = terminals | {stack_bottom}
+      rows = non_terminals
 
-      self.table: Dict[str, Dict[str, Optional[Production]]] = {}
+      self.table = {}
 
       # initializating table
       for r in rows:

@@ -167,6 +167,7 @@ class Proc:
         return True
 
     def create_table(self):
+        print('creating table')
         if not self.is_ll1():
             print("Can't generate the syntatic analyser table for a non-LL(1) grammar")
             return False
@@ -174,6 +175,7 @@ class Proc:
         table = TableSyntaticAnalyser(self.llc)
 
         for prod in self.llc.prods:
+            print(prod)
             first_body = self.calculate_first_prod(prod.body)
 
             for t in first_body - {self.empty_symbol}:
