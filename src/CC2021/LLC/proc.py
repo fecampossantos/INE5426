@@ -177,10 +177,10 @@ class Proc:
             first_body = self.calculate_first_prod(prod.body)
 
             for t in first_body - {_EMPTY_SYMBOL}:
-                table.add_production(prod, t)
+                table.add_prod(prod, t)
 
             if _EMPTY_SYMBOL in first_body:
                 for t in self.follows[prod.head]:
-                    table.add_production(prod, t)
+                    table.add_prod(prod, t)
 
         return table
