@@ -216,7 +216,7 @@ class Proc:
         table = TableSyntaticAnalyser(self.llc.terminals, self.llc.non_terminals)
 
         for prod in self.llc.prods:
-            print(prod)
+            # print(prod)
             first_body = self.calculate_first_prod(prod.body)
 
             for t in first_body - {self.empty_symbol}:
