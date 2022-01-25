@@ -11,6 +11,12 @@ class Production:
       h_eq = self.head == p2.head
       b_eq = self.body == p2.body
       return h_eq and b_eq
+  
+  def __str__(self):
+    return self.__repr__()
+  
+  def __repr__(self):
+    return f'{self.head} ->' + ''.join(self.body)
 
 @dataclass
 class LLC:
