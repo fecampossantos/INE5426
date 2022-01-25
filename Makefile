@@ -4,7 +4,7 @@ PYTHON = $(VENV)/bin/python3
 PIP = $(VENV)/bin/pip3
 
 # Exemplo
-filepath=examples/exemplo1.lcc 
+filepath=src/examples/exemplo1.lcc 
 
 run: 
 		rm -rf venv/
