@@ -74,6 +74,9 @@ class Parser:
 
     print('')
     print('')
+    print(self.table)
+    print('')
+    print('')
     print(stack)
 
     for tk in tokens  + [STACK_TOKEN]:
