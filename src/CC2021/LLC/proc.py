@@ -2,6 +2,7 @@ from CC2021.LLC.parser import Parser
 from itertools import combinations
 from CC2021.strucs import TableSyntaticAnalyser
 from CC2021.strucs import LLC
+from src.CC2021.strucs import Production
 
 
 _EMPTY_SYMBOL = '&'
@@ -119,7 +120,7 @@ class Proc:
 
         return checks
 
-    def theorem_second_part(self, p1, p2):
+    def theorem_second_part(self, p1: Production, p2: Production):
         # checks if
         # for A -> p1 | p2
         # if(p1 -*> &) then (first(p2) <intersection> follow(A) = empty)
@@ -147,10 +148,10 @@ class Proc:
 
     def is_ll1(self):
         for nt in self.llc.non_terminals:
-            productions = list(filter(lambda k: k.head == nt, self.llc.productions))
+            productions = list(filter(lambda k: k.head == nt, self.llc.prods))
             for p1, p2 in combinations(productions, 2):
-                first_part = self.t_first_part(p1, p2)
-                second_part = self.t_second_part(p1, p2)
+                first_part = self.theorem_first_part(p1, p2)
+                second_part = self.theorem_second_part(p1, p2)
 
                 if not (first_part and second_part):
                     print('Gramamr is not LL(1)')
@@ -169,7 +170,7 @@ class Proc:
 
         table = TableSyntaticAnalyser(self.llc)
 
-        for prod in self.llc.productions:
+        for prod in self.llc.prods:
             first_body = self.calculate_first_prod(prod.body)
 
             for t in first_body - {_EMPTY_SYMBOL}:
