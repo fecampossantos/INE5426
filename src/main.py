@@ -81,17 +81,16 @@ def main(data):
     # print_tokens_table(tokens_table)
     # print_token_list(tokens_values)
     # print_symbols_table(symbols_table)
-    print('reached on token list')
-    print(token_list)
 
-    # check, wrong_token = parser.parse(tokens=token_list)
 
-    # if not check:
-    #     print('Syntatic error on line %s' % wrong_token.lineno)
-    #     print('Token: %s' % wrong_token)
-    #     sys.exit(1)
+    check, wrong_token = parser.parse(tokens=token_list)
 
-    # print('Syntatic Analysis succesfull! \n')
+    if not check:
+        print('Syntatic error on line %s' % wrong_token.lineno)
+        print('Token: %s' % wrong_token)
+        sys.exit(1)
+
+    print('Syntatic Analysis succesfull! \n')
 
 
 
