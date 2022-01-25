@@ -148,20 +148,23 @@ class Proc:
 
     def is_ll1(self):
         for nt in self.llc.non_terminals:
-            productions = list(filter(lambda k: k.head == nt, self.llc.prods))
-            for p1, p2 in combinations(productions, 2):
-                first_part = self.theorem_first_part(p1, p2)
-                second_part = self.theorem_second_part(p1, p2)
+            if not self.check_theorems_on_productions_of(nt):
+                return False
+            return True
 
-                if not (first_part and second_part):
-                    print('Gramamr is not LL(1)')
-                    print('productions that prove not benig LL(1):')
-                    print('P1: %s' % p1)
-                    print('P2: %s' % p2)
+    def check_theorems_on_productions_of(self, nt):
+        productions = list(filter(lambda k: k.head == nt, self.llc.prods))
 
-                    return False
+        for p1, p2 in combinations(productions, 2):
+            first_part_of_theorem = self.theorem_first_part(p1, p2)
+            second_part_of_theorem = self.theorem_second_part(p1, p2)
+            if not (first_part_of_theorem and second_part_of_theorem):
+                print('|Grammar is not LL(1), as shown by productions')
+                print('|    | P1: %s' % p1)
+                print('|    | P2: %s' % p2)
+                return False
 
-                return True
+        return True
 
     def create_table(self):
         if not self.is_ll1():
