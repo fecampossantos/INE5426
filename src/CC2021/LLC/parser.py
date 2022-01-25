@@ -46,7 +46,7 @@ class Parser:
       self.non_terminals.add(head)
       items = body_set.split()
       for i in items:
-        i = i.split()
+        i = i.strip()
         if i == '':
           continue
 
