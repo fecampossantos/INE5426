@@ -32,7 +32,7 @@ class TableSyntaticAnalyser:
         for c in columns:
           self.table [r][c] = None
   
-  def add_prod(self, prod: Production, terminal, non_terminal):
+  def add_prod(self,terminal, non_terminal, prod):
     el = self.table[non_terminal][terminal]
 
     if el is not None and el != prod:

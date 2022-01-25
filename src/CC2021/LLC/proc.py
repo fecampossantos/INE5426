@@ -17,76 +17,117 @@ def unite(a, b):
 
 class Proc:
     def __init__(self):
-        self.llc = None
+        self.llc: LLC = None
         self.empty_symbol = _EMPTY_SYMBOL
         self.stack_bottom = _STACK_BOTTOM
 
     def create_llc(self, llc1):
         self.llc: LLC = llc1
-        self.firsts = self.get_firsts()
-        self.follows = self.get_follows()
+        # self.firsts = self.get_firsts()
+        # self.follows = self.get_follows()
+
+        first = {i: set() for i in self.llc.non_terminals}
+        first.update((i, {i}) for i in self.llc.terminals)
+        first[self.empty_symbol] = {self.empty_symbol}
+
+        follow = {i: set() for i in self.llc.non_terminals}
+        follow[self.empty_symbol] = {self.stack_bottom}
+        follow[self.llc.start_symbol] = {self.stack_bottom}
+
+        epsilon = {self.empty_symbol}
+
+        while True:
+            updated = False
+
+            for prod in self.llc.prods:
+                # Calculate FIRST
+                for symbol in prod.body:
+                    updated |= unite(first[prod.head], first[symbol])
+
+                    if symbol not in epsilon:
+                        break
+
+                else:
+                    first[prod.head] |= {self.empty_symbol}
+                    updated |= unite(epsilon, {prod.head})
+
+                # Calculate FOLLOW
+                aux = follow[prod.head]
+                for symbol in reversed(prod.body):
+                    if symbol in follow:
+                        updated |= unite(follow[symbol], aux)
+
+                    if symbol in epsilon:
+                        aux = aux.unite(first[symbol])
+                    else:
+                        aux = first[symbol]
+
+            if not updated:
+                break
+        self.firsts = first
+        self.follows = follow
 
     def read_llc(self, path):
         p = Parser()
         self.create_llc(p.parse(path))
 
-    def get_firsts(self):
-        # prepare firsts
-        first = {a: set() for a in self.llc.non_terminals}
-        first.update((a, {a}) for a in self.llc.terminals)
-        first[self.empty_symbol] = {self.empty_symbol}
+    # def get_firsts(self):
+    #     # prepare firsts
+    #     first = {a: set() for a in self.llc.non_terminals}
+    #     first.update((a, {a}) for a in self.llc.terminals)
+    #     first[self.empty_symbol] = {self.empty_symbol}
 
-        epsilon = {self.empty_symbol}
+    #     epsilon = {self.empty_symbol}
 
-        while True:
-            updated = False
+    #     while True:
+    #         updated = False
 
-            for prod in self.llc.prods:
-                # calculate firsts
-                for s in prod.body:
-                    updated |= unite(first[prod.head], first[s])
+    #         for prod in self.llc.prods:
+    #             # calculate firsts
+    #             for s in prod.body:
+    #                 updated |= unite(first[prod.head], first[s])
 
-                    if s not in epsilon:
-                        break
+    #                 if s not in epsilon:
+    #                     break
 
-                    else:
-                        first[prod.head] |= {self.empty_symbol}
-                        updated |= unite(epsilon, {prod.head})
+    #                 else:
+    #                     first[prod.head] |= {self.empty_symbol}
+    #                     updated |= unite(epsilon, {prod.head})
 
-            # stops when nothing changed
-            if not updated:
-                break
+    #         # stops when nothing changed
+    #         if not updated:
+    #             break
 
-        return first
+    #     return first
 
-    def get_follows(self):
-        # prepare follows
-        follow = {a: set() for a in self.llc.non_terminals}
-        follow[self.empty_symbol] = {self.stack_bottom}
-        follow[self.llc.start_s] = {self.stack_bottom}
+    # def get_follows(self):
+    #     # prepare follows
+    #     follow = {a: set() for a in self.llc.non_terminals}
+    #     follow[self.empty_symbol] = {self.stack_bottom}
+    #     follow[self.llc.start_s] = {self.stack_bottom}
 
-        epsilon = {self.empty_symbol}
+    #     epsilon = {self.empty_symbol}
 
-        while True:
-            updated = False
+    #     while True:
+    #         updated = False
 
-            for prod in self.llc.prods:
-                # calculate follows
-                aux = follow[prod.head]
-                rev = reversed(prod.body)
+    #         for prod in self.llc.prods:
+    #             # calculate follows
+    #             aux = follow[prod.head]
+    #             rev = reversed(prod.body)
 
-                for s in rev:
-                    if s in follow:
-                        updated |= unite(follow[s], aux)
+    #             for s in rev:
+    #                 if s in follow:
+    #                     updated |= unite(follow[s], aux)
 
-                    if s in epsilon:
-                        aux = aux.union(self.firsts[s])
-                    else:
-                        aux = self.firsts[s]
+    #                 if s in epsilon:
+    #                     aux = aux.unite(self.firsts[s])
+    #                 else:
+    #                     aux = self.firsts[s]
 
-            # stops when nothing changed
-            if not updated:
-                break
+    #         # stops when nothing changed
+    #         if not updated:
+    #             break
 
     def calculate_first_prod(self, body):
         first = set()
@@ -104,7 +145,7 @@ class Proc:
         return first
 
     # checking if LLC is LL(1)
-    def theorem_first_part(self, p1, p2):
+    def theorem_first_part(self, p1: Production, p2: Production):
         # checks if
         # first(p1) <intersection> first(p2) == empty
 
@@ -179,10 +220,10 @@ class Proc:
             first_body = self.calculate_first_prod(prod.body)
 
             for t in first_body - {self.empty_symbol}:
-                table.add_prod(prod, t, prod.head)
+                table.add_prod(t, prod.head, prod)
 
             if self.empty_symbol in first_body:
                 for t in self.follows[prod.head]:
-                    table.add_prod(prod, t, prod.head)
+                    table.add_prod(t, prod.head, prod)
 
         return table
