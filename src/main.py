@@ -19,6 +19,7 @@ from utils.printer import print_symbols_table, print_token_list, print_tokens_ta
 from CC2021.semantic.semantic import parse
 from CC2021.yac.yacc_parser import generate_code_from_source
 
+
 def get_info(data, lexer):
     TYPES_CHECK = ['int', 'float', 'string', 'def']
     # simple list of tokens, consisting of an array
@@ -74,20 +75,19 @@ def main(data):
     lexer.build()
     lexer.input(data)
 
-    token_list, tokens_values, tokens_table, symbols_table = get_info(data, lexer)
+    token_list, tokens_values, tokens_table, symbols_table = get_info(
+        data, lexer)
     print_tokens_table(tokens_table)
     print_token_list(tokens_values)
     print_symbols_table(symbols_table)
-    
 
-    
     check, wrong_token = parser.parse(tokens=token_list)
 
     if not check:
-      print('Syntatic error on line %s' % wrong_token.lineno )
-      print('Token: %s' % wrong_token)
-      sys.exit(1)
-    
+        print('Syntatic error on line %s' % wrong_token.lineno)
+        print('Token: %s' % wrong_token)
+        sys.exit(1)
+
     print('Syntatic Analysis succesfull! \n')
     # print('Running semantic analysis')
 
@@ -96,7 +96,6 @@ def main(data):
     # num_expressions = rslt_semantic['num_expressions']
 
     # print('Semantic analys successfull')
-
 
     # symbol_table_file = 'symbol_tables.json'
 
@@ -119,17 +118,17 @@ def main(data):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        # print("No PATH received as argument.")
-        # path_ = 'D:/Documents/Git/UFSC/Compiladores/AL1/src/examples/exemplo2.lcc'
-        # path = os.path.join(os.path.dirname(__file__),'examples','exemplo2.lcc')
-        path = os.path.join('examples','exemplo2.lcc')
-        input_file = open(path)
-        data = input_file.read()
-        input_file.close()
-        main(data)
-    else:
-        input_file = open(sys.argv[1])
-        data = input_file.read()
-        input_file.close()
-        main(data)
+    # if len(sys.argv) < 2:
+    #     # print("No PATH received as argument.")
+    #     # path_ = 'D:/Documents/Git/UFSC/Compiladores/AL1/src/examples/exemplo2.lcc'
+    #     # path = os.path.join(os.path.dirname(__file__),'examples','exemplo2.lcc')
+    #     path = os.path.join('examples','exemplo2.lcc')
+    #     input_file = open(path)
+    #     data = input_file.read()
+    #     input_file.close()
+    #     main(data)
+    # else:
+    input_file = open(sys.argv[1])
+    data = input_file.read()
+    input_file.close()
+    main(data)
