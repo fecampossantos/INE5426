@@ -21,7 +21,7 @@ class Lexer:
         # # added later
         # 'true': 'TRUE',
         # 'false': 'FALSE',
-        # 'null': 'NULL'
+        'null': 'NULL'
     }
 
     #============ OP ============#
