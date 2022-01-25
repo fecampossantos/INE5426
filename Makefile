@@ -11,7 +11,7 @@ run:
 		python3 -m venv $(VENV)
 		. $(VENV)/bin/activate
 		$(PIP) install -r requirements.txt
-		$(PYTHON) main.py ${filepath}
+		$(PYTHON) src/main.py ${filepath}
 
 
 clean:
