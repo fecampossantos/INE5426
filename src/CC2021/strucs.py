@@ -16,7 +16,7 @@ class Production:
     return self.__repr__()
   
   def __repr__(self):
-    return f'{self.head} ->' + ' '.join(self.body)
+    return f'{self.head} -> ' + ' '.join(self.body)
 
 @dataclass
 class LLC:
