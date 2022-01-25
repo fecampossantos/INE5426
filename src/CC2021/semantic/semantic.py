@@ -483,13 +483,13 @@ def p_returnstat(p: yacc.YaccProduction):
 
 
 def p_ifstat(p: yacc.YaccProduction):
-    """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES new_scope LEFTBRACE STATELIST RIGHTBRACE ELSE"""
+    """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES new_scope LEFTBRACE STATELIST RIGHTBRACE ELSE_STMT"""
     # Go back to previous scope
     scope_stack.pop()
 
 
 def p_opt_else(p: yacc.YaccProduction):
-    """ELSE : ELSE new_scope LEFTBRACE STATELIST RIGHTBRACE
+    """ELSE_STMT : ELSE_STMT new_scope LEFTBRACE STATELIST RIGHTBRACE
                 | empty
     """
     if len(p) > 2:

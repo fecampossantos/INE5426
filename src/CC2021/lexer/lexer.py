@@ -9,7 +9,7 @@ class Lexer:
         'int': 'INT',
         'float': 'FLOAT',
         'string': 'STRING',
-        'new': 'ALLOC',
+        'new': 'NEW',
         'def': 'DEF',
         'break': 'BREAK',
         'print': 'PRINT',
@@ -20,7 +20,8 @@ class Lexer:
         'for': 'FOR',
         # added later
         'true': 'TRUE',
-        'false': 'FALSE'
+        'false': 'FALSE',
+        'null': 'NULL'
     }
 
     #============ OP ============#
@@ -32,7 +33,7 @@ class Lexer:
     t_MOD = r'%'
     t_ASSIGN = r'='
     # Relationals
-    t_EQUAL = r'=='
+    t_EQUALS = r'=='
     t_DIFFERENT = r'!='
     t_LT = r'<'
     t_LE = r'<='
@@ -114,7 +115,7 @@ class Lexer:
 
     # Tokens
     tokens = list(reserved.values()) + ['PLUS', 'MINUS',
-                                        'TIMES', 'DIVIDE', 'MOD', 'EQUAL', 'DIFFERENT', 'LT', 'LE', 'GT',
+                                        'TIMES', 'DIVIDE', 'MOD', 'EQUALS', 'DIFFERENT', 'LT', 'LE', 'GT',
                                         'GE', 'ASSIGN', 'COMMA', 'SEMICOLON', 'RPARENTHESES',
                                         'LPARENTHESES', 'LBRACKET', 'RBRACKET', 'RIGHTBRACE',
                                         'LEFTBRACE', 'DOT', 'FLOATCONSTANT', 'INTCONSTANT',
