@@ -26,7 +26,7 @@ class Parser:
                 if not line:
                     continue
                 self.parse_line(line)
-
+        print(self.prods)
         return LLC(start_s=self.start_symbol,
                    terminals=self.terminals,
                    non_terminals=self.non_terminals,
