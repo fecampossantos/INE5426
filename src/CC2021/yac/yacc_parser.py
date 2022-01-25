@@ -54,6 +54,7 @@ def new_label():
 
 
 def p_empty(p: yacc.YaccProduction):
+  """empty :"""
     pass
 
 
