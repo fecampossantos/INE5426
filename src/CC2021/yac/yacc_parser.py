@@ -1,7 +1,7 @@
 # https://ply.readthedocs.io/en/latest/ply.html#yacc
 
 from CC2021.ply import yacc
-from CC2021.lexer import Lexer
+from CC2021.lexer.lexer import Lexer
 from CC2021.yac.loop_control import LoopControl
 
 # instantiating lex for yacc
