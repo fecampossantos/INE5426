@@ -70,21 +70,30 @@ class Parser:
     stack = deque()
 
     stack.append(_END_SYMBOL)     # stack begins with end stack symbol
-    stack.append(self.start_symbol)   # and then the starting symbol
+    stack.append(_START_SYMBOL)   # and then the starting symbol
+
+    print('')
+    print('')
+    print(stack)
 
     for tk in tokens  + [STACK_TOKEN]:
       mapped_token = _MAP[tk.type]
+      print(mapped_token)
 
       while True:
         # if the mapped token is the same as the last entrie (top) on the stack, pop
         if mapped_token == stack[-1]:
+          print('popped token')
           stack.pop()
+          print(stack)
           break
 
         # if not, applies production
         prod = self.table.get_prod(stack[-1], mapped_token)
+        print('applied production')
         # if returns None, then it is a syntatic error
         if prod is None:
+          print('prod is none')
           return(False, tk)
 
         # if it got here, production was applied
@@ -97,6 +106,7 @@ class Parser:
     
     # if the stack is not empty, it is not correct
     if len(stack) > 1:
+      print('len(stack) >1')
       return (False, tk)
     # else, everything is correct
 
