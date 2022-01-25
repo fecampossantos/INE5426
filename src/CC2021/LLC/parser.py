@@ -5,13 +5,18 @@ _EMPTY_SYMBOL = '&'
 
 class Parser:
   def __init__(self):
-      self.current_symbol: Union[None, str] = None
+      # self.current_symbol: Union[None, str] = None
+      self.current_symbol = None
       self.empty_symbol = _EMPTY_SYMBOL
 
-      self.prods: List[Production] = []
-      self.start_symbol: Union[None, str] = None
-      self.non_terminals: Set[str] = set()
-      self.terminals: Set[str] = set()
+      # self.prods: List[Production] = []
+      # self.start_symbol: Union[None, str] = None
+      # self.non_terminals: Set[str] = set()
+      # self.terminals: Set[str] = set()
+      self.prods = []
+      self.start_symbol = None
+      self.non_terminals = set()
+      self.terminals = set()
 
   def parse(self, path):
     with open(path) as f:
