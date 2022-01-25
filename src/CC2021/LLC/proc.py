@@ -2,7 +2,7 @@ from CC2021.LLC.parser import Parser
 from itertools import combinations
 from CC2021.strucs import TableSyntaticAnalyser
 from CC2021.strucs import LLC
-from src.CC2021.strucs import Production
+from CC2021.strucs import Production
 
 
 _EMPTY_SYMBOL = '&'
