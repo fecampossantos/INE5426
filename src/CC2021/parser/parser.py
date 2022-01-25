@@ -70,11 +70,8 @@ class Parser:
     stack = deque()
 
     stack.append(_END_SYMBOL)     # stack begins with end stack symbol
-    stack.append(_START_SYMBOL)   # and then the starting symbol
+    stack.append(self.start_symbol)   # and then the starting symbol
 
-    print('')
-    print('')
-    print(self.table)
     print('')
     print('')
     print(stack)
