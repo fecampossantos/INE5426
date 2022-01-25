@@ -74,7 +74,6 @@ def main(data):
     lexer = Lexer()
     lexer.build()
     lexer.input(data)
-    print('built lexer')
 
     token_list, tokens_values, tokens_table, symbols_table = get_info(
         data, lexer)

@@ -77,6 +77,7 @@ class Parser:
     print(stack)
 
     for tk in tokens  + [STACK_TOKEN]:
+      print(tk)
       mapped_token = _MAP[tk.type]
       print(mapped_token)
 
