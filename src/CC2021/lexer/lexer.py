@@ -1,6 +1,6 @@
 import sys
 from prettytable import PrettyTable
-from CC2021.ply.lex import lex
+from CC2021.ply import lex
 
 
 class Lexer:
@@ -18,10 +18,10 @@ class Lexer:
         'if': 'IF',
         'else': 'ELSE',
         'for': 'FOR',
-        # added later
-        'true': 'TRUE',
-        'false': 'FALSE',
-        'null': 'NULL'
+        # # added later
+        # 'true': 'TRUE',
+        # 'false': 'FALSE',
+        # 'null': 'NULL'
     }
 
     #============ OP ============#
