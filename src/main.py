@@ -77,9 +77,11 @@ def main(data):
 
     token_list, tokens_values, tokens_table, symbols_table = get_info(
         data, lexer)
-    print_tokens_table(tokens_table)
-    print_token_list(tokens_values)
-    print_symbols_table(symbols_table)
+    # print_tokens_table(tokens_table)
+    # print_token_list(tokens_values)
+    # print_symbols_table(symbols_table)
+    print('reached on token list')
+    print(token_list)
 
     # check, wrong_token = parser.parse(tokens=token_list)
 
@@ -89,32 +91,35 @@ def main(data):
     #     sys.exit(1)
 
     # print('Syntatic Analysis succesfull! \n')
-    # print('Running semantic analysis')
 
-    # rslt_semantic = parse(data)
-    # symbols_table = rslt_semantic['scopes']
-    # num_expressions = rslt_semantic['num_expressions']
 
-    # print('Semantic analys successfull')
 
-    # symbol_table_file = 'symbol_tables.json'
+    # # # print('Running semantic analysis')
 
-    # with open(symbol_table_file, 'w') as f:
-    #     json.dump(symbol_tables, f, indent=2, sort_keys=False)
+    # # # rslt_semantic = parse(data)
+    # # # symbols_table = rslt_semantic['scopes']
+    # # # num_expressions = rslt_semantic['num_expressions']
 
-    # expressions_file = 'expressions.json'
-    # print('Exporting symbol tables to %s' % expressions_file)
+    # # # print('Semantic analys successfull')
 
-    # with open(expressions_file, 'w') as f:
-    #     json.dump(num_expressions, f, indent=2, sort_keys=False)
+    # # # symbol_table_file = 'symbol_tables.json'
 
-    # print('Running intermediary code generation...')
-    # code = generate_code_from_source(data)
-    # intermediary_code_file = 'intermediary_code.gic'
-    # print('Exportind intermediary code to %s' % intermediary_code_file)
+    # # # with open(symbol_table_file, 'w') as f:
+    # # #     json.dump(symbol_tables, f, indent=2, sort_keys=False)
 
-    # with open(intermediary_code_file, 'w') as f:
-    #     f.write(code)
+    # # # expressions_file = 'expressions.json'
+    # # # print('Exporting symbol tables to %s' % expressions_file)
+
+    # # # with open(expressions_file, 'w') as f:
+    # # #     json.dump(num_expressions, f, indent=2, sort_keys=False)
+
+    # # # print('Running intermediary code generation...')
+    # # # code = generate_code_from_source(data)
+    # # # intermediary_code_file = 'intermediary_code.gic'
+    # # # print('Exportind intermediary code to %s' % intermediary_code_file)
+
+    # # # with open(intermediary_code_file, 'w') as f:
+    # # #     f.write(code)
 
 
 if __name__ == '__main__':
