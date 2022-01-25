@@ -403,7 +403,7 @@ def p_returnstat(p: yacc.YaccProduction):
 
 
 def p_ifstat(p: yacc.YaccProduction):
-    """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSE"""
+    """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT"""
     cond_temp_var = p[3]['temp_var']
     next_label = new_label()
 
@@ -421,7 +421,7 @@ def p_ifstat(p: yacc.YaccProduction):
 
 
 def p_opt_else(p: yacc.YaccProduction):
-    """ELSE : ELSE LEFTBRACE STATELIST RIGHTBRACE
+    """ELSESTAT : ELSE LEFTBRACE STATELIST RIGHTBRACE
                 | empty
     """
     if len(p) < 3:
@@ -620,14 +620,14 @@ def p_arithm_operators(p: yacc.YaccProduction):
     p[0] = {'code': p[1]}
 
 def p_unary_operators(p: yacc.YaccProduction):
-    """OPT_UNARY_EXPR : TIMES
+    """OPT_UNARY : TIMES
                     | MOD
                     | DIVIDE """
     p[0] = {'code': p[1]}
 
 
 def p_term_unary_exp(p: yacc.YaccProduction):
-    """TERM : UNARYEXPR OPT_UNARY"""
+    """TERM : UNARYEXPR OPT_UNARY_TERM"""
     if p[2]['code']:
         temp_var = get_temp_var()
         left_temp = p[1]['temp_var']
@@ -643,7 +643,7 @@ def p_term_unary_exp(p: yacc.YaccProduction):
 
 
 def p_rec_unaryexp_op(p: yacc.YaccProduction):
-    """OPT_UNARY : OPT_UNARY_EXPR TERM
+    """OPT_UNARY_TERM : OPT_UNARY TERM
                      | empty
     """
     if len(p) < 3:
