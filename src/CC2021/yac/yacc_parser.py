@@ -403,7 +403,7 @@ def p_returnstat(p: yacc.YaccProduction):
 
 
 def p_ifstat(p: yacc.YaccProduction):
-    """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSE_STMT"""
+    """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSE"""
     cond_temp_var = p[3]['temp_var']
     next_label = new_label()
 
@@ -421,7 +421,7 @@ def p_ifstat(p: yacc.YaccProduction):
 
 
 def p_opt_else(p: yacc.YaccProduction):
-    """ELSE_STMT : ELSE_STMT LEFTBRACE STATELIST RIGHTBRACE
+    """ELSE : ELSE LEFTBRACE STATELIST RIGHTBRACE
                 | empty
     """
     if len(p) < 3:

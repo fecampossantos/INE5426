@@ -48,7 +48,7 @@ class Lexer:
     t_RBRACKET = r'\]'
     t_RIGHTBRACE = r'}'
     t_LEFTBRACE = r'{'
-    t_DOT = r'\.'
+    # t_DOT = r'\.'
 
     # Linebreak
     # - Doesn't return token
@@ -118,8 +118,12 @@ class Lexer:
                                         'TIMES', 'DIVIDE', 'MOD', 'EQUALS', 'DIFFERENT', 'LT', 'LE', 'GT',
                                         'GE', 'ASSIGN', 'COMMA', 'SEMICOLON', 'RPARENTHESES',
                                         'LPARENTHESES', 'LBRACKET', 'RBRACKET', 'RIGHTBRACE',
-                                        'LEFTBRACE', 'DOT', 'FLOATCONSTANT', 'INTCONSTANT',
-                                        'STRINGCONSTANT', 'LINEBREAK', 'IDENT']
+                                        'LEFTBRACE',
+                                        # 'DOT',
+                                        'FLOATCONSTANT', 'INTCONSTANT',
+                                        'STRINGCONSTANT',
+                                        # 'LINEBREAK',
+                                        'IDENT']
     # https://www.dabeaz.com/ply/ply.html#ply_nn9
     # Compute column.
     #     input is the input text string
