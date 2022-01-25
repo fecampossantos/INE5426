@@ -1,6 +1,7 @@
 from CC2021.LLC.parser import Parser
 from itertools import combinations
 from CC2021.strucs import TableSyntaticAnalyser
+from CC2021.strucs import LLC
 
 
 _EMPTY_SYMBOL = '&'
@@ -20,7 +21,7 @@ class Proc:
         self.stack_bottom = _STACK_BOTTOM
 
     def create_llc(self, llc1):
-        self.llc = llc1
+        self.llc: LLC = llc1
         self.firsts = self.get_firsts()
         self.follows = self.get_follows()
 
