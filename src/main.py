@@ -100,11 +100,11 @@ if __name__ == '__main__':
 
     if(args == 'all'):
       paths = [
-        'src/examples/exemplo1.lcc',
-        'src/examples/exemplo2.lcc',
-        # 'src/examples/prog1.lcc',
-        'src/examples/tdee.lcc',
-        'src/examples/utils.lcc',
+        # 'src/examples/exemplo1.lcc', #passes
+        # 'src/examples/exemplo2.lcc', #passes
+        # 'src/examples/prog1.lcc', #error
+        # 'src/examples/tdee.lcc', #error
+        # 'src/examples/utils.lcc', #error
         'src/examples/utils2.lcc',
         'src/examples/bhaskara.lcc',
         'src/examples/example_error_break.lcc',
