@@ -96,12 +96,11 @@ def main(data):
 
 if __name__ == '__main__':
     args = sys.argv[1]
-    
-    if(args == 'all'){
+
+    if(args == 'all'):
       print('run all')
-    } else {
+    else:
       input_file = open(sys.argv[1])
       data = input_file.read()
       input_file.close()
       main(data)
-    }
