@@ -224,8 +224,8 @@ def p_atribright_alloc(p: yacc.YaccProduction):
 
 
 def p_funccall_or_exp_minus(p: yacc.YaccProduction):
-    """EXPR_OR_FCALL : MINUS FACTOR OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                              | PLUS FACTOR OPT_UNARY OPT_ARITHM OPT_CMP_EXPR"""
+    """EXPR_OR_FCALL : MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                              | PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     previous_code = ''
     curr_left_value = f'{p[1]} {p[2]["temp_var"]}'
     for i in range(3, 6):

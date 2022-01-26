@@ -91,6 +91,8 @@ def main(data):
 
     print('Syntatic Analysis succesfull! \n')
 
+    #need to do semantic analysis later
+
 
 if __name__ == '__main__':
     input_file = open(sys.argv[1])
