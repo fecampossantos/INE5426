@@ -243,9 +243,9 @@ def p_funccall_or_exp_minus(p: yacc.YaccProduction):
 
 
 def p_funccall_or_exp_string(p: yacc.YaccProduction):
-    """EXPR_OR_FCALL : INTCONSTANT OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                              | STRINGCONSTANT OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                              | FLOATCONSTANT OPT_UNARY OPT_ARITHM OPT_CMP_EXPR"""
+    """EXPR_OR_FCALL : INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                              | STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                              | FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
 
     curr_left_value = get_temp_var()
     previous_code = f'{curr_left_value} = {p[1]}\n'
@@ -264,7 +264,7 @@ def p_funccall_or_exp_string(p: yacc.YaccProduction):
 
 
 def p_funccall_or_exp_null(p: yacc.YaccProduction):
-    """EXPR_OR_FCALL : NULL OPT_UNARY OPT_ARITHM OPT_CMP_EXPR"""
+    """EXPR_OR_FCALL : NULL OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     previous_code = ''
     curr_left_value = p[1]
     for i in range(2, 5):
@@ -282,7 +282,7 @@ def p_funccall_or_exp_null(p: yacc.YaccProduction):
 
 
 def p_funccall_or_exp_parentesis(p: yacc.YaccProduction):
-    """EXPR_OR_FCALL : LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY OPT_ARITHM OPT_CMP_EXPR"""
+    """EXPR_OR_FCALL : LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     previous_code = p[2]['code']
     curr_left_value = p[2]['temp_var']
     for i in range(4, 7):
