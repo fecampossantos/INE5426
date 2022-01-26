@@ -70,20 +70,15 @@ class Parser:
     stack.append(_END_SYMBOL)     # stack begins with end stack symbol
     stack.append(self.start_symbol)   # and then the starting symbol
 
-    reader = []
-
     for tk in tokens  + [STACK_TOKEN]:
       mapped_token = _MAP[tk.type]
-      #for test purposes
-      reader.append(mapped_token)
 
       while True:
         # if the mapped token is the same as the last entrie (top) on the stack, pop
         if mapped_token == stack[-1]:
           stack.pop()
           break
-        
-        print(reader)
+
         # if not, applies production
         prod = self.table.get_prod(stack[-1], mapped_token)
 
