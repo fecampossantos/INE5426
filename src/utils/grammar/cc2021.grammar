@@ -40,16 +40,16 @@ ATRIBSTAT : LVALUE "=" RIGHT_ATRIB
 RIGHT_ATRIB : EXPR_OR_FCALL
             | ALLOCEXPRESSION                      
 
-EXPR_OR_FCALL: '+' FACTOR OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                      | '-' FACTOR OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                      | "int_constant" OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                      | "float_constant" OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                      | "string_constant" OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                      | "null" OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
-                      | "(" NUMEXPRESSION ")" OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
+EXPR_OR_FCALL: '+' FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                      | '-' FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                      | "int_constant" OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                      | "float_constant" OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                      | "string_constant" OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                      | "null" OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                      | "(" NUMEXPRESSION ")" OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
                       | "ident" AFTER_IDENT
 
-AFTER_IDENT: OPT_ALLOC_EXPR OPT_UNARY OPT_ARITHM OPT_CMP_EXPR
+AFTER_IDENT: OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
             | "(" PARAMLISTCALL ")"
       
 PARAMLISTCALL : "ident" PARAMLISTCALL2
