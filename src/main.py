@@ -91,14 +91,28 @@ def main(data):
 
     print('Syntatic Analysis succesfull! \n')
 
+    return
     #need to do semantic analysis later
 
 
 if __name__ == '__main__':
     args = sys.argv[1]
-    print(args)
+
     if(args == 'all'):
-      print('run all')
+      paths = [
+        'src/examples/exemplo1.lcc',
+        'src/examples/exemplo2.lcc',
+        'src/examples/prog1.lcc',
+        'src/examples/tdee.lcc',
+        'src/examples/utils.lcc',
+        'src/examples/utils2.lcc',
+        ]
+      for path in paths:
+        print('running for %s' %path)
+        inp = open(path)
+        data = inp.read()
+        inp.close()
+        main(data)
     else:
       input_file = open(sys.argv[1])
       data = input_file.read()
