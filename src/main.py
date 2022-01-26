@@ -95,7 +95,13 @@ def main(data):
 
 
 if __name__ == '__main__':
-    input_file = open(sys.argv[1])
-    data = input_file.read()
-    input_file.close()
-    main(data)
+    args = sys.argv[1]
+    
+    if(args == 'all'){
+      print('run all')
+    } else {
+      input_file = open(sys.argv[1])
+      data = input_file.read()
+      input_file.close()
+      main(data)
+    }
