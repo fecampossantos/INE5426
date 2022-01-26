@@ -70,8 +70,12 @@ class Parser:
     stack.append(_END_SYMBOL)     # stack begins with end stack symbol
     stack.append(self.start_symbol)   # and then the starting symbol
 
+    reader = []
+
     for tk in tokens  + [STACK_TOKEN]:
       mapped_token = _MAP[tk.type]
+      #for test purposes
+      reader.append(mapped_token)
 
       while True:
         # if the mapped token is the same as the last entrie (top) on the stack, pop
@@ -81,13 +85,10 @@ class Parser:
 
         # if not, applies production
         prod = self.table.get_prod(stack[-1], mapped_token)
-        print('applied production')
-        print(prod)
-        print(stack[-1])
-        print(mapped_token)
+
         # if returns None, then it is a syntatic error
         if prod is None:
-          print('prod is none')
+          print(reader)
           return(False, tk)
 
         # if it got here, production was applied
