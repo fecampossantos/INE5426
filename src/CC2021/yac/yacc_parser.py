@@ -324,7 +324,7 @@ def p_funccall_or_exp_ident(p: yacc.YaccProduction):
 
 
 def p_follow_ident_alloc(p: yacc.YaccProduction):
-    """AFTER_IDENT : OPT_ALLOC_EXPR OPT_UNARY OPT_ARITHM OPT_CMP_EXPR"""
+    """AFTER_IDENT : OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     index_access = ''
 
     if p[1]['code']:
