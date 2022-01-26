@@ -82,13 +82,14 @@ class Parser:
         if mapped_token == stack[-1]:
           stack.pop()
           break
-
+        
+        print(reader)
         # if not, applies production
         prod = self.table.get_prod(stack[-1], mapped_token)
 
         # if returns None, then it is a syntatic error
         if prod is None:
-          print(reader)
+          # print(reader)
           return(False, tk)
 
         # if it got here, production was applied
