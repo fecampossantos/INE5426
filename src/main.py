@@ -102,10 +102,18 @@ if __name__ == '__main__':
       paths = [
         'src/examples/exemplo1.lcc',
         'src/examples/exemplo2.lcc',
-        'src/examples/prog1.lcc',
+        # 'src/examples/prog1.lcc',
         'src/examples/tdee.lcc',
         'src/examples/utils.lcc',
         'src/examples/utils2.lcc',
+        'src/examples/bhaskara.lcc',
+        'src/examples/example_error_break.lcc',
+        'src/examples/example_error_var_scope.lcc',
+        'src/examples/example_error_var_type.lcc',
+        'src/examples/exemplo3.lcc',
+        'src/examples/geometry.lcc',
+        'src/examples/math.lcc',
+        'src/examples/vinho.lcc',
         ]
       for path in paths:
         print('running for %s' %path)
