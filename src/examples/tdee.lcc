@@ -8,27 +8,22 @@ def bmr(string gender, float weight, float height, int age, int activity){
         temp = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
     }
 
-    // Sedentary
     if (activity == 1) {
         temp = temp *1.2;
     }
 
-    // Lightly active
     if (activity == 2) {
         temp = temp * 1.375;
     }
 
-    // Moderately active
     if (activity == 3) {
         temp = temp * 1.55;
     }
 
-    // Very active
     if (activity == 4) {
         temp = temp * 1.725;
     }
 
-    // Extra active
     if (activity == 5) {
         temp = temp * 1.9;
     }
@@ -43,10 +38,10 @@ def bmi(float weight, float height) {
     if (bmi <= 18.5) {
         print("Underweight");
     }
-    else if (bmi <= 24.99) {
+    if (bmi <= 24.99) {
         print("Normal weight");
     }
-    else if (bmi <= 29.99) {
+    if (bmi <= 29.99) {
         print("Overweihgt");
     }
     else {
@@ -57,13 +52,10 @@ def bmi(float weight, float height) {
 def calories(int protein, int fats, int carbs) {
     int result;
 
-    // protein
     result = result + protein * 4;
 
-    // fats
     result = result + fats * 9;
 
-    // carbs
     result = result + carbs * 4;
 
     return result;

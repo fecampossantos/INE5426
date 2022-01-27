@@ -24,8 +24,8 @@ STATEMENT : VARDECL ";"
           | PRINTSTAT ";"
           | READSTAT ";"
           | RETURNSTAT ";"
-          | IFSTAT ";"
-          | FORSTAT ";"
+          | IFSTAT
+          | FORSTAT
           | "{" STATELIST "}"
           | "break" ";"
           | ";"
@@ -62,7 +62,10 @@ PRINTSTAT : "print" EXPRESSION
            
 READSTAT : "read" LVALUE
          
-RETURNSTAT : "return"
+RETURNSTAT : "return" OPT_LVALUE
+
+OPT_LVALUE    : LVALUE
+              | &
              
 IFSTAT : "if" "(" EXPRESSION ")" "{" STATELIST "}" ELSESTAT
            

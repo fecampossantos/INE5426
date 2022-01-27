@@ -1,7 +1,6 @@
 /*
 Lista de funcoes uteis
 */
-
 // Converte horas para minutos
 def horasParaMinutos(float horas){
 
@@ -9,7 +8,6 @@ def horasParaMinutos(float horas){
   minutos = 60 * horas;
   return minutos;
 }
-
 // Converte horas para segundos
 def horasParaSegundos(float horas){
 
@@ -17,7 +15,6 @@ def horasParaSegundos(float horas){
     segundos = horas * 3600;
     return segundos;
 }
-semestresMaximos
 // Converte minutos para horas
 def minutosParaHoras(float minutos){
 
@@ -25,7 +22,6 @@ def minutosParaHoras(float minutos){
   horas = minutos / 60;
   return minutos;
 }
-
 // Converte minutos para segundos
 def minutosParaSegundos(float minutos){
 
@@ -33,7 +29,6 @@ def minutosParaSegundos(float minutos){
     segundos = minutos * 60;
     return segundos;
 }
-
 // Converte segundos para horas
 def segundosParaHoras(float segundos){
 
@@ -41,7 +36,6 @@ def segundosParaHoras(float segundos){
     horas = segundos / 3600;
     return horas;
 }
-
 // Converte segundos para minutos
 def segundosParaMinutos(float segundos) {
 
@@ -49,37 +43,48 @@ def segundosParaMinutos(float segundos) {
     minutos = segundos / 60;
     return minutos;
 }
-
 // Retorna a string do mes correspondente
 def retornaMes(int mesNumero) {
 
-    string mes = "";
+    string mes;
 
     if (mesNumero == 1) {
         mes = "Janeiro";
-    } else if (mesNumero == 2) {
+    }
+    if (mesNumero == 2) {
         mes = "Fevereiro";
-    } else if (mesNumero == 3) {
+    }
+    if (mesNumero == 3) {
         mes = "Marco";
-    } else if (mesNumero == 4) {
+    }
+    if (mesNumero == 4) {
         mes = "Abril";
-    } else if (mesNumero == 5) {
+    }
+    if (mesNumero == 5) {
         mes = "Maio";
-    } else if (mesNumero == 6) {
+    }
+    if (mesNumero == 6) {
         mes = "Junho";
-    } else if (mesNumero == 7) {
+    }
+    if (mesNumero == 7) {
         mes = "Julho";
-    } else if (mesNumero == 8) {
+    }
+    if (mesNumero == 8) {
         mes = "Agosto";
-    } else if (mesNumero == 9) {
+    }
+    if (mesNumero == 9) {
         mes = "Setembro";
-    } else if (mesNumero == 10) {
+    }
+    if (mesNumero == 10) {
         mes = "Outubro";
-    } else if (mesNumero == 11) {
+    }
+    if (mesNumero == 11) {
         mes = "Novembro";
-    } else if (mesNumero == 12) {
+    }
+    if (mesNumero == 12) {
         mes = "Dezembro";
-    } else {
+    }
+    else {
         mes = "Numero invalido";
     }
 
@@ -91,8 +96,10 @@ def retornaMes(int mesNumero) {
 // Retorna a quantidade de semestres restantes até a formatura
 def restantesFormatura(int cursados) {
 
-    int semestresMaximos = 14;
+    int semestresMaximos;
     int restantes;
+
+    semestresMaximos = 14;
 
     restantes = semestresMaximos - cursados;
 

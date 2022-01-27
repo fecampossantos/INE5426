@@ -61,7 +61,8 @@ def p_add_loop_label(p: yacc.YaccProduction):
     """add_loop_label :"""
     loop_control.set_next_label(new_label())
 
-
+def p_error(p):
+    print('___ERROR___')
 # begins grammar declaration
 
 def p_prog_statment(p: yacc.YaccProduction):
@@ -158,29 +159,29 @@ def p_statement_return(p: yacc.YaccProduction):
     p[0] = {'code': p[1]['code']}
 
 
-# def p_statement_if(p: yacc.YaccProduction):
-#     """STATEMENT : IFSTAT"""
-#     p[0] = {
-#         'code': p[1]['code']
-#     }
 def p_statement_if(p: yacc.YaccProduction):
-    """STATEMENT : IFSTAT SEMICOLON"""
+    """STATEMENT : IFSTAT"""
     p[0] = {
         'code': p[1]['code']
     }
-
-
-# def p_statement_for(p: yacc.YaccProduction):
-#     """STATEMENT : FORSTAT"""
+# def p_statement_if(p: yacc.YaccProduction):
+#     """STATEMENT : IFSTAT SEMICOLON"""
 #     p[0] = {
 #         'code': p[1]['code']
 #     }
+
 
 def p_statement_for(p: yacc.YaccProduction):
-    """STATEMENT : FORSTAT SEMICOLON"""
+    """STATEMENT : FORSTAT"""
     p[0] = {
         'code': p[1]['code']
     }
+
+# def p_statement_for(p: yacc.YaccProduction):
+#     """STATEMENT : FORSTAT SEMICOLON"""
+#     p[0] = {
+#         'code': p[1]['code']
+#     }
 
 
 def p_statement_statelist(p: yacc.YaccProduction):
@@ -415,9 +416,16 @@ def p_readstat(p: yacc.YaccProduction):
 #     p[0] = {'code': f'{p[1]}\n'}
 
 def p_returnstat(p: yacc.YaccProduction):
-    """RETURNSTAT : RETURN LVALUE"""
+    """RETURNSTAT : RETURN OPT_LVALUE"""
     p[0] = {'code': 'return ' + p[2]['var_name']}
 
+def p_opt_lvalue(p: yacc.YaccProduction):
+    """OPT_LVALUE   : LVALUE
+                    | empty"""
+    if p[1]:
+        p[0] = {'code': p[1]['code']}
+    else:
+        p[0] = {'code': ''}
 
 def p_ifstat(p: yacc.YaccProduction):
     """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT"""

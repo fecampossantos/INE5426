@@ -20,7 +20,7 @@ from CC2021.semantic.semantic import parse
 from CC2021.yac.yacc_parser import generate_code_from_source
 
 
-def get_info(data, lexer):
+def get_info(lexer):
     TYPES_CHECK = ['int', 'float', 'string', 'def']
     # simple list of tokens, consisting of an array
     # of token values
@@ -35,7 +35,7 @@ def get_info(data, lexer):
     # {name, type, declared_line, referenced_lines}
     symbols_table = {}
 
-    lexer.input(data)
+    # lexer.input(data)
     tok = ''
 
     while True:
@@ -75,8 +75,7 @@ def main(data):
     lexer.build()
     lexer.input(data)
 
-    token_list, tokens_values, tokens_table, symbols_table = get_info(
-        data, lexer)
+    token_list, tokens_values, tokens_table, symbols_table = get_info(lexer)
     # print_tokens_table(tokens_table)
     # print_token_list(tokens_values)
     # print_symbols_table(symbols_table)
@@ -102,20 +101,19 @@ if __name__ == '__main__':
 
     if(args == 'all'):
       paths = [
-        # 'src/examples/exemplo1.lcc', #passes
-        # 'src/examples/exemplo2.lcc', #passes
-        # 'src/examples/prog1.lcc', #error
-        # 'src/examples/tdee.lcc', #error
-        # 'src/examples/utils.lcc', #error
+        'src/examples/exemplo1.lcc',
+        'src/examples/exemplo2.lcc',
+        'src/examples/exemplo3.lcc',
+        'src/examples/prog1.lcc',
+        'src/examples/tdee.lcc',
+        'src/examples/utils.lcc',
         'src/examples/utils2.lcc',
         'src/examples/bhaskara.lcc',
-        'src/examples/example_error_break.lcc',
-        'src/examples/example_error_var_scope.lcc',
-        'src/examples/example_error_var_type.lcc',
-        'src/examples/exemplo3.lcc',
         'src/examples/geometry.lcc',
         'src/examples/math.lcc',
-        'src/examples/vinho.lcc',
+        ## generates error
+        'src/examples/utils_withError_noSemicolon_line10.lcc',
+        'src/examples/utils_withError_valueAtribuiton_line2.lcc'
         ]
       for path in paths:
         print('running for %s' %path)

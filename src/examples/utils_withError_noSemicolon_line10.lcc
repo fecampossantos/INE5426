@@ -1,0 +1,13 @@
+def calcAreaQuadrado(int lado){
+  int area;
+  area = lado * lado;
+  return area;
+}
+
+def calcPerimetroQuadrado(int lado){
+  int perimetro;
+  perimetro = lado * 4;
+  return perimetro
+}
+
+// esta faltando um ; no return da linha 10

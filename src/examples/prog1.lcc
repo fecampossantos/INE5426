@@ -6,11 +6,6 @@ def functionName(int a) {
 
   string message;
   message = "mensagem";
-  print(message)
+  print(message);
   print(z);
-} |
-
-// esse comentario será ignorado
-
-/* esse
-tambem */
+}

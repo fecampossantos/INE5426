@@ -6,28 +6,28 @@ def pow(int n, int e) {
         output = output * n;
     }
 
-    print "Resultado é ";
-    print output;
-    print "\n";
+    print("Resultado é ");
+    print(output);
+    print("\n");
 
     return;
 }
 
-def calculate_delta(float a, float b, float c) {
+def calculateDelta(float a, float b, float c) {
     float delta;
     
     delta = (b * b) - (4 * a * c);
     
     if (delta < 0) {
-        print "There aren't any real roots!";
+        print("There aren't any real roots!");
     }
     
     if (delta == 0) {
-        print "There is exactly one real root!";
+        print("There is exactly one real root!");
     }
     
     if (delta > 0) {
-        print "There are two distinct roots!";
+        print("There are two distinct roots!");
     }
     
     return;
@@ -38,8 +38,8 @@ def bhaskara(float a, float b, float c) {
     float x2;
     
     if (a == 0) {
-        print "HEY! Value a must be different from 0!";
-        print "Stopping right now!";
+        print("HEY! Value a must be different from 0!");
+        print("Stopping right now!");
         return;
     }
     
@@ -48,29 +48,29 @@ def bhaskara(float a, float b, float c) {
     delta = (b * b) - (4 * a * c);
     
     if (delta < 0) {
-        print "There's no real solution! Sorry...";
+        print("There's no real solution! Sorry...");
         return;
     }
 
     if (delta == 0) {
         x1 = (-b) / (2 * a);
-        print "There's one solution!";
-        print "x = ";
-        print x1;
+        print("There's one solution!");
+        print("x = ");
+        print(x1);
         return;
     }
     
     if (delta > 0) {
-        float sqrt_delta;
-        sqrt_delta = pow(delta, half);
+        float sqrtDelta;
+        sqrtDelta = pow(delta, half);
 
-        x1 = (-b + sqrt_delta) / (2 * a);
-        x2 = (-b - sqrt_delta) / (2 * a);
-        print "There are two solutions!";
-        print "x1 = ";
-        print x1;
-        print "\n x2 = ";
-        print x2;
+        x1 = (-b + sqrtDelta) / (2 * a);
+        x2 = (-b - sqrtDelta) / (2 * a);
+        print("There are two solutions!");
+        print("x1 = ");
+        print(x1);
+        print("\n x2 = ");
+        print(x2);
         return;
     }
     return;
@@ -82,56 +82,56 @@ def main() {
     int b;
     int c;
     
-    print "Calculate bhaskara for...";
+    print("Calculate bhaskara for...");
 
-    print "a=1, b=12, c=13";
-    print "Result should be x1=-1.20 and x2=-10.79";
+    print("a=1, b=12, c=13");
+    print("Result should be x1=-1.20 and x2=-10.79");
     a = 1;
     b = 12;
     c = 13;
     result = bhaskara(a, b, c);
 
-    print "a=2, b=16, c=18";
-    print "Result should be x1=-1.35 and x2=-6.64";
+    print("a=2, b=16, c=18");
+    print("Result should be x1=-1.35 and x2=-6.64");
     a = 2;
     b = 16;
     c = 18;
     result = bhaskara(a, b, c);
 
-    print "a=2, b=12, c=18";
-    print "Result should be x1=x2=-3";
+    print("a=2, b=12, c=18");
+    print("Result should be x1=x2=-3");
     a = 2;
     b = 12;
     c = 18;
     result = bhaskara(a, b, c);
 
-    print "a=4, b=6, c=50";
-    print "Result should be none";
+    print("a=4, b=6, c=50");
+    print("Result should be none");
     a = 4;
     b = 6;
     c = 50;
     result = bhaskara(a, b, c);
 
-    print "a=0, b=6, c=50";
-    print "Result should be error";
+    print("a=0, b=6, c=50");
+    print("Result should be error");
     a = 0;
     b = 6;
     c = 50;
     result = bhaskara(a, b, c);
 
-    print "Calculate delta for...";
+    print("Calculate delta for...");
 
-    print "a=2, b=12, c=18";
-    print "Result should be delta=0";
+    print("a=2, b=12, c=18");
+    print("Result should be delta=0");
     a = 2;
     b = 12;
     c = 18;
-    result = calculate_delta(a, b, c);
+    result = calculateDelta(a, b, c);
 
-    print "a=4, b=6, c=50";
-    print "Result should be delta=-764";
+    print("a=4, b=6, c=50");
+    print("Result should be delta=-764");
     a = 4;
     b = 6;
     c = 50;
-    result = calculate_delta(a, b, c);
+    result = calculateDelta(a, b, c);
 }

@@ -28,20 +28,20 @@ def calcAreaTriangulo(int ladoA, int ladoB, int ladoC){
   if(ladoA == ladoB){
     if(ladoA == ladoC){
       // equilatero
-      area = (ladoA*ladoA * 1,73) / 4
+      area = (ladoA*ladoA * 1.73) / 4;
     }
     else {
       // isosceles
       int altura;
       int base;
       base = ladoC / 2;
-      altura = raiz(ladoA*ladoA - base*base);
+      altura = (ladoA*ladoA - base*base)*(1/2);
       area = (altura * ladoC) / 2;
     }
   }
   else {
     // escaleno
-    print("para calcular a area do triangulo escaleno, precisamos saber algum dos angulos")
+    print("para calcular a area do triangulo escaleno, precisamos saber algum dos angulos");
   }
 }
 
@@ -71,28 +71,25 @@ def bhaskara(float a, float b, float c){
   delta = (b*b) - (4*a*c);
 
   if(delta == 0){
-    raiz1 = (-b + raiz(delta)) / (2*a);
+    raiz1 = (-b + (delta)*(1/2)) / (2*a);
     raiz2 = raiz1;
   }
 
   if(delta < 0){
-    print("Não existem raízes reais")
+    print("Não existem raízes reais");
   }
 
   if(delta > 0){
-    raiz1 = (-b + raiz(delta)) / (2*a);
-    raiz2 = (-b - raiz(delta)) / (2*a);
+    raiz1 = (-b + (delta)*(1/2)) / (2*a);
+    raiz2 = (-b - (delta)*(1/2)) / (2*a);
   }
 
-  return raiz1, raiz2;
+  return;
 }
 
-def raiz(int a){
-  // função que calcula raiz
-}
 
 def verificaPrimo(int n){
-  for (int i = 2; i <= n/2; i = i + 1){
+  for (i = 2; i <= n/2; i = i + 1){
     if(n%i == 0){
       return true;
     }
