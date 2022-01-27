@@ -237,14 +237,14 @@ def p_statement_end(p: yacc.YaccProduction):
 
 
 def p_vardecl(p: yacc.YaccProduction):
-    """VARDECL : TYPE IDENT ARRAY_OP"""
+    """VARDECL : TYPE IDENT ARRAY_OPT"""
     entry = TableEntry(p[2], p[1], p[3], p.lineno(2))
     scope = scope_stack.seek()
     scope.add_entry(entry)
 
 
 def p_opt_vector(p: yacc.YaccProduction):
-    """ARRAY_OP : LBRACKET INTCONSTANT RBRACKET ARRAY_OP
+    """ARRAY_OPT : LBRACKET INTCONSTANT RBRACKET ARRAY_OPT
                   | empty
     """
     if len(p) > 2:

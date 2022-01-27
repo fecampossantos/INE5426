@@ -87,9 +87,11 @@ def main(data):
     if not check:
         print('Syntatic error on line %s' % wrong_token.lineno)
         print('Token: %s' % wrong_token)
-        sys.exit(1)
-
-    print('Syntatic Analysis succesfull! \n')
+        # sys.exit(1)
+        print('\n')
+        print('\n')
+    else:
+      print('Syntatic Analysis succesfull! \n')
 
     return
     #need to do semantic analysis later

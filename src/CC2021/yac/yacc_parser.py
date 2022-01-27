@@ -51,16 +51,18 @@ def new_label():
 
     return lbl
 
-
+# empty (declared to cover for the char '&', referenced as "empty") - necessary by yacc
 def p_empty(p: yacc.YaccProduction):
     """empty :"""
     pass
 
-
+# add loop label for loop control
 def p_add_loop_label(p: yacc.YaccProduction):
     """add_loop_label :"""
     loop_control.set_next_label(new_label())
 
+
+# begins grammar declaration
 
 def p_prog_statment(p: yacc.YaccProduction):
     """PROGRAM : STATEMENT
@@ -156,15 +158,26 @@ def p_statement_return(p: yacc.YaccProduction):
     p[0] = {'code': p[1]['code']}
 
 
+# def p_statement_if(p: yacc.YaccProduction):
+#     """STATEMENT : IFSTAT"""
+#     p[0] = {
+#         'code': p[1]['code']
+#     }
 def p_statement_if(p: yacc.YaccProduction):
-    """STATEMENT : IFSTAT"""
+    """STATEMENT : IFSTAT SEMICOLON"""
     p[0] = {
         'code': p[1]['code']
     }
 
 
+# def p_statement_for(p: yacc.YaccProduction):
+#     """STATEMENT : FORSTAT"""
+#     p[0] = {
+#         'code': p[1]['code']
+#     }
+
 def p_statement_for(p: yacc.YaccProduction):
-    """STATEMENT : FORSTAT"""
+    """STATEMENT : FORSTAT SEMICOLON"""
     p[0] = {
         'code': p[1]['code']
     }
@@ -188,14 +201,14 @@ def p_statement_end(p: yacc.YaccProduction):
 
 
 def p_vardecl(p: yacc.YaccProduction):
-    """VARDECL : TYPE IDENT ARRAY_OP"""
+    """VARDECL : TYPE IDENT ARRAY_OPT"""
     p[0] = {
         'code': f'{p[1]["code"]} {p[2]}{p[3]["code"]}\n'
     }
 
 
 def p_opt_vector(p: yacc.YaccProduction):
-    """ARRAY_OP : LBRACKET INTCONSTANT RBRACKET ARRAY_OP
+    """ARRAY_OPT : LBRACKET INTCONSTANT RBRACKET ARRAY_OPT
                   | empty
     """
     if len(p) < 3:
@@ -397,9 +410,13 @@ def p_readstat(p: yacc.YaccProduction):
     p[0] = {'code': 'read ' + p[2]['var_name']}
 
 
+# def p_returnstat(p: yacc.YaccProduction):
+#     """RETURNSTAT : RETURN"""
+#     p[0] = {'code': f'{p[1]}\n'}
+
 def p_returnstat(p: yacc.YaccProduction):
-    """RETURNSTAT : RETURN"""
-    p[0] = {'code': f'{p[1]}\n'}
+    """RETURNSTAT : RETURN LVALUE"""
+    p[0] = {'code': 'return ' + p[2]['var_name']}
 
 
 def p_ifstat(p: yacc.YaccProduction):
