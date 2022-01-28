@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, List, Set, Dict, Optional, Union
+from typing import List, Set, Dict, Optional, Union
 import time
 
 @dataclass
@@ -40,11 +40,6 @@ class TableSyntaticAnalyser:
   
   def add_prod(self,terminal, non_terminal, prod):
     el = self.table[non_terminal][terminal]
-    # print('adding production to table')
-    # print('non terminal: %s' % non_terminal)
-    # print('terminal: %s' % terminal)
-    # print('production: %s' % prod)
-    # print('elemtn: %s' % el)
 
     if el is not None and el != prod:
       print('Error: the cell in the Syntatic Analyser table cannot be created twice')
