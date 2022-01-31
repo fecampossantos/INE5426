@@ -51,6 +51,18 @@ def isPrime(int n) {
     return;
 }
 
+def sqrt(int n) {
+    float result;
+
+    result = n ^ (1/2);
+    print ("A raiz quadrada de");
+    print(n);
+    print("é");
+    print(result);
+
+    return;
+}
+
 def main() {
     int auxA;
     int auxB;
@@ -73,4 +85,16 @@ def main() {
     auxB = 5; 
     print "5 elevado a 5";
     returnValue = pow(auxA, auxB);
+
+    auxA = 4;
+    print "raiz quadrada de 4";
+    returnValue = sqrt(auxA)
+
+    auxA = 16 ;
+    print "raiz quadrada de 16";
+    returnValue = sqrt(auxA)
+
+    auxA = 25;
+    print "raiz quadrada de 25";
+    returnValue = sqrt(auxA)
 }
