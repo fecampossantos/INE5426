@@ -101,15 +101,12 @@ if __name__ == '__main__':
       paths = [
         'src/examples/exemplo1.lcc',
         'src/examples/exemplo2.lcc',
-        'src/examples/exemplo1-professor.lcc',
+        # 'src/examples/exemplo1-professor.lcc',
         'src/examples/exemplo2-professor.lcc',
-        'src/examples/exemplo3.lcc',
         'src/examples/prog1.lcc',
         'src/examples/tdee.lcc',
         'src/examples/utils.lcc',
         'src/examples/utils2.lcc',
-        'src/examples/bhaskara.lcc',
-        'src/examples/geometry.lcc',
         'src/examples/math.lcc',
         ## generates error
         'src/examples/utils_withError_noSemicolon_line10.lcc',
