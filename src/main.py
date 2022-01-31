@@ -14,9 +14,8 @@ from prettytable import PrettyTable
 
 from CC2021.lexer.lexer import Lexer
 from CC2021.parser.parser import parser
-# from parser.parser import Parser
+
 from utils.printer import print_symbols_table, print_token_list, print_tokens_table
-from CC2021.semantic.semantic import parse
 from CC2021.yac.yacc_parser import generate_code_from_source
 
 
@@ -79,7 +78,6 @@ def main(data):
     # print_tokens_table(tokens_table)
     # print_token_list(tokens_values)
     # print_symbols_table(symbols_table)
-
 
     check, wrong_token = parser.parse(tokens=token_list)
 

@@ -1,12 +1,9 @@
 import os
 from collections import deque
-from typing import List, Tuple, Optional
 
 from CC2021.ply.lex import LexToken
 from CC2021.LLC.proc import Proc
-
-_EMPTY_SYMBOL = '&'
-_END_SYMBOL = '$'
+from utils.utils import *
 
 _MAP = {
     'DEF': 'def',
@@ -62,12 +59,12 @@ class Parser:
     self.llc = proc.llc
     self.start_symbol = proc.llc.start_s
     self.table = proc.create_table()
-    self.empty_symbol = _EMPTY_SYMBOL
+    self.empty_symbol = EMPTY_SYMBOL
 
   def parse(self, tokens):
     stack = deque()
 
-    stack.append(_END_SYMBOL)     # stack begins with end stack symbol
+    stack.append(STACK_BOTTOM)     # stack begins with end stack symbol
     stack.append(self.start_symbol)   # and then the starting symbol
 
     for tk in tokens  + [STACK_TOKEN]:
