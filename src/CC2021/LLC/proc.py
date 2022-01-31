@@ -13,7 +13,15 @@ class Proc:
 
     def create_llc(self, llc1):
         self.llc: LLC = llc1
+        first, follow = self.calculate_firsts_and_follows()
+        self.firsts = first
+        self.follows = follow
 
+    def read_llc(self, path):
+        p = Parser()
+        self.create_llc(p.parse(path))
+
+    def calculate_firsts_and_follows(self):
         first = {i: set() for i in self.llc.non_terminals}
         first.update((i, {i}) for i in self.llc.terminals)
         first[self.empty_symbol] = {self.empty_symbol}
@@ -52,13 +60,8 @@ class Proc:
 
             if not updated:
                 break
-        self.firsts = first
-        self.follows = follow
-
-    def read_llc(self, path):
-        p = Parser()
-        self.create_llc(p.parse(path))
-
+        
+        return first, follow
 
     def calculate_first_prod(self, body):
         first = set()
@@ -111,10 +114,10 @@ class Proc:
             check &= p2_first.intersection(follow_head) == set()
 
         if not check:
-            print('The LLC is not LL(1)!')
-            print('First of p1 %s' % p1_first)
-            print('First of p2 %s' % p2_first)
-            print('follow of head of prods %s' % follow_head)
+            print('A LLC nao e LL(1)!')
+            print('First da producao 1 %s' % p1_first)
+            print('First da producao 2 %s' % p2_first)
+            print('Follow do head das producoes %s' % follow_head)
 
         return check
 

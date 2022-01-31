@@ -78,12 +78,11 @@ def main(data):
     # print_token_list(tokens_values)
     # print_symbols_table(symbols_table)
 
-    check, wrong_token = parser.parse(tokens=token_list)
+    passed_parsing, wrong_token = parser.parse(tokens=token_list)
 
-    if not check:
+    if not passed_parsing:
         print('Syntatic error on line %s' % wrong_token.lineno)
         print('Token: %s' % wrong_token)
-        # sys.exit(1)
         print('\n')
         print('\n')
     else:

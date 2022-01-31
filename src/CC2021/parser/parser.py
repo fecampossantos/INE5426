@@ -7,17 +7,17 @@ from utils.utils import *
 
 _MAP = {
     'DEF': 'def',
-    'IF': 'if',
     'FOR': 'for',
+    'READ': 'read',
+    'PRINT': 'print',
+    'RETURN': 'return',
+    'IF': 'if',
     'ELSE': 'else',
     'NEW': 'new',
     'INT': 'int',
     'FLOAT': 'float',
     'STRING': 'string',
     'BREAK': 'break',
-    'READ': 'read',
-    'PRINT': 'print',
-    'RETURN': 'return',
     'LEFTBRACE': '{',
     'RIGHTBRACE': '}',
     'LPARENTHESES': '(',
@@ -43,18 +43,15 @@ _MAP = {
     'FLOATCONSTANT': 'float_constant',
     'INTCONSTANT': 'int_constant',
     'STRINGCONSTANT': 'string_constant',
-    'STACK_TOK': '$'
+    'END_STACK_TOKEN': '$'
 }
-
-STACK_TOKEN = LexToken()
-STACK_TOKEN.type = 'STACK_TOK'
 
 class Parser:
   def __init__(self):
-    path = os.path.join(os.path.dirname(__file__), '..','..','utils','grammar','cc2021.grammar')
+    llc_path = os.path.join(os.path.dirname(__file__), '..','..','utils','grammar','cc2021.grammar')
     proc = Proc()
 
-    proc.read_llc(path)
+    proc.read_llc(llc_path)
 
     self.llc = proc.llc
     self.start_symbol = proc.llc.start_s
@@ -98,5 +95,8 @@ class Parser:
     # else, everything is correct
 
     return (True, None)
+
+STACK_TOKEN = LexToken()
+STACK_TOKEN.type = 'END_STACK_TOKEN'
 
 parser = Parser()
