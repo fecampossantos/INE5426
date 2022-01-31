@@ -1,6 +1,7 @@
 
 EMPTY_SYMBOL = '&'
 STACK_BOTTOM = '$'
+PROGRAM_START = 'PROGRAM'
 
 def merge(a, b):
     n = len(a)

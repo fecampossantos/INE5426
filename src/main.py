@@ -16,7 +16,6 @@ from CC2021.lexer.lexer import Lexer
 from CC2021.parser.parser import parser
 
 from utils.printer import print_symbols_table, print_token_list, print_tokens_table
-from CC2021.yac.yacc_parser import generate_code_from_source
 
 
 def get_info(lexer):
@@ -75,20 +74,20 @@ def main(data):
     lexer.input(data)
 
     token_list, tokens_values, tokens_table, symbols_table = get_info(lexer)
-    print_tokens_table(tokens_table)
-    print_token_list(tokens_values)
-    print_symbols_table(symbols_table)
+    # print_tokens_table(tokens_table)
+    # print_token_list(tokens_values)
+    # print_symbols_table(symbols_table)
 
-    # check, wrong_token = parser.parse(tokens=token_list)
+    check, wrong_token = parser.parse(tokens=token_list)
 
-    # if not check:
-    #     print('Syntatic error on line %s' % wrong_token.lineno)
-    #     print('Token: %s' % wrong_token)
-    #     # sys.exit(1)
-    #     print('\n')
-    #     print('\n')
-    # else:
-    #   print('Syntatic Analysis succesfull! \n')
+    if not check:
+        print('Syntatic error on line %s' % wrong_token.lineno)
+        print('Token: %s' % wrong_token)
+        # sys.exit(1)
+        print('\n')
+        print('\n')
+    else:
+      print('Syntatic Analysis succesfull! \n')
 
     return
 

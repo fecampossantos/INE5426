@@ -3,6 +3,7 @@
 from CC2021.ply import yacc
 from CC2021.lexer.lexer import Lexer
 from CC2021.yac.loop_control import LoopControl
+from utils.utils import PROGRAM_START
 
 # instantiating lex for yacc
 lexer = Lexer()
@@ -731,9 +732,4 @@ def p_lvalue_ident(p: yacc.YaccProduction):
     }
 
 
-yac_parser = yacc.yacc(start='PROGRAM', check_recursion=False)
-
-
-def generate_code_from_source(text: str):
-    # return _parser.parse(text, lexer=lexer, debug=True)
-    return yac_parser.parse(text, lexer=lexer)
+yac_parser = yacc.yacc(start=PROGRAM_START, check_recursion=False, debug=True)
