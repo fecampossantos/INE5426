@@ -1,8 +1,9 @@
 from CC2021.LLC.parser import Parser
-from CC2021.strucs import TableSyntaticAnalyser, LLC, Production
+from CC2021.strucs import *
 from itertools import combinations
 from utils.utils import *
 
+## classe que processa uma LLC
 
 class Proc:
     
@@ -89,9 +90,9 @@ class Proc:
         checks = (p1_first.intersection(p2_first) == set())
 
         if not checks:
-            print('The LLC is not LL(1)!')
-            print('--> Firsts of first production: %s' % p1_first)
-            print('--> Firsts of second production: %s' % p2_first)
+            print('A LLC nao e LL(1)! - Falha na primeira parte do teorema')
+            print('--> First da primeira producao: %s' % p1_first)
+            print('--> First da segunda producao: %s' % p2_first)
 
         return checks
 
@@ -114,7 +115,7 @@ class Proc:
             check &= p2_first.intersection(follow_head) == set()
 
         if not check:
-            print('A LLC nao e LL(1)!')
+            print('A LLC nao e LL(1)! - Falha na segunda parte do teorema')
             print('First da producao 1 %s' % p1_first)
             print('First da producao 2 %s' % p2_first)
             print('Follow do head das producoes %s' % follow_head)
@@ -134,7 +135,7 @@ class Proc:
             first_part_of_theorem = self.ll_first_condition(p1, p2)
             second_part_of_theorem = self.ll_second_condition(p1, p2)
             if not (first_part_of_theorem and second_part_of_theorem):
-                print('|Grammar is not LL(1), as shown by productions')
+                print('|A gramatica nao e LL(1), provado pelas producoes')
                 print('|    | P1: %s' % p1)
                 print('|    | P2: %s' % p2)
                 return False
@@ -143,7 +144,7 @@ class Proc:
 
     def create_table(self):
         if not self.is_ll1():
-            print("Can't generate the syntatic analyser table for a non-LL(1) grammar")
+            print("Essa gramatica nao e LL(1)")
             return False
 
         table = TableSyntaticAnalyser(self.llc.terminals, self.llc.non_terminals)

@@ -1,5 +1,4 @@
-from typing import List, Set, Dict, Optional, Union
-import time
+from typing import List, Set
 
 class Production:
   head: str

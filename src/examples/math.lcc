@@ -8,7 +8,6 @@ def pow(int n, int e) {
 
     print "Resultado é ";
     print output;
-    print "\n";
 
     return;
 }
@@ -18,44 +17,44 @@ def isPrime(int n) {
         if (n > 1) {
             print "É primo";
         } else {
-            print "Não é primo.\n";
+            print "Não é primo.";
         }
         return;
     }
 
     if (n % 2 == 0) {
-        print "Não é primo.\n";
+        print "Não é primo.";
         return;
     }
 
      if (n % 3 == 0) {
-        print "Não é primo.\n";
+        print "Não é primo.";
         return;
      }
 
     int i;
     for (i = 5; n >= (i * i); i = i + 6){
         if ((n % i) == 0) {
-            print "Não é primo\n";
+            print "Não é primo";
             return;
         }
         int tmp;
         tmp = i + 2;
         if ((n % tmp) == 0) {
-            print "Não é primo\n";
+            print "Não é primo";
             return;
         }
     }
 
-    print "É primo\n";
+    print "É primo";
     return;
 }
 
 def sqrt(int n) {
     float result;
 
-    result = n ^ (1/2);
-    print ("A raiz quadrada de");
+    result = n * (1/2);
+    print("A raiz quadrada de");
     print(n);
     print("é");
     print(result);
@@ -88,13 +87,13 @@ def main() {
 
     auxA = 4;
     print "raiz quadrada de 4";
-    returnValue = sqrt(auxA)
+    returnValue = sqrt(auxA);
 
     auxA = 16 ;
     print "raiz quadrada de 16";
-    returnValue = sqrt(auxA)
+    returnValue = sqrt(auxA);
 
     auxA = 25;
     print "raiz quadrada de 25";
-    returnValue = sqrt(auxA)
+    returnValue = sqrt(auxA);
 }

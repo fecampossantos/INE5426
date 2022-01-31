@@ -1,6 +1,7 @@
 from CC2021.strucs import LLC, Production
 from utils.utils import EMPTY_SYMBOL 
 
+# classe que faz o parsing de uma possivel linguagem, a partir de uma gramatica .grammar
 
 class Parser:
     def __init__(self):
@@ -21,14 +22,14 @@ class Parser:
                     continue
                 self.parse_line(line)
         
-        return LLC(start_s=self.start_symbol,
+        return LLC(symbol_start=self.start_symbol,
                    terminals=self.terminals,
                    non_terminals=self.non_terminals,
-                   prods=self.prods)
+                   productions=self.prods)
 
     def parse_line(self, line):
         if len(line.split(':')) == 2:
-            # if this line represents the first prod
+            # linha representa a primeira producao
             h, b = line.split(':')
             head = h.strip()
             body_set = b.strip()
@@ -36,7 +37,7 @@ class Parser:
             self.current_symbol = head
 
             if self.start_symbol is None:
-                # start symbol not set yet
+                # simbolo inicial ainda nao definido
                 self.start_symbol = head
             self.create_production(head, body_set)
         
@@ -56,7 +57,7 @@ class Parser:
           body.append(item)
         
         elif (item[0] == '"' and item[-1] == '"'):
-          # if item begins and ends with double quotes, remove them
+          # remove aspas
           symb = item[1:-1]
           body.append(symb)
           self.terminals.add(symb)
