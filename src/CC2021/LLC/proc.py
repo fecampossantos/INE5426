@@ -6,7 +6,6 @@ from utils.utils import *
 ## classe que processa uma LLC
 
 class Proc:
-    
     def __init__(self):
         self.llc: LLC = None
         self.empty_symbol = EMPTY_SYMBOL
@@ -79,48 +78,7 @@ class Proc:
 
         return first
 
-    # checking if LLC is LL(1)
-    def ll_first_condition(self, p1: Production, p2: Production):
-        # checks if
-        # first(p1) <intersection> first(p2) == empty
-
-        p1_first = self.calculate_first_prod(p1.body)
-        p2_first = self.calculate_first_prod(p2.body)
-
-        checks = (p1_first.intersection(p2_first) == set())
-
-        if not checks:
-            print('A LLC nao e LL(1)! - Falha na primeira parte do teorema')
-            print('--> First da primeira producao: %s' % p1_first)
-            print('--> First da segunda producao: %s' % p2_first)
-
-        return checks
-
-    def ll_second_condition(self, p1: Production, p2: Production):
-        # checks if
-        # for A -> p1 | p2
-        # if(p1 -*> &) then (first(p2) <intersection> follow(A) = empty)
-        # if(p2 -*> &) then (first(p1) <intersection> follow(A) = empty)
-
-        check = True
-        follow_head = self.follows[p1.head]
-
-        p1_first = self.calculate_first_prod(p1.body)
-        p2_first = self.calculate_first_prod(p2.body)
-
-        if EMPTY_SYMBOL in p2_first:
-            check &= p1_first.intersection(follow_head) == set()
-
-        if EMPTY_SYMBOL in p1_first:
-            check &= p2_first.intersection(follow_head) == set()
-
-        if not check:
-            print('A LLC nao e LL(1)! - Falha na segunda parte do teorema')
-            print('First da producao 1 %s' % p1_first)
-            print('First da producao 2 %s' % p2_first)
-            print('Follow do head das producoes %s' % follow_head)
-
-        return check
+    
 
     def is_ll1(self):
         for nt in self.llc.non_terminals:
@@ -141,6 +99,47 @@ class Proc:
                 return False
 
         return True
+    
+    # checa se a LLC é LL(1)
+    def ll_first_condition(self, p1: Production, p2: Production):
+        # first(p1) <iontersecção> first(p2) == vazio
+
+        p1_first = self.calculate_first_prod(p1.body)
+        p2_first = self.calculate_first_prod(p2.body)
+
+        checks = (p1_first.intersection(p2_first) == set())
+
+        if not checks:
+            print('A LLC nao e LL(1)! - Falha na primeira parte do teorema')
+            print('--> First da primeira producao: %s' % p1_first)
+            print('--> First da segunda producao: %s' % p2_first)
+
+        return checks
+
+    def ll_second_condition(self, p1: Production, p2: Production):
+        # pra A -> p1 | p2
+        # se(p1 -*> &) então (first(p2) <intersecção> follow(A) = vazio)
+        # se(p2 -*> &) então (first(p1) <intersecção> follow(A) = vazio)
+
+        check = True
+        follow_head = self.follows[p1.head]
+
+        p1_first = self.calculate_first_prod(p1.body)
+        p2_first = self.calculate_first_prod(p2.body)
+
+        if EMPTY_SYMBOL in p2_first:
+            check &= p1_first.intersection(follow_head) == set()
+
+        if EMPTY_SYMBOL in p1_first:
+            check &= p2_first.intersection(follow_head) == set()
+
+        if not check:
+            print('A LLC nao e LL(1)! - Falha na segunda parte do teorema')
+            print('First da producao 1 %s' % p1_first)
+            print('First da producao 2 %s' % p2_first)
+            print('Follow do head das producoes %s' % follow_head)
+
+        return check
 
     def create_table(self):
         if not self.is_ll1():
