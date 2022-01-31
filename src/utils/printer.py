@@ -1,3 +1,5 @@
+from prettytable import PrettyTable
+
 def print_tokens_table(tokens_table):
     print("========= Tokens Table =========")
     t = PrettyTable(['TOKEN', 'VALUE', 'LINE', 'COLUMN'])
