@@ -1,5 +1,3 @@
-import sys
-from prettytable import PrettyTable
 from CC2021.ply import lex
 
 

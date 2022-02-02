@@ -1,0 +1,3390 @@
+Created by PLY (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> PROGRAM
+Rule 1     empty -> <empty>
+Rule 2     add_loop_label -> <empty>
+Rule 3     PROGRAM -> STATEMENT
+Rule 4     PROGRAM -> FUNCLIST
+Rule 5     PROGRAM -> empty
+Rule 6     FUNCLIST -> FUNCDEF FUNCLIST2
+Rule 7     FUNCLIST2 -> FUNCLIST
+Rule 8     FUNCLIST2 -> empty
+Rule 9     FUNCDEF -> DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+Rule 10    PARAMLIST -> TYPE IDENT PARAMLIST2
+Rule 11    PARAMLIST -> empty
+Rule 12    PARAMLIST2 -> COMMA PARAMLIST
+Rule 13    PARAMLIST2 -> empty
+Rule 14    TYPE -> INT
+Rule 15    TYPE -> FLOAT
+Rule 16    TYPE -> STRING
+Rule 17    STATEMENT -> VARDECL SEMICOLON
+Rule 18    STATEMENT -> ATRIBSTAT SEMICOLON
+Rule 19    STATEMENT -> PRINTSTAT SEMICOLON
+Rule 20    STATEMENT -> READSTAT SEMICOLON
+Rule 21    STATEMENT -> RETURNSTAT SEMICOLON
+Rule 22    STATEMENT -> IFSTAT
+Rule 23    STATEMENT -> FORSTAT
+Rule 24    STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE
+Rule 25    STATEMENT -> BREAK SEMICOLON
+Rule 26    STATEMENT -> SEMICOLON
+Rule 27    VARDECL -> TYPE IDENT ARRAY_OPT
+Rule 28    ARRAY_OPT -> LBRACKET INTCONSTANT RBRACKET ARRAY_OPT
+Rule 29    ARRAY_OPT -> empty
+Rule 30    ATRIBSTAT -> LVALUE ASSIGN RIGHT_ATRIB
+Rule 31    RIGHT_ATRIB -> EXPR_OR_FCALL
+Rule 32    RIGHT_ATRIB -> ALLOCEXPRESSION
+Rule 33    EXPR_OR_FCALL -> MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+Rule 34    EXPR_OR_FCALL -> PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+Rule 35    EXPR_OR_FCALL -> INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+Rule 36    EXPR_OR_FCALL -> STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+Rule 37    EXPR_OR_FCALL -> FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+Rule 38    EXPR_OR_FCALL -> NULL OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+Rule 39    EXPR_OR_FCALL -> LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+Rule 40    EXPR_OR_FCALL -> IDENT AFTER_IDENT
+Rule 41    AFTER_IDENT -> OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+Rule 42    AFTER_IDENT -> LPARENTHESES PARAMLISTCALL RPARENTHESES
+Rule 43    PARAMLISTCALL -> IDENT PARAMLISTCALL2
+Rule 44    PARAMLISTCALL -> empty
+Rule 45    PARAMLISTCALL2 -> COMMA PARAMLISTCALL
+Rule 46    PARAMLISTCALL2 -> empty
+Rule 47    PRINTSTAT -> PRINT EXPRESSION
+Rule 48    READSTAT -> READ LVALUE
+Rule 49    RETURNSTAT -> RETURN OPT_LVALUE
+Rule 50    OPT_LVALUE -> LVALUE
+Rule 51    OPT_LVALUE -> empty
+Rule 52    IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+Rule 53    ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE
+Rule 54    ELSESTAT -> empty
+Rule 55    FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+Rule 56    STATELIST -> STATEMENT OPT_STATELIST
+Rule 57    OPT_STATELIST -> STATELIST
+Rule 58    OPT_STATELIST -> empty
+Rule 59    ALLOCEXPRESSION -> NEW TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+Rule 60    OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+Rule 61    OPT_ALLOC_EXPR -> empty
+Rule 62    EXPRESSION -> NUMEXPRESSION OPT_CMP_EXPR
+Rule 63    OPT_CMP_EXPR -> CMP NUMEXPRESSION
+Rule 64    OPT_CMP_EXPR -> empty
+Rule 65    CMP -> LT
+Rule 66    CMP -> GT
+Rule 67    CMP -> LE
+Rule 68    CMP -> GE
+Rule 69    CMP -> EQUALS
+Rule 70    CMP -> DIFFERENT
+Rule 71    NUMEXPRESSION -> TERM OPT_ARITHM
+Rule 72    OPT_ARITHM -> ARITHM TERM OPT_ARITHM
+Rule 73    OPT_ARITHM -> empty
+Rule 74    ARITHM -> PLUS
+Rule 75    ARITHM -> MINUS
+Rule 76    OPT_UNARY -> TIMES
+Rule 77    OPT_UNARY -> MOD
+Rule 78    OPT_UNARY -> DIVIDE
+Rule 79    TERM -> UNARYEXPR OPT_UNARY_TERM
+Rule 80    OPT_UNARY_TERM -> OPT_UNARY TERM
+Rule 81    OPT_UNARY_TERM -> empty
+Rule 82    UNARYEXPR -> ARITHM FACTOR
+Rule 83    UNARYEXPR -> FACTOR
+Rule 84    FACTOR -> INTCONSTANT
+Rule 85    FACTOR -> FLOATCONSTANT
+Rule 86    FACTOR -> STRINGCONSTANT
+Rule 87    FACTOR -> NULL
+Rule 88    FACTOR -> LVALUE
+Rule 89    FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES
+Rule 90    LVALUE -> IDENT OPT_ALLOC_EXPR
+
+Terminals, with rules where they appear
+
+ASSIGN               : 30
+BREAK                : 25
+COMMA                : 12 45
+DEF                  : 9
+DIFFERENT            : 70
+DIVIDE               : 78
+ELSE                 : 53
+EQUALS               : 69
+FLOAT                : 15
+FLOATCONSTANT        : 37 85
+FOR                  : 55
+GE                   : 68
+GT                   : 66
+IDENT                : 9 10 27 40 43 90
+IF                   : 52
+INT                  : 14
+INTCONSTANT          : 28 35 84
+LBRACKET             : 28 59 60
+LE                   : 67
+LEFTBRACE            : 9 24 52 53 55
+LPARENTHESES         : 9 39 42 52 55 89
+LT                   : 65
+MINUS                : 33 75
+MOD                  : 77
+NEW                  : 59
+NULL                 : 38 87
+PLUS                 : 34 74
+PRINT                : 47
+RBRACKET             : 28 59 60
+READ                 : 48
+RETURN               : 49
+RIGHTBRACE           : 9 24 52 53 55
+RPARENTHESES         : 9 39 42 52 55 89
+SEMICOLON            : 17 18 19 20 21 25 26 55 55
+STRING               : 16
+STRINGCONSTANT       : 36 86
+TIMES                : 76
+error                : 
+
+Nonterminals, with rules where they appear
+
+AFTER_IDENT          : 40
+ALLOCEXPRESSION      : 32
+ARITHM               : 72 82
+ARRAY_OPT            : 27 28
+ATRIBSTAT            : 18 55 55
+CMP                  : 63
+ELSESTAT             : 52
+EXPRESSION           : 47 52 55
+EXPR_OR_FCALL        : 31
+FACTOR               : 33 34 82 83
+FORSTAT              : 23
+FUNCDEF              : 6
+FUNCLIST             : 4 7
+FUNCLIST2            : 6
+IFSTAT               : 22
+LVALUE               : 30 48 50 88
+NUMEXPRESSION        : 39 59 60 62 63 89
+OPT_ALLOC_EXPR       : 41 59 60 90
+OPT_ARITHM           : 33 34 35 36 37 38 39 41 71 72
+OPT_CMP_EXPR         : 33 34 35 36 37 38 39 41 62
+OPT_LVALUE           : 49
+OPT_STATELIST        : 56
+OPT_UNARY            : 80
+OPT_UNARY_TERM       : 33 34 35 36 37 38 39 41 79
+PARAMLIST            : 9 12
+PARAMLIST2           : 10
+PARAMLISTCALL        : 42 45
+PARAMLISTCALL2       : 43
+PRINTSTAT            : 19
+PROGRAM              : 0
+READSTAT             : 20
+RETURNSTAT           : 21
+RIGHT_ATRIB          : 30
+STATELIST            : 9 24 52 53 55 57
+STATEMENT            : 3 56
+TERM                 : 71 72 80
+TYPE                 : 10 27 59
+UNARYEXPR            : 79
+VARDECL              : 17
+add_loop_label       : 55
+empty                : 5 8 11 13 29 44 46 51 54 58 61 64 73 81
+
+
+state 0
+
+    (0) S' -> . PROGRAM
+    (3) PROGRAM -> . STATEMENT
+    (4) PROGRAM -> . FUNCLIST
+    (5) PROGRAM -> . empty
+    (17) STATEMENT -> . VARDECL SEMICOLON
+    (18) STATEMENT -> . ATRIBSTAT SEMICOLON
+    (19) STATEMENT -> . PRINTSTAT SEMICOLON
+    (20) STATEMENT -> . READSTAT SEMICOLON
+    (21) STATEMENT -> . RETURNSTAT SEMICOLON
+    (22) STATEMENT -> . IFSTAT
+    (23) STATEMENT -> . FORSTAT
+    (24) STATEMENT -> . LEFTBRACE STATELIST RIGHTBRACE
+    (25) STATEMENT -> . BREAK SEMICOLON
+    (26) STATEMENT -> . SEMICOLON
+    (6) FUNCLIST -> . FUNCDEF FUNCLIST2
+    (1) empty -> .
+    (27) VARDECL -> . TYPE IDENT ARRAY_OPT
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (47) PRINTSTAT -> . PRINT EXPRESSION
+    (48) READSTAT -> . READ LVALUE
+    (49) RETURNSTAT -> . RETURN OPT_LVALUE
+    (52) IFSTAT -> . IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+    (55) FORSTAT -> . add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (9) FUNCDEF -> . DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+    (2) add_loop_label -> .
+
+    LEFTBRACE       shift and go to state 13
+    BREAK           shift and go to state 14
+    SEMICOLON       shift and go to state 6
+    $end            reduce using rule 1 (empty -> .)
+    PRINT           shift and go to state 19
+    READ            shift and go to state 20
+    RETURN          shift and go to state 21
+    IF              shift and go to state 22
+    DEF             shift and go to state 24
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    IDENT           shift and go to state 17
+    FOR             reduce using rule 2 (add_loop_label -> .)
+
+    PROGRAM                        shift and go to state 1
+    STATEMENT                      shift and go to state 2
+    FUNCLIST                       shift and go to state 3
+    empty                          shift and go to state 4
+    VARDECL                        shift and go to state 5
+    ATRIBSTAT                      shift and go to state 7
+    PRINTSTAT                      shift and go to state 8
+    READSTAT                       shift and go to state 9
+    RETURNSTAT                     shift and go to state 10
+    IFSTAT                         shift and go to state 11
+    FORSTAT                        shift and go to state 12
+    FUNCDEF                        shift and go to state 15
+    TYPE                           shift and go to state 16
+    LVALUE                         shift and go to state 18
+    add_loop_label                 shift and go to state 23
+
+state 1
+
+    (0) S' -> PROGRAM .
+
+
+
+state 2
+
+    (3) PROGRAM -> STATEMENT .
+
+    $end            reduce using rule 3 (PROGRAM -> STATEMENT .)
+
+
+state 3
+
+    (4) PROGRAM -> FUNCLIST .
+
+    $end            reduce using rule 4 (PROGRAM -> FUNCLIST .)
+
+
+state 4
+
+    (5) PROGRAM -> empty .
+
+    $end            reduce using rule 5 (PROGRAM -> empty .)
+
+
+state 5
+
+    (17) STATEMENT -> VARDECL . SEMICOLON
+
+    SEMICOLON       shift and go to state 28
+
+
+state 6
+
+    (26) STATEMENT -> SEMICOLON .
+
+    $end            reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    LEFTBRACE       reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    BREAK           reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    SEMICOLON       reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    PRINT           reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    READ            reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    RETURN          reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    IF              reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    INT             reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    FLOAT           reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    STRING          reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    IDENT           reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    FOR             reduce using rule 26 (STATEMENT -> SEMICOLON .)
+    RIGHTBRACE      reduce using rule 26 (STATEMENT -> SEMICOLON .)
+
+
+state 7
+
+    (18) STATEMENT -> ATRIBSTAT . SEMICOLON
+
+    SEMICOLON       shift and go to state 29
+
+
+state 8
+
+    (19) STATEMENT -> PRINTSTAT . SEMICOLON
+
+    SEMICOLON       shift and go to state 30
+
+
+state 9
+
+    (20) STATEMENT -> READSTAT . SEMICOLON
+
+    SEMICOLON       shift and go to state 31
+
+
+state 10
+
+    (21) STATEMENT -> RETURNSTAT . SEMICOLON
+
+    SEMICOLON       shift and go to state 32
+
+
+state 11
+
+    (22) STATEMENT -> IFSTAT .
+
+    $end            reduce using rule 22 (STATEMENT -> IFSTAT .)
+    LEFTBRACE       reduce using rule 22 (STATEMENT -> IFSTAT .)
+    BREAK           reduce using rule 22 (STATEMENT -> IFSTAT .)
+    SEMICOLON       reduce using rule 22 (STATEMENT -> IFSTAT .)
+    PRINT           reduce using rule 22 (STATEMENT -> IFSTAT .)
+    READ            reduce using rule 22 (STATEMENT -> IFSTAT .)
+    RETURN          reduce using rule 22 (STATEMENT -> IFSTAT .)
+    IF              reduce using rule 22 (STATEMENT -> IFSTAT .)
+    INT             reduce using rule 22 (STATEMENT -> IFSTAT .)
+    FLOAT           reduce using rule 22 (STATEMENT -> IFSTAT .)
+    STRING          reduce using rule 22 (STATEMENT -> IFSTAT .)
+    IDENT           reduce using rule 22 (STATEMENT -> IFSTAT .)
+    FOR             reduce using rule 22 (STATEMENT -> IFSTAT .)
+    RIGHTBRACE      reduce using rule 22 (STATEMENT -> IFSTAT .)
+
+
+state 12
+
+    (23) STATEMENT -> FORSTAT .
+
+    $end            reduce using rule 23 (STATEMENT -> FORSTAT .)
+    LEFTBRACE       reduce using rule 23 (STATEMENT -> FORSTAT .)
+    BREAK           reduce using rule 23 (STATEMENT -> FORSTAT .)
+    SEMICOLON       reduce using rule 23 (STATEMENT -> FORSTAT .)
+    PRINT           reduce using rule 23 (STATEMENT -> FORSTAT .)
+    READ            reduce using rule 23 (STATEMENT -> FORSTAT .)
+    RETURN          reduce using rule 23 (STATEMENT -> FORSTAT .)
+    IF              reduce using rule 23 (STATEMENT -> FORSTAT .)
+    INT             reduce using rule 23 (STATEMENT -> FORSTAT .)
+    FLOAT           reduce using rule 23 (STATEMENT -> FORSTAT .)
+    STRING          reduce using rule 23 (STATEMENT -> FORSTAT .)
+    IDENT           reduce using rule 23 (STATEMENT -> FORSTAT .)
+    FOR             reduce using rule 23 (STATEMENT -> FORSTAT .)
+    RIGHTBRACE      reduce using rule 23 (STATEMENT -> FORSTAT .)
+
+
+state 13
+
+    (24) STATEMENT -> LEFTBRACE . STATELIST RIGHTBRACE
+    (56) STATELIST -> . STATEMENT OPT_STATELIST
+    (17) STATEMENT -> . VARDECL SEMICOLON
+    (18) STATEMENT -> . ATRIBSTAT SEMICOLON
+    (19) STATEMENT -> . PRINTSTAT SEMICOLON
+    (20) STATEMENT -> . READSTAT SEMICOLON
+    (21) STATEMENT -> . RETURNSTAT SEMICOLON
+    (22) STATEMENT -> . IFSTAT
+    (23) STATEMENT -> . FORSTAT
+    (24) STATEMENT -> . LEFTBRACE STATELIST RIGHTBRACE
+    (25) STATEMENT -> . BREAK SEMICOLON
+    (26) STATEMENT -> . SEMICOLON
+    (27) VARDECL -> . TYPE IDENT ARRAY_OPT
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (47) PRINTSTAT -> . PRINT EXPRESSION
+    (48) READSTAT -> . READ LVALUE
+    (49) RETURNSTAT -> . RETURN OPT_LVALUE
+    (52) IFSTAT -> . IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+    (55) FORSTAT -> . add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+    (2) add_loop_label -> .
+
+    LEFTBRACE       shift and go to state 13
+    BREAK           shift and go to state 14
+    SEMICOLON       shift and go to state 6
+    PRINT           shift and go to state 19
+    READ            shift and go to state 20
+    RETURN          shift and go to state 21
+    IF              shift and go to state 22
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    IDENT           shift and go to state 17
+    FOR             reduce using rule 2 (add_loop_label -> .)
+
+    STATELIST                      shift and go to state 33
+    STATEMENT                      shift and go to state 34
+    VARDECL                        shift and go to state 5
+    ATRIBSTAT                      shift and go to state 7
+    PRINTSTAT                      shift and go to state 8
+    READSTAT                       shift and go to state 9
+    RETURNSTAT                     shift and go to state 10
+    IFSTAT                         shift and go to state 11
+    FORSTAT                        shift and go to state 12
+    TYPE                           shift and go to state 16
+    LVALUE                         shift and go to state 18
+    add_loop_label                 shift and go to state 23
+
+state 14
+
+    (25) STATEMENT -> BREAK . SEMICOLON
+
+    SEMICOLON       shift and go to state 35
+
+
+state 15
+
+    (6) FUNCLIST -> FUNCDEF . FUNCLIST2
+    (7) FUNCLIST2 -> . FUNCLIST
+    (8) FUNCLIST2 -> . empty
+    (6) FUNCLIST -> . FUNCDEF FUNCLIST2
+    (1) empty -> .
+    (9) FUNCDEF -> . DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    $end            reduce using rule 1 (empty -> .)
+    DEF             shift and go to state 24
+
+    FUNCDEF                        shift and go to state 15
+    FUNCLIST2                      shift and go to state 36
+    FUNCLIST                       shift and go to state 37
+    empty                          shift and go to state 38
+
+state 16
+
+    (27) VARDECL -> TYPE . IDENT ARRAY_OPT
+
+    IDENT           shift and go to state 39
+
+
+state 17
+
+    (90) LVALUE -> IDENT . OPT_ALLOC_EXPR
+    (60) OPT_ALLOC_EXPR -> . LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+    (61) OPT_ALLOC_EXPR -> . empty
+    (1) empty -> .
+
+    LBRACKET        shift and go to state 41
+    ASSIGN          reduce using rule 1 (empty -> .)
+    TIMES           reduce using rule 1 (empty -> .)
+    MOD             reduce using rule 1 (empty -> .)
+    DIVIDE          reduce using rule 1 (empty -> .)
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RBRACKET        reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ALLOC_EXPR                 shift and go to state 40
+    empty                          shift and go to state 42
+
+state 18
+
+    (30) ATRIBSTAT -> LVALUE . ASSIGN RIGHT_ATRIB
+
+    ASSIGN          shift and go to state 43
+
+
+state 19
+
+    (47) PRINTSTAT -> PRINT . EXPRESSION
+    (62) EXPRESSION -> . NUMEXPRESSION OPT_CMP_EXPR
+    (71) NUMEXPRESSION -> . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    EXPRESSION                     shift and go to state 44
+    NUMEXPRESSION                  shift and go to state 45
+    TERM                           shift and go to state 46
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 20
+
+    (48) READSTAT -> READ . LVALUE
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    IDENT           shift and go to state 17
+
+    LVALUE                         shift and go to state 58
+
+state 21
+
+    (49) RETURNSTAT -> RETURN . OPT_LVALUE
+    (50) OPT_LVALUE -> . LVALUE
+    (51) OPT_LVALUE -> . empty
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+    (1) empty -> .
+
+    IDENT           shift and go to state 17
+    SEMICOLON       reduce using rule 1 (empty -> .)
+
+    OPT_LVALUE                     shift and go to state 59
+    LVALUE                         shift and go to state 60
+    empty                          shift and go to state 61
+
+state 22
+
+    (52) IFSTAT -> IF . LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+
+    LPARENTHESES    shift and go to state 62
+
+
+state 23
+
+    (55) FORSTAT -> add_loop_label . FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    FOR             shift and go to state 63
+
+
+state 24
+
+    (9) FUNCDEF -> DEF . IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    IDENT           shift and go to state 64
+
+
+state 25
+
+    (14) TYPE -> INT .
+
+    IDENT           reduce using rule 14 (TYPE -> INT .)
+    LBRACKET        reduce using rule 14 (TYPE -> INT .)
+
+
+state 26
+
+    (15) TYPE -> FLOAT .
+
+    IDENT           reduce using rule 15 (TYPE -> FLOAT .)
+    LBRACKET        reduce using rule 15 (TYPE -> FLOAT .)
+
+
+state 27
+
+    (16) TYPE -> STRING .
+
+    IDENT           reduce using rule 16 (TYPE -> STRING .)
+    LBRACKET        reduce using rule 16 (TYPE -> STRING .)
+
+
+state 28
+
+    (17) STATEMENT -> VARDECL SEMICOLON .
+
+    $end            reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    LEFTBRACE       reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    BREAK           reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    SEMICOLON       reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    PRINT           reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    READ            reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    RETURN          reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    IF              reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    INT             reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    FLOAT           reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    STRING          reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    IDENT           reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    FOR             reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+    RIGHTBRACE      reduce using rule 17 (STATEMENT -> VARDECL SEMICOLON .)
+
+
+state 29
+
+    (18) STATEMENT -> ATRIBSTAT SEMICOLON .
+
+    $end            reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    LEFTBRACE       reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    BREAK           reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    SEMICOLON       reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    PRINT           reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    READ            reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    RETURN          reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    IF              reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    INT             reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    FLOAT           reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    STRING          reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    IDENT           reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    FOR             reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+    RIGHTBRACE      reduce using rule 18 (STATEMENT -> ATRIBSTAT SEMICOLON .)
+
+
+state 30
+
+    (19) STATEMENT -> PRINTSTAT SEMICOLON .
+
+    $end            reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    LEFTBRACE       reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    BREAK           reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    SEMICOLON       reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    PRINT           reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    READ            reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    RETURN          reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    IF              reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    INT             reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    FLOAT           reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    STRING          reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    IDENT           reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    FOR             reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+    RIGHTBRACE      reduce using rule 19 (STATEMENT -> PRINTSTAT SEMICOLON .)
+
+
+state 31
+
+    (20) STATEMENT -> READSTAT SEMICOLON .
+
+    $end            reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    LEFTBRACE       reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    BREAK           reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    SEMICOLON       reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    PRINT           reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    READ            reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    RETURN          reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    IF              reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    INT             reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    FLOAT           reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    STRING          reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    IDENT           reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    FOR             reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+    RIGHTBRACE      reduce using rule 20 (STATEMENT -> READSTAT SEMICOLON .)
+
+
+state 32
+
+    (21) STATEMENT -> RETURNSTAT SEMICOLON .
+
+    $end            reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    LEFTBRACE       reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    BREAK           reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    SEMICOLON       reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    PRINT           reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    READ            reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    RETURN          reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    IF              reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    INT             reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    FLOAT           reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    STRING          reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    IDENT           reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    FOR             reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+    RIGHTBRACE      reduce using rule 21 (STATEMENT -> RETURNSTAT SEMICOLON .)
+
+
+state 33
+
+    (24) STATEMENT -> LEFTBRACE STATELIST . RIGHTBRACE
+
+    RIGHTBRACE      shift and go to state 65
+
+
+state 34
+
+    (56) STATELIST -> STATEMENT . OPT_STATELIST
+    (57) OPT_STATELIST -> . STATELIST
+    (58) OPT_STATELIST -> . empty
+    (56) STATELIST -> . STATEMENT OPT_STATELIST
+    (1) empty -> .
+    (17) STATEMENT -> . VARDECL SEMICOLON
+    (18) STATEMENT -> . ATRIBSTAT SEMICOLON
+    (19) STATEMENT -> . PRINTSTAT SEMICOLON
+    (20) STATEMENT -> . READSTAT SEMICOLON
+    (21) STATEMENT -> . RETURNSTAT SEMICOLON
+    (22) STATEMENT -> . IFSTAT
+    (23) STATEMENT -> . FORSTAT
+    (24) STATEMENT -> . LEFTBRACE STATELIST RIGHTBRACE
+    (25) STATEMENT -> . BREAK SEMICOLON
+    (26) STATEMENT -> . SEMICOLON
+    (27) VARDECL -> . TYPE IDENT ARRAY_OPT
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (47) PRINTSTAT -> . PRINT EXPRESSION
+    (48) READSTAT -> . READ LVALUE
+    (49) RETURNSTAT -> . RETURN OPT_LVALUE
+    (52) IFSTAT -> . IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+    (55) FORSTAT -> . add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+    (2) add_loop_label -> .
+
+    RIGHTBRACE      reduce using rule 1 (empty -> .)
+    LEFTBRACE       shift and go to state 13
+    BREAK           shift and go to state 14
+    SEMICOLON       shift and go to state 6
+    PRINT           shift and go to state 19
+    READ            shift and go to state 20
+    RETURN          shift and go to state 21
+    IF              shift and go to state 22
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    IDENT           shift and go to state 17
+    FOR             reduce using rule 2 (add_loop_label -> .)
+
+    STATEMENT                      shift and go to state 34
+    OPT_STATELIST                  shift and go to state 66
+    STATELIST                      shift and go to state 67
+    empty                          shift and go to state 68
+    VARDECL                        shift and go to state 5
+    ATRIBSTAT                      shift and go to state 7
+    PRINTSTAT                      shift and go to state 8
+    READSTAT                       shift and go to state 9
+    RETURNSTAT                     shift and go to state 10
+    IFSTAT                         shift and go to state 11
+    FORSTAT                        shift and go to state 12
+    TYPE                           shift and go to state 16
+    LVALUE                         shift and go to state 18
+    add_loop_label                 shift and go to state 23
+
+state 35
+
+    (25) STATEMENT -> BREAK SEMICOLON .
+
+    $end            reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    LEFTBRACE       reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    BREAK           reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    SEMICOLON       reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    PRINT           reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    READ            reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    RETURN          reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    IF              reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    INT             reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    FLOAT           reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    STRING          reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    IDENT           reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    FOR             reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+    RIGHTBRACE      reduce using rule 25 (STATEMENT -> BREAK SEMICOLON .)
+
+
+state 36
+
+    (6) FUNCLIST -> FUNCDEF FUNCLIST2 .
+
+    $end            reduce using rule 6 (FUNCLIST -> FUNCDEF FUNCLIST2 .)
+
+
+state 37
+
+    (7) FUNCLIST2 -> FUNCLIST .
+
+    $end            reduce using rule 7 (FUNCLIST2 -> FUNCLIST .)
+
+
+state 38
+
+    (8) FUNCLIST2 -> empty .
+
+    $end            reduce using rule 8 (FUNCLIST2 -> empty .)
+
+
+state 39
+
+    (27) VARDECL -> TYPE IDENT . ARRAY_OPT
+    (28) ARRAY_OPT -> . LBRACKET INTCONSTANT RBRACKET ARRAY_OPT
+    (29) ARRAY_OPT -> . empty
+    (1) empty -> .
+
+    LBRACKET        shift and go to state 70
+    SEMICOLON       reduce using rule 1 (empty -> .)
+
+    ARRAY_OPT                      shift and go to state 69
+    empty                          shift and go to state 71
+
+state 40
+
+    (90) LVALUE -> IDENT OPT_ALLOC_EXPR .
+
+    ASSIGN          reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    TIMES           reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    MOD             reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    DIVIDE          reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    PLUS            reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    MINUS           reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    LT              reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    GT              reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    LE              reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    GE              reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    EQUALS          reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    DIFFERENT       reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    SEMICOLON       reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    RBRACKET        reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+    RPARENTHESES    reduce using rule 90 (LVALUE -> IDENT OPT_ALLOC_EXPR .)
+
+
+state 41
+
+    (60) OPT_ALLOC_EXPR -> LBRACKET . NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+    (71) NUMEXPRESSION -> . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    NUMEXPRESSION                  shift and go to state 72
+    TERM                           shift and go to state 46
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 42
+
+    (61) OPT_ALLOC_EXPR -> empty .
+
+    ASSIGN          reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    TIMES           reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    MOD             reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    DIVIDE          reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    PLUS            reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    MINUS           reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    LT              reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    GT              reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    LE              reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    GE              reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    EQUALS          reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    DIFFERENT       reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    SEMICOLON       reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    RBRACKET        reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+    RPARENTHESES    reduce using rule 61 (OPT_ALLOC_EXPR -> empty .)
+
+
+state 43
+
+    (30) ATRIBSTAT -> LVALUE ASSIGN . RIGHT_ATRIB
+    (31) RIGHT_ATRIB -> . EXPR_OR_FCALL
+    (32) RIGHT_ATRIB -> . ALLOCEXPRESSION
+    (33) EXPR_OR_FCALL -> . MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (34) EXPR_OR_FCALL -> . PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (35) EXPR_OR_FCALL -> . INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (36) EXPR_OR_FCALL -> . STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (37) EXPR_OR_FCALL -> . FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (38) EXPR_OR_FCALL -> . NULL OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (39) EXPR_OR_FCALL -> . LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (40) EXPR_OR_FCALL -> . IDENT AFTER_IDENT
+    (59) ALLOCEXPRESSION -> . NEW TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+
+    MINUS           shift and go to state 76
+    PLUS            shift and go to state 77
+    INTCONSTANT     shift and go to state 78
+    STRINGCONSTANT  shift and go to state 79
+    FLOATCONSTANT   shift and go to state 80
+    NULL            shift and go to state 81
+    LPARENTHESES    shift and go to state 82
+    IDENT           shift and go to state 83
+    NEW             shift and go to state 84
+
+    RIGHT_ATRIB                    shift and go to state 73
+    EXPR_OR_FCALL                  shift and go to state 74
+    ALLOCEXPRESSION                shift and go to state 75
+
+state 44
+
+    (47) PRINTSTAT -> PRINT EXPRESSION .
+
+    SEMICOLON       reduce using rule 47 (PRINTSTAT -> PRINT EXPRESSION .)
+
+
+state 45
+
+    (62) EXPRESSION -> NUMEXPRESSION . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 85
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 46
+
+    (71) NUMEXPRESSION -> TERM . OPT_ARITHM
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RBRACKET        reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 94
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 47
+
+    (79) TERM -> UNARYEXPR . OPT_UNARY_TERM
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RBRACKET        reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 97
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 48
+
+    (82) UNARYEXPR -> ARITHM . FACTOR
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    FACTOR                         shift and go to state 103
+    LVALUE                         shift and go to state 56
+
+state 49
+
+    (83) UNARYEXPR -> FACTOR .
+
+    TIMES           reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    MOD             reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    DIVIDE          reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    PLUS            reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    MINUS           reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    LT              reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    GT              reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    LE              reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    GE              reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    EQUALS          reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    DIFFERENT       reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    SEMICOLON       reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    RBRACKET        reduce using rule 83 (UNARYEXPR -> FACTOR .)
+    RPARENTHESES    reduce using rule 83 (UNARYEXPR -> FACTOR .)
+
+
+state 50
+
+    (74) ARITHM -> PLUS .
+
+    INTCONSTANT     reduce using rule 74 (ARITHM -> PLUS .)
+    FLOATCONSTANT   reduce using rule 74 (ARITHM -> PLUS .)
+    STRINGCONSTANT  reduce using rule 74 (ARITHM -> PLUS .)
+    NULL            reduce using rule 74 (ARITHM -> PLUS .)
+    LPARENTHESES    reduce using rule 74 (ARITHM -> PLUS .)
+    IDENT           reduce using rule 74 (ARITHM -> PLUS .)
+    PLUS            reduce using rule 74 (ARITHM -> PLUS .)
+    MINUS           reduce using rule 74 (ARITHM -> PLUS .)
+
+
+state 51
+
+    (75) ARITHM -> MINUS .
+
+    INTCONSTANT     reduce using rule 75 (ARITHM -> MINUS .)
+    FLOATCONSTANT   reduce using rule 75 (ARITHM -> MINUS .)
+    STRINGCONSTANT  reduce using rule 75 (ARITHM -> MINUS .)
+    NULL            reduce using rule 75 (ARITHM -> MINUS .)
+    LPARENTHESES    reduce using rule 75 (ARITHM -> MINUS .)
+    IDENT           reduce using rule 75 (ARITHM -> MINUS .)
+    PLUS            reduce using rule 75 (ARITHM -> MINUS .)
+    MINUS           reduce using rule 75 (ARITHM -> MINUS .)
+
+
+state 52
+
+    (84) FACTOR -> INTCONSTANT .
+
+    TIMES           reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    MOD             reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    DIVIDE          reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    PLUS            reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    MINUS           reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    LT              reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    GT              reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    LE              reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    GE              reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    EQUALS          reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    DIFFERENT       reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    SEMICOLON       reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    RBRACKET        reduce using rule 84 (FACTOR -> INTCONSTANT .)
+    RPARENTHESES    reduce using rule 84 (FACTOR -> INTCONSTANT .)
+
+
+state 53
+
+    (85) FACTOR -> FLOATCONSTANT .
+
+    TIMES           reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    MOD             reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    DIVIDE          reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    PLUS            reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    MINUS           reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    LT              reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    GT              reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    LE              reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    GE              reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    EQUALS          reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    DIFFERENT       reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    SEMICOLON       reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    RBRACKET        reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+    RPARENTHESES    reduce using rule 85 (FACTOR -> FLOATCONSTANT .)
+
+
+state 54
+
+    (86) FACTOR -> STRINGCONSTANT .
+
+    TIMES           reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    MOD             reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    DIVIDE          reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    PLUS            reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    MINUS           reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    LT              reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    GT              reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    LE              reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    GE              reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    EQUALS          reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    DIFFERENT       reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    SEMICOLON       reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    RBRACKET        reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+    RPARENTHESES    reduce using rule 86 (FACTOR -> STRINGCONSTANT .)
+
+
+state 55
+
+    (87) FACTOR -> NULL .
+
+    TIMES           reduce using rule 87 (FACTOR -> NULL .)
+    MOD             reduce using rule 87 (FACTOR -> NULL .)
+    DIVIDE          reduce using rule 87 (FACTOR -> NULL .)
+    PLUS            reduce using rule 87 (FACTOR -> NULL .)
+    MINUS           reduce using rule 87 (FACTOR -> NULL .)
+    LT              reduce using rule 87 (FACTOR -> NULL .)
+    GT              reduce using rule 87 (FACTOR -> NULL .)
+    LE              reduce using rule 87 (FACTOR -> NULL .)
+    GE              reduce using rule 87 (FACTOR -> NULL .)
+    EQUALS          reduce using rule 87 (FACTOR -> NULL .)
+    DIFFERENT       reduce using rule 87 (FACTOR -> NULL .)
+    SEMICOLON       reduce using rule 87 (FACTOR -> NULL .)
+    RBRACKET        reduce using rule 87 (FACTOR -> NULL .)
+    RPARENTHESES    reduce using rule 87 (FACTOR -> NULL .)
+
+
+state 56
+
+    (88) FACTOR -> LVALUE .
+
+    TIMES           reduce using rule 88 (FACTOR -> LVALUE .)
+    MOD             reduce using rule 88 (FACTOR -> LVALUE .)
+    DIVIDE          reduce using rule 88 (FACTOR -> LVALUE .)
+    PLUS            reduce using rule 88 (FACTOR -> LVALUE .)
+    MINUS           reduce using rule 88 (FACTOR -> LVALUE .)
+    LT              reduce using rule 88 (FACTOR -> LVALUE .)
+    GT              reduce using rule 88 (FACTOR -> LVALUE .)
+    LE              reduce using rule 88 (FACTOR -> LVALUE .)
+    GE              reduce using rule 88 (FACTOR -> LVALUE .)
+    EQUALS          reduce using rule 88 (FACTOR -> LVALUE .)
+    DIFFERENT       reduce using rule 88 (FACTOR -> LVALUE .)
+    SEMICOLON       reduce using rule 88 (FACTOR -> LVALUE .)
+    RBRACKET        reduce using rule 88 (FACTOR -> LVALUE .)
+    RPARENTHESES    reduce using rule 88 (FACTOR -> LVALUE .)
+
+
+state 57
+
+    (89) FACTOR -> LPARENTHESES . NUMEXPRESSION RPARENTHESES
+    (71) NUMEXPRESSION -> . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    NUMEXPRESSION                  shift and go to state 104
+    TERM                           shift and go to state 46
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 58
+
+    (48) READSTAT -> READ LVALUE .
+
+    SEMICOLON       reduce using rule 48 (READSTAT -> READ LVALUE .)
+
+
+state 59
+
+    (49) RETURNSTAT -> RETURN OPT_LVALUE .
+
+    SEMICOLON       reduce using rule 49 (RETURNSTAT -> RETURN OPT_LVALUE .)
+
+
+state 60
+
+    (50) OPT_LVALUE -> LVALUE .
+
+    SEMICOLON       reduce using rule 50 (OPT_LVALUE -> LVALUE .)
+
+
+state 61
+
+    (51) OPT_LVALUE -> empty .
+
+    SEMICOLON       reduce using rule 51 (OPT_LVALUE -> empty .)
+
+
+state 62
+
+    (52) IFSTAT -> IF LPARENTHESES . EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+    (62) EXPRESSION -> . NUMEXPRESSION OPT_CMP_EXPR
+    (71) NUMEXPRESSION -> . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    EXPRESSION                     shift and go to state 105
+    NUMEXPRESSION                  shift and go to state 45
+    TERM                           shift and go to state 46
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 63
+
+    (55) FORSTAT -> add_loop_label FOR . LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    LPARENTHESES    shift and go to state 106
+
+
+state 64
+
+    (9) FUNCDEF -> DEF IDENT . LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    LPARENTHESES    shift and go to state 107
+
+
+state 65
+
+    (24) STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .
+
+    $end            reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    LEFTBRACE       reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    BREAK           reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    SEMICOLON       reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    PRINT           reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    READ            reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    RETURN          reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    IF              reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    INT             reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    FLOAT           reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    STRING          reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    IDENT           reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    FOR             reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+    RIGHTBRACE      reduce using rule 24 (STATEMENT -> LEFTBRACE STATELIST RIGHTBRACE .)
+
+
+state 66
+
+    (56) STATELIST -> STATEMENT OPT_STATELIST .
+
+    RIGHTBRACE      reduce using rule 56 (STATELIST -> STATEMENT OPT_STATELIST .)
+
+
+state 67
+
+    (57) OPT_STATELIST -> STATELIST .
+
+    RIGHTBRACE      reduce using rule 57 (OPT_STATELIST -> STATELIST .)
+
+
+state 68
+
+    (58) OPT_STATELIST -> empty .
+
+    RIGHTBRACE      reduce using rule 58 (OPT_STATELIST -> empty .)
+
+
+state 69
+
+    (27) VARDECL -> TYPE IDENT ARRAY_OPT .
+
+    SEMICOLON       reduce using rule 27 (VARDECL -> TYPE IDENT ARRAY_OPT .)
+
+
+state 70
+
+    (28) ARRAY_OPT -> LBRACKET . INTCONSTANT RBRACKET ARRAY_OPT
+
+    INTCONSTANT     shift and go to state 108
+
+
+state 71
+
+    (29) ARRAY_OPT -> empty .
+
+    SEMICOLON       reduce using rule 29 (ARRAY_OPT -> empty .)
+
+
+state 72
+
+    (60) OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION . RBRACKET OPT_ALLOC_EXPR
+
+    RBRACKET        shift and go to state 109
+
+
+state 73
+
+    (30) ATRIBSTAT -> LVALUE ASSIGN RIGHT_ATRIB .
+
+    SEMICOLON       reduce using rule 30 (ATRIBSTAT -> LVALUE ASSIGN RIGHT_ATRIB .)
+    RPARENTHESES    reduce using rule 30 (ATRIBSTAT -> LVALUE ASSIGN RIGHT_ATRIB .)
+
+
+state 74
+
+    (31) RIGHT_ATRIB -> EXPR_OR_FCALL .
+
+    SEMICOLON       reduce using rule 31 (RIGHT_ATRIB -> EXPR_OR_FCALL .)
+    RPARENTHESES    reduce using rule 31 (RIGHT_ATRIB -> EXPR_OR_FCALL .)
+
+
+state 75
+
+    (32) RIGHT_ATRIB -> ALLOCEXPRESSION .
+
+    SEMICOLON       reduce using rule 32 (RIGHT_ATRIB -> ALLOCEXPRESSION .)
+    RPARENTHESES    reduce using rule 32 (RIGHT_ATRIB -> ALLOCEXPRESSION .)
+
+
+state 76
+
+    (33) EXPR_OR_FCALL -> MINUS . FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    FACTOR                         shift and go to state 110
+    LVALUE                         shift and go to state 56
+
+state 77
+
+    (34) EXPR_OR_FCALL -> PLUS . FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    FACTOR                         shift and go to state 111
+    LVALUE                         shift and go to state 56
+
+state 78
+
+    (35) EXPR_OR_FCALL -> INTCONSTANT . OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 112
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 79
+
+    (36) EXPR_OR_FCALL -> STRINGCONSTANT . OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 113
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 80
+
+    (37) EXPR_OR_FCALL -> FLOATCONSTANT . OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 114
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 81
+
+    (38) EXPR_OR_FCALL -> NULL . OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 115
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 82
+
+    (39) EXPR_OR_FCALL -> LPARENTHESES . NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (71) NUMEXPRESSION -> . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    NUMEXPRESSION                  shift and go to state 116
+    TERM                           shift and go to state 46
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 83
+
+    (40) EXPR_OR_FCALL -> IDENT . AFTER_IDENT
+    (41) AFTER_IDENT -> . OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (42) AFTER_IDENT -> . LPARENTHESES PARAMLISTCALL RPARENTHESES
+    (60) OPT_ALLOC_EXPR -> . LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+    (61) OPT_ALLOC_EXPR -> . empty
+    (1) empty -> .
+
+    LPARENTHESES    shift and go to state 119
+    LBRACKET        shift and go to state 41
+    TIMES           reduce using rule 1 (empty -> .)
+    MOD             reduce using rule 1 (empty -> .)
+    DIVIDE          reduce using rule 1 (empty -> .)
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    AFTER_IDENT                    shift and go to state 117
+    OPT_ALLOC_EXPR                 shift and go to state 118
+    empty                          shift and go to state 42
+
+state 84
+
+    (59) ALLOCEXPRESSION -> NEW . TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+
+    TYPE                           shift and go to state 120
+
+state 85
+
+    (62) EXPRESSION -> NUMEXPRESSION OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 62 (EXPRESSION -> NUMEXPRESSION OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 62 (EXPRESSION -> NUMEXPRESSION OPT_CMP_EXPR .)
+
+
+state 86
+
+    (63) OPT_CMP_EXPR -> CMP . NUMEXPRESSION
+    (71) NUMEXPRESSION -> . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    NUMEXPRESSION                  shift and go to state 121
+    TERM                           shift and go to state 46
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 87
+
+    (64) OPT_CMP_EXPR -> empty .
+
+    SEMICOLON       reduce using rule 64 (OPT_CMP_EXPR -> empty .)
+    RPARENTHESES    reduce using rule 64 (OPT_CMP_EXPR -> empty .)
+
+
+state 88
+
+    (65) CMP -> LT .
+
+    PLUS            reduce using rule 65 (CMP -> LT .)
+    MINUS           reduce using rule 65 (CMP -> LT .)
+    INTCONSTANT     reduce using rule 65 (CMP -> LT .)
+    FLOATCONSTANT   reduce using rule 65 (CMP -> LT .)
+    STRINGCONSTANT  reduce using rule 65 (CMP -> LT .)
+    NULL            reduce using rule 65 (CMP -> LT .)
+    LPARENTHESES    reduce using rule 65 (CMP -> LT .)
+    IDENT           reduce using rule 65 (CMP -> LT .)
+
+
+state 89
+
+    (66) CMP -> GT .
+
+    PLUS            reduce using rule 66 (CMP -> GT .)
+    MINUS           reduce using rule 66 (CMP -> GT .)
+    INTCONSTANT     reduce using rule 66 (CMP -> GT .)
+    FLOATCONSTANT   reduce using rule 66 (CMP -> GT .)
+    STRINGCONSTANT  reduce using rule 66 (CMP -> GT .)
+    NULL            reduce using rule 66 (CMP -> GT .)
+    LPARENTHESES    reduce using rule 66 (CMP -> GT .)
+    IDENT           reduce using rule 66 (CMP -> GT .)
+
+
+state 90
+
+    (67) CMP -> LE .
+
+    PLUS            reduce using rule 67 (CMP -> LE .)
+    MINUS           reduce using rule 67 (CMP -> LE .)
+    INTCONSTANT     reduce using rule 67 (CMP -> LE .)
+    FLOATCONSTANT   reduce using rule 67 (CMP -> LE .)
+    STRINGCONSTANT  reduce using rule 67 (CMP -> LE .)
+    NULL            reduce using rule 67 (CMP -> LE .)
+    LPARENTHESES    reduce using rule 67 (CMP -> LE .)
+    IDENT           reduce using rule 67 (CMP -> LE .)
+
+
+state 91
+
+    (68) CMP -> GE .
+
+    PLUS            reduce using rule 68 (CMP -> GE .)
+    MINUS           reduce using rule 68 (CMP -> GE .)
+    INTCONSTANT     reduce using rule 68 (CMP -> GE .)
+    FLOATCONSTANT   reduce using rule 68 (CMP -> GE .)
+    STRINGCONSTANT  reduce using rule 68 (CMP -> GE .)
+    NULL            reduce using rule 68 (CMP -> GE .)
+    LPARENTHESES    reduce using rule 68 (CMP -> GE .)
+    IDENT           reduce using rule 68 (CMP -> GE .)
+
+
+state 92
+
+    (69) CMP -> EQUALS .
+
+    PLUS            reduce using rule 69 (CMP -> EQUALS .)
+    MINUS           reduce using rule 69 (CMP -> EQUALS .)
+    INTCONSTANT     reduce using rule 69 (CMP -> EQUALS .)
+    FLOATCONSTANT   reduce using rule 69 (CMP -> EQUALS .)
+    STRINGCONSTANT  reduce using rule 69 (CMP -> EQUALS .)
+    NULL            reduce using rule 69 (CMP -> EQUALS .)
+    LPARENTHESES    reduce using rule 69 (CMP -> EQUALS .)
+    IDENT           reduce using rule 69 (CMP -> EQUALS .)
+
+
+state 93
+
+    (70) CMP -> DIFFERENT .
+
+    PLUS            reduce using rule 70 (CMP -> DIFFERENT .)
+    MINUS           reduce using rule 70 (CMP -> DIFFERENT .)
+    INTCONSTANT     reduce using rule 70 (CMP -> DIFFERENT .)
+    FLOATCONSTANT   reduce using rule 70 (CMP -> DIFFERENT .)
+    STRINGCONSTANT  reduce using rule 70 (CMP -> DIFFERENT .)
+    NULL            reduce using rule 70 (CMP -> DIFFERENT .)
+    LPARENTHESES    reduce using rule 70 (CMP -> DIFFERENT .)
+    IDENT           reduce using rule 70 (CMP -> DIFFERENT .)
+
+
+state 94
+
+    (71) NUMEXPRESSION -> TERM OPT_ARITHM .
+
+    LT              reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+    GT              reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+    LE              reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+    GE              reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+    EQUALS          reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+    DIFFERENT       reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+    SEMICOLON       reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+    RBRACKET        reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+    RPARENTHESES    reduce using rule 71 (NUMEXPRESSION -> TERM OPT_ARITHM .)
+
+
+state 95
+
+    (72) OPT_ARITHM -> ARITHM . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    ARITHM                         shift and go to state 48
+    TERM                           shift and go to state 122
+    UNARYEXPR                      shift and go to state 47
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 96
+
+    (73) OPT_ARITHM -> empty .
+
+    LT              reduce using rule 73 (OPT_ARITHM -> empty .)
+    GT              reduce using rule 73 (OPT_ARITHM -> empty .)
+    LE              reduce using rule 73 (OPT_ARITHM -> empty .)
+    GE              reduce using rule 73 (OPT_ARITHM -> empty .)
+    EQUALS          reduce using rule 73 (OPT_ARITHM -> empty .)
+    DIFFERENT       reduce using rule 73 (OPT_ARITHM -> empty .)
+    SEMICOLON       reduce using rule 73 (OPT_ARITHM -> empty .)
+    RBRACKET        reduce using rule 73 (OPT_ARITHM -> empty .)
+    RPARENTHESES    reduce using rule 73 (OPT_ARITHM -> empty .)
+
+
+state 97
+
+    (79) TERM -> UNARYEXPR OPT_UNARY_TERM .
+
+    PLUS            reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    MINUS           reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    LT              reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    GT              reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    LE              reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    GE              reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    EQUALS          reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    DIFFERENT       reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    SEMICOLON       reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    RBRACKET        reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+    RPARENTHESES    reduce using rule 79 (TERM -> UNARYEXPR OPT_UNARY_TERM .)
+
+
+state 98
+
+    (80) OPT_UNARY_TERM -> OPT_UNARY . TERM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    TERM                           shift and go to state 123
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 99
+
+    (81) OPT_UNARY_TERM -> empty .
+
+    PLUS            reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    MINUS           reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    LT              reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    GT              reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    LE              reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    GE              reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    EQUALS          reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    DIFFERENT       reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    SEMICOLON       reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    RBRACKET        reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+    RPARENTHESES    reduce using rule 81 (OPT_UNARY_TERM -> empty .)
+
+
+state 100
+
+    (76) OPT_UNARY -> TIMES .
+
+    PLUS            reduce using rule 76 (OPT_UNARY -> TIMES .)
+    MINUS           reduce using rule 76 (OPT_UNARY -> TIMES .)
+    INTCONSTANT     reduce using rule 76 (OPT_UNARY -> TIMES .)
+    FLOATCONSTANT   reduce using rule 76 (OPT_UNARY -> TIMES .)
+    STRINGCONSTANT  reduce using rule 76 (OPT_UNARY -> TIMES .)
+    NULL            reduce using rule 76 (OPT_UNARY -> TIMES .)
+    LPARENTHESES    reduce using rule 76 (OPT_UNARY -> TIMES .)
+    IDENT           reduce using rule 76 (OPT_UNARY -> TIMES .)
+
+
+state 101
+
+    (77) OPT_UNARY -> MOD .
+
+    PLUS            reduce using rule 77 (OPT_UNARY -> MOD .)
+    MINUS           reduce using rule 77 (OPT_UNARY -> MOD .)
+    INTCONSTANT     reduce using rule 77 (OPT_UNARY -> MOD .)
+    FLOATCONSTANT   reduce using rule 77 (OPT_UNARY -> MOD .)
+    STRINGCONSTANT  reduce using rule 77 (OPT_UNARY -> MOD .)
+    NULL            reduce using rule 77 (OPT_UNARY -> MOD .)
+    LPARENTHESES    reduce using rule 77 (OPT_UNARY -> MOD .)
+    IDENT           reduce using rule 77 (OPT_UNARY -> MOD .)
+
+
+state 102
+
+    (78) OPT_UNARY -> DIVIDE .
+
+    PLUS            reduce using rule 78 (OPT_UNARY -> DIVIDE .)
+    MINUS           reduce using rule 78 (OPT_UNARY -> DIVIDE .)
+    INTCONSTANT     reduce using rule 78 (OPT_UNARY -> DIVIDE .)
+    FLOATCONSTANT   reduce using rule 78 (OPT_UNARY -> DIVIDE .)
+    STRINGCONSTANT  reduce using rule 78 (OPT_UNARY -> DIVIDE .)
+    NULL            reduce using rule 78 (OPT_UNARY -> DIVIDE .)
+    LPARENTHESES    reduce using rule 78 (OPT_UNARY -> DIVIDE .)
+    IDENT           reduce using rule 78 (OPT_UNARY -> DIVIDE .)
+
+
+state 103
+
+    (82) UNARYEXPR -> ARITHM FACTOR .
+
+    TIMES           reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    MOD             reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    DIVIDE          reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    PLUS            reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    MINUS           reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    LT              reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    GT              reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    LE              reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    GE              reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    EQUALS          reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    DIFFERENT       reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    SEMICOLON       reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    RBRACKET        reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+    RPARENTHESES    reduce using rule 82 (UNARYEXPR -> ARITHM FACTOR .)
+
+
+state 104
+
+    (89) FACTOR -> LPARENTHESES NUMEXPRESSION . RPARENTHESES
+
+    RPARENTHESES    shift and go to state 124
+
+
+state 105
+
+    (52) IFSTAT -> IF LPARENTHESES EXPRESSION . RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+
+    RPARENTHESES    shift and go to state 125
+
+
+state 106
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES . ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    IDENT           shift and go to state 17
+
+    ATRIBSTAT                      shift and go to state 126
+    LVALUE                         shift and go to state 18
+
+state 107
+
+    (9) FUNCDEF -> DEF IDENT LPARENTHESES . PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (10) PARAMLIST -> . TYPE IDENT PARAMLIST2
+    (11) PARAMLIST -> . empty
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (1) empty -> .
+
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    PARAMLIST                      shift and go to state 127
+    TYPE                           shift and go to state 128
+    empty                          shift and go to state 129
+
+state 108
+
+    (28) ARRAY_OPT -> LBRACKET INTCONSTANT . RBRACKET ARRAY_OPT
+
+    RBRACKET        shift and go to state 130
+
+
+state 109
+
+    (60) OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET . OPT_ALLOC_EXPR
+    (60) OPT_ALLOC_EXPR -> . LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+    (61) OPT_ALLOC_EXPR -> . empty
+    (1) empty -> .
+
+    LBRACKET        shift and go to state 41
+    ASSIGN          reduce using rule 1 (empty -> .)
+    TIMES           reduce using rule 1 (empty -> .)
+    MOD             reduce using rule 1 (empty -> .)
+    DIVIDE          reduce using rule 1 (empty -> .)
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RBRACKET        reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ALLOC_EXPR                 shift and go to state 131
+    empty                          shift and go to state 42
+
+state 110
+
+    (33) EXPR_OR_FCALL -> MINUS FACTOR . OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 132
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 111
+
+    (34) EXPR_OR_FCALL -> PLUS FACTOR . OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 133
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 112
+
+    (35) EXPR_OR_FCALL -> INTCONSTANT OPT_UNARY_TERM . OPT_ARITHM OPT_CMP_EXPR
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 134
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 113
+
+    (36) EXPR_OR_FCALL -> STRINGCONSTANT OPT_UNARY_TERM . OPT_ARITHM OPT_CMP_EXPR
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 135
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 114
+
+    (37) EXPR_OR_FCALL -> FLOATCONSTANT OPT_UNARY_TERM . OPT_ARITHM OPT_CMP_EXPR
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 136
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 115
+
+    (38) EXPR_OR_FCALL -> NULL OPT_UNARY_TERM . OPT_ARITHM OPT_CMP_EXPR
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 137
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 116
+
+    (39) EXPR_OR_FCALL -> LPARENTHESES NUMEXPRESSION . RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+
+    RPARENTHESES    shift and go to state 138
+
+
+state 117
+
+    (40) EXPR_OR_FCALL -> IDENT AFTER_IDENT .
+
+    SEMICOLON       reduce using rule 40 (EXPR_OR_FCALL -> IDENT AFTER_IDENT .)
+    RPARENTHESES    reduce using rule 40 (EXPR_OR_FCALL -> IDENT AFTER_IDENT .)
+
+
+state 118
+
+    (41) AFTER_IDENT -> OPT_ALLOC_EXPR . OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 139
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 119
+
+    (42) AFTER_IDENT -> LPARENTHESES . PARAMLISTCALL RPARENTHESES
+    (43) PARAMLISTCALL -> . IDENT PARAMLISTCALL2
+    (44) PARAMLISTCALL -> . empty
+    (1) empty -> .
+
+    IDENT           shift and go to state 141
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    PARAMLISTCALL                  shift and go to state 140
+    empty                          shift and go to state 142
+
+state 120
+
+    (59) ALLOCEXPRESSION -> NEW TYPE . LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+
+    LBRACKET        shift and go to state 143
+
+
+state 121
+
+    (63) OPT_CMP_EXPR -> CMP NUMEXPRESSION .
+
+    SEMICOLON       reduce using rule 63 (OPT_CMP_EXPR -> CMP NUMEXPRESSION .)
+    RPARENTHESES    reduce using rule 63 (OPT_CMP_EXPR -> CMP NUMEXPRESSION .)
+
+
+state 122
+
+    (72) OPT_ARITHM -> ARITHM TERM . OPT_ARITHM
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RBRACKET        reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    ARITHM                         shift and go to state 95
+    OPT_ARITHM                     shift and go to state 144
+    empty                          shift and go to state 96
+
+state 123
+
+    (80) OPT_UNARY_TERM -> OPT_UNARY TERM .
+
+    PLUS            reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    MINUS           reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    LT              reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    GT              reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    LE              reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    GE              reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    EQUALS          reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    DIFFERENT       reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    SEMICOLON       reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    RBRACKET        reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+    RPARENTHESES    reduce using rule 80 (OPT_UNARY_TERM -> OPT_UNARY TERM .)
+
+
+state 124
+
+    (89) FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .
+
+    TIMES           reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    MOD             reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    DIVIDE          reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    PLUS            reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    MINUS           reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    LT              reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    GT              reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    LE              reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    GE              reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    EQUALS          reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    DIFFERENT       reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    SEMICOLON       reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    RBRACKET        reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+    RPARENTHESES    reduce using rule 89 (FACTOR -> LPARENTHESES NUMEXPRESSION RPARENTHESES .)
+
+
+state 125
+
+    (52) IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES . LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+
+    LEFTBRACE       shift and go to state 145
+
+
+state 126
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT . SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    SEMICOLON       shift and go to state 146
+
+
+state 127
+
+    (9) FUNCDEF -> DEF IDENT LPARENTHESES PARAMLIST . RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    RPARENTHESES    shift and go to state 147
+
+
+state 128
+
+    (10) PARAMLIST -> TYPE . IDENT PARAMLIST2
+
+    IDENT           shift and go to state 148
+
+
+state 129
+
+    (11) PARAMLIST -> empty .
+
+    RPARENTHESES    reduce using rule 11 (PARAMLIST -> empty .)
+
+
+state 130
+
+    (28) ARRAY_OPT -> LBRACKET INTCONSTANT RBRACKET . ARRAY_OPT
+    (28) ARRAY_OPT -> . LBRACKET INTCONSTANT RBRACKET ARRAY_OPT
+    (29) ARRAY_OPT -> . empty
+    (1) empty -> .
+
+    LBRACKET        shift and go to state 70
+    SEMICOLON       reduce using rule 1 (empty -> .)
+
+    ARRAY_OPT                      shift and go to state 149
+    empty                          shift and go to state 71
+
+state 131
+
+    (60) OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .
+
+    ASSIGN          reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    TIMES           reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    MOD             reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    DIVIDE          reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    PLUS            reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    MINUS           reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    LT              reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    GT              reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    LE              reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    GE              reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    EQUALS          reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    DIFFERENT       reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    SEMICOLON       reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    RBRACKET        reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    RPARENTHESES    reduce using rule 60 (OPT_ALLOC_EXPR -> LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+
+
+state 132
+
+    (33) EXPR_OR_FCALL -> MINUS FACTOR OPT_UNARY_TERM . OPT_ARITHM OPT_CMP_EXPR
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 150
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 133
+
+    (34) EXPR_OR_FCALL -> PLUS FACTOR OPT_UNARY_TERM . OPT_ARITHM OPT_CMP_EXPR
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 151
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 134
+
+    (35) EXPR_OR_FCALL -> INTCONSTANT OPT_UNARY_TERM OPT_ARITHM . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 152
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 135
+
+    (36) EXPR_OR_FCALL -> STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 153
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 136
+
+    (37) EXPR_OR_FCALL -> FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 154
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 137
+
+    (38) EXPR_OR_FCALL -> NULL OPT_UNARY_TERM OPT_ARITHM . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 155
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 138
+
+    (39) EXPR_OR_FCALL -> LPARENTHESES NUMEXPRESSION RPARENTHESES . OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    (80) OPT_UNARY_TERM -> . OPT_UNARY TERM
+    (81) OPT_UNARY_TERM -> . empty
+    (76) OPT_UNARY -> . TIMES
+    (77) OPT_UNARY -> . MOD
+    (78) OPT_UNARY -> . DIVIDE
+    (1) empty -> .
+
+    TIMES           shift and go to state 100
+    MOD             shift and go to state 101
+    DIVIDE          shift and go to state 102
+    PLUS            reduce using rule 1 (empty -> .)
+    MINUS           reduce using rule 1 (empty -> .)
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_UNARY_TERM                 shift and go to state 156
+    OPT_UNARY                      shift and go to state 98
+    empty                          shift and go to state 99
+
+state 139
+
+    (41) AFTER_IDENT -> OPT_ALLOC_EXPR OPT_UNARY_TERM . OPT_ARITHM OPT_CMP_EXPR
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 157
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 140
+
+    (42) AFTER_IDENT -> LPARENTHESES PARAMLISTCALL . RPARENTHESES
+
+    RPARENTHESES    shift and go to state 158
+
+
+state 141
+
+    (43) PARAMLISTCALL -> IDENT . PARAMLISTCALL2
+    (45) PARAMLISTCALL2 -> . COMMA PARAMLISTCALL
+    (46) PARAMLISTCALL2 -> . empty
+    (1) empty -> .
+
+    COMMA           shift and go to state 160
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    PARAMLISTCALL2                 shift and go to state 159
+    empty                          shift and go to state 161
+
+state 142
+
+    (44) PARAMLISTCALL -> empty .
+
+    RPARENTHESES    reduce using rule 44 (PARAMLISTCALL -> empty .)
+
+
+state 143
+
+    (59) ALLOCEXPRESSION -> NEW TYPE LBRACKET . NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+    (71) NUMEXPRESSION -> . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    NUMEXPRESSION                  shift and go to state 162
+    TERM                           shift and go to state 46
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 144
+
+    (72) OPT_ARITHM -> ARITHM TERM OPT_ARITHM .
+
+    LT              reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+    GT              reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+    LE              reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+    GE              reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+    EQUALS          reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+    DIFFERENT       reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+    SEMICOLON       reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+    RBRACKET        reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+    RPARENTHESES    reduce using rule 72 (OPT_ARITHM -> ARITHM TERM OPT_ARITHM .)
+
+
+state 145
+
+    (52) IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE . STATELIST RIGHTBRACE ELSESTAT
+    (56) STATELIST -> . STATEMENT OPT_STATELIST
+    (17) STATEMENT -> . VARDECL SEMICOLON
+    (18) STATEMENT -> . ATRIBSTAT SEMICOLON
+    (19) STATEMENT -> . PRINTSTAT SEMICOLON
+    (20) STATEMENT -> . READSTAT SEMICOLON
+    (21) STATEMENT -> . RETURNSTAT SEMICOLON
+    (22) STATEMENT -> . IFSTAT
+    (23) STATEMENT -> . FORSTAT
+    (24) STATEMENT -> . LEFTBRACE STATELIST RIGHTBRACE
+    (25) STATEMENT -> . BREAK SEMICOLON
+    (26) STATEMENT -> . SEMICOLON
+    (27) VARDECL -> . TYPE IDENT ARRAY_OPT
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (47) PRINTSTAT -> . PRINT EXPRESSION
+    (48) READSTAT -> . READ LVALUE
+    (49) RETURNSTAT -> . RETURN OPT_LVALUE
+    (52) IFSTAT -> . IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+    (55) FORSTAT -> . add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+    (2) add_loop_label -> .
+
+    LEFTBRACE       shift and go to state 13
+    BREAK           shift and go to state 14
+    SEMICOLON       shift and go to state 6
+    PRINT           shift and go to state 19
+    READ            shift and go to state 20
+    RETURN          shift and go to state 21
+    IF              shift and go to state 22
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    IDENT           shift and go to state 17
+    FOR             reduce using rule 2 (add_loop_label -> .)
+
+    STATELIST                      shift and go to state 163
+    STATEMENT                      shift and go to state 34
+    VARDECL                        shift and go to state 5
+    ATRIBSTAT                      shift and go to state 7
+    PRINTSTAT                      shift and go to state 8
+    READSTAT                       shift and go to state 9
+    RETURNSTAT                     shift and go to state 10
+    IFSTAT                         shift and go to state 11
+    FORSTAT                        shift and go to state 12
+    TYPE                           shift and go to state 16
+    LVALUE                         shift and go to state 18
+    add_loop_label                 shift and go to state 23
+
+state 146
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON . EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (62) EXPRESSION -> . NUMEXPRESSION OPT_CMP_EXPR
+    (71) NUMEXPRESSION -> . TERM OPT_ARITHM
+    (79) TERM -> . UNARYEXPR OPT_UNARY_TERM
+    (82) UNARYEXPR -> . ARITHM FACTOR
+    (83) UNARYEXPR -> . FACTOR
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (84) FACTOR -> . INTCONSTANT
+    (85) FACTOR -> . FLOATCONSTANT
+    (86) FACTOR -> . STRINGCONSTANT
+    (87) FACTOR -> . NULL
+    (88) FACTOR -> . LVALUE
+    (89) FACTOR -> . LPARENTHESES NUMEXPRESSION RPARENTHESES
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    INTCONSTANT     shift and go to state 52
+    FLOATCONSTANT   shift and go to state 53
+    STRINGCONSTANT  shift and go to state 54
+    NULL            shift and go to state 55
+    LPARENTHESES    shift and go to state 57
+    IDENT           shift and go to state 17
+
+    EXPRESSION                     shift and go to state 164
+    NUMEXPRESSION                  shift and go to state 45
+    TERM                           shift and go to state 46
+    UNARYEXPR                      shift and go to state 47
+    ARITHM                         shift and go to state 48
+    FACTOR                         shift and go to state 49
+    LVALUE                         shift and go to state 56
+
+state 147
+
+    (9) FUNCDEF -> DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES . LEFTBRACE STATELIST RIGHTBRACE
+
+    LEFTBRACE       shift and go to state 165
+
+
+state 148
+
+    (10) PARAMLIST -> TYPE IDENT . PARAMLIST2
+    (12) PARAMLIST2 -> . COMMA PARAMLIST
+    (13) PARAMLIST2 -> . empty
+    (1) empty -> .
+
+    COMMA           shift and go to state 167
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    PARAMLIST2                     shift and go to state 166
+    empty                          shift and go to state 168
+
+state 149
+
+    (28) ARRAY_OPT -> LBRACKET INTCONSTANT RBRACKET ARRAY_OPT .
+
+    SEMICOLON       reduce using rule 28 (ARRAY_OPT -> LBRACKET INTCONSTANT RBRACKET ARRAY_OPT .)
+
+
+state 150
+
+    (33) EXPR_OR_FCALL -> MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 169
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 151
+
+    (34) EXPR_OR_FCALL -> PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 170
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 152
+
+    (35) EXPR_OR_FCALL -> INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 35 (EXPR_OR_FCALL -> INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 35 (EXPR_OR_FCALL -> INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+
+
+state 153
+
+    (36) EXPR_OR_FCALL -> STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 36 (EXPR_OR_FCALL -> STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 36 (EXPR_OR_FCALL -> STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+
+
+state 154
+
+    (37) EXPR_OR_FCALL -> FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 37 (EXPR_OR_FCALL -> FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 37 (EXPR_OR_FCALL -> FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+
+
+state 155
+
+    (38) EXPR_OR_FCALL -> NULL OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 38 (EXPR_OR_FCALL -> NULL OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 38 (EXPR_OR_FCALL -> NULL OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+
+
+state 156
+
+    (39) EXPR_OR_FCALL -> LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM . OPT_ARITHM OPT_CMP_EXPR
+    (72) OPT_ARITHM -> . ARITHM TERM OPT_ARITHM
+    (73) OPT_ARITHM -> . empty
+    (74) ARITHM -> . PLUS
+    (75) ARITHM -> . MINUS
+    (1) empty -> .
+
+    PLUS            shift and go to state 50
+    MINUS           shift and go to state 51
+    LT              reduce using rule 1 (empty -> .)
+    GT              reduce using rule 1 (empty -> .)
+    LE              reduce using rule 1 (empty -> .)
+    GE              reduce using rule 1 (empty -> .)
+    EQUALS          reduce using rule 1 (empty -> .)
+    DIFFERENT       reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ARITHM                     shift and go to state 171
+    ARITHM                         shift and go to state 95
+    empty                          shift and go to state 96
+
+state 157
+
+    (41) AFTER_IDENT -> OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 172
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 158
+
+    (42) AFTER_IDENT -> LPARENTHESES PARAMLISTCALL RPARENTHESES .
+
+    SEMICOLON       reduce using rule 42 (AFTER_IDENT -> LPARENTHESES PARAMLISTCALL RPARENTHESES .)
+    RPARENTHESES    reduce using rule 42 (AFTER_IDENT -> LPARENTHESES PARAMLISTCALL RPARENTHESES .)
+
+
+state 159
+
+    (43) PARAMLISTCALL -> IDENT PARAMLISTCALL2 .
+
+    RPARENTHESES    reduce using rule 43 (PARAMLISTCALL -> IDENT PARAMLISTCALL2 .)
+
+
+state 160
+
+    (45) PARAMLISTCALL2 -> COMMA . PARAMLISTCALL
+    (43) PARAMLISTCALL -> . IDENT PARAMLISTCALL2
+    (44) PARAMLISTCALL -> . empty
+    (1) empty -> .
+
+    IDENT           shift and go to state 141
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    PARAMLISTCALL                  shift and go to state 173
+    empty                          shift and go to state 142
+
+state 161
+
+    (46) PARAMLISTCALL2 -> empty .
+
+    RPARENTHESES    reduce using rule 46 (PARAMLISTCALL2 -> empty .)
+
+
+state 162
+
+    (59) ALLOCEXPRESSION -> NEW TYPE LBRACKET NUMEXPRESSION . RBRACKET OPT_ALLOC_EXPR
+
+    RBRACKET        shift and go to state 174
+
+
+state 163
+
+    (52) IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST . RIGHTBRACE ELSESTAT
+
+    RIGHTBRACE      shift and go to state 175
+
+
+state 164
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION . SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    SEMICOLON       shift and go to state 176
+
+
+state 165
+
+    (9) FUNCDEF -> DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE . STATELIST RIGHTBRACE
+    (56) STATELIST -> . STATEMENT OPT_STATELIST
+    (17) STATEMENT -> . VARDECL SEMICOLON
+    (18) STATEMENT -> . ATRIBSTAT SEMICOLON
+    (19) STATEMENT -> . PRINTSTAT SEMICOLON
+    (20) STATEMENT -> . READSTAT SEMICOLON
+    (21) STATEMENT -> . RETURNSTAT SEMICOLON
+    (22) STATEMENT -> . IFSTAT
+    (23) STATEMENT -> . FORSTAT
+    (24) STATEMENT -> . LEFTBRACE STATELIST RIGHTBRACE
+    (25) STATEMENT -> . BREAK SEMICOLON
+    (26) STATEMENT -> . SEMICOLON
+    (27) VARDECL -> . TYPE IDENT ARRAY_OPT
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (47) PRINTSTAT -> . PRINT EXPRESSION
+    (48) READSTAT -> . READ LVALUE
+    (49) RETURNSTAT -> . RETURN OPT_LVALUE
+    (52) IFSTAT -> . IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+    (55) FORSTAT -> . add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+    (2) add_loop_label -> .
+
+    LEFTBRACE       shift and go to state 13
+    BREAK           shift and go to state 14
+    SEMICOLON       shift and go to state 6
+    PRINT           shift and go to state 19
+    READ            shift and go to state 20
+    RETURN          shift and go to state 21
+    IF              shift and go to state 22
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    IDENT           shift and go to state 17
+    FOR             reduce using rule 2 (add_loop_label -> .)
+
+    STATELIST                      shift and go to state 177
+    STATEMENT                      shift and go to state 34
+    VARDECL                        shift and go to state 5
+    ATRIBSTAT                      shift and go to state 7
+    PRINTSTAT                      shift and go to state 8
+    READSTAT                       shift and go to state 9
+    RETURNSTAT                     shift and go to state 10
+    IFSTAT                         shift and go to state 11
+    FORSTAT                        shift and go to state 12
+    TYPE                           shift and go to state 16
+    LVALUE                         shift and go to state 18
+    add_loop_label                 shift and go to state 23
+
+state 166
+
+    (10) PARAMLIST -> TYPE IDENT PARAMLIST2 .
+
+    RPARENTHESES    reduce using rule 10 (PARAMLIST -> TYPE IDENT PARAMLIST2 .)
+
+
+state 167
+
+    (12) PARAMLIST2 -> COMMA . PARAMLIST
+    (10) PARAMLIST -> . TYPE IDENT PARAMLIST2
+    (11) PARAMLIST -> . empty
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (1) empty -> .
+
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    PARAMLIST                      shift and go to state 178
+    TYPE                           shift and go to state 128
+    empty                          shift and go to state 129
+
+state 168
+
+    (13) PARAMLIST2 -> empty .
+
+    RPARENTHESES    reduce using rule 13 (PARAMLIST2 -> empty .)
+
+
+state 169
+
+    (33) EXPR_OR_FCALL -> MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 33 (EXPR_OR_FCALL -> MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 33 (EXPR_OR_FCALL -> MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+
+
+state 170
+
+    (34) EXPR_OR_FCALL -> PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 34 (EXPR_OR_FCALL -> PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 34 (EXPR_OR_FCALL -> PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+
+
+state 171
+
+    (39) EXPR_OR_FCALL -> LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM . OPT_CMP_EXPR
+    (63) OPT_CMP_EXPR -> . CMP NUMEXPRESSION
+    (64) OPT_CMP_EXPR -> . empty
+    (65) CMP -> . LT
+    (66) CMP -> . GT
+    (67) CMP -> . LE
+    (68) CMP -> . GE
+    (69) CMP -> . EQUALS
+    (70) CMP -> . DIFFERENT
+    (1) empty -> .
+
+    LT              shift and go to state 88
+    GT              shift and go to state 89
+    LE              shift and go to state 90
+    GE              shift and go to state 91
+    EQUALS          shift and go to state 92
+    DIFFERENT       shift and go to state 93
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_CMP_EXPR                   shift and go to state 179
+    CMP                            shift and go to state 86
+    empty                          shift and go to state 87
+
+state 172
+
+    (41) AFTER_IDENT -> OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 41 (AFTER_IDENT -> OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 41 (AFTER_IDENT -> OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+
+
+state 173
+
+    (45) PARAMLISTCALL2 -> COMMA PARAMLISTCALL .
+
+    RPARENTHESES    reduce using rule 45 (PARAMLISTCALL2 -> COMMA PARAMLISTCALL .)
+
+
+state 174
+
+    (59) ALLOCEXPRESSION -> NEW TYPE LBRACKET NUMEXPRESSION RBRACKET . OPT_ALLOC_EXPR
+    (60) OPT_ALLOC_EXPR -> . LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR
+    (61) OPT_ALLOC_EXPR -> . empty
+    (1) empty -> .
+
+    LBRACKET        shift and go to state 41
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    RPARENTHESES    reduce using rule 1 (empty -> .)
+
+    OPT_ALLOC_EXPR                 shift and go to state 180
+    empty                          shift and go to state 42
+
+state 175
+
+    (52) IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE . ELSESTAT
+    (53) ELSESTAT -> . ELSE LEFTBRACE STATELIST RIGHTBRACE
+    (54) ELSESTAT -> . empty
+    (1) empty -> .
+
+    ELSE            shift and go to state 182
+    $end            reduce using rule 1 (empty -> .)
+    LEFTBRACE       reduce using rule 1 (empty -> .)
+    BREAK           reduce using rule 1 (empty -> .)
+    SEMICOLON       reduce using rule 1 (empty -> .)
+    PRINT           reduce using rule 1 (empty -> .)
+    READ            reduce using rule 1 (empty -> .)
+    RETURN          reduce using rule 1 (empty -> .)
+    IF              reduce using rule 1 (empty -> .)
+    INT             reduce using rule 1 (empty -> .)
+    FLOAT           reduce using rule 1 (empty -> .)
+    STRING          reduce using rule 1 (empty -> .)
+    IDENT           reduce using rule 1 (empty -> .)
+    FOR             reduce using rule 1 (empty -> .)
+    RIGHTBRACE      reduce using rule 1 (empty -> .)
+
+    ELSESTAT                       shift and go to state 181
+    empty                          shift and go to state 183
+
+state 176
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON . ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+
+    IDENT           shift and go to state 17
+
+    ATRIBSTAT                      shift and go to state 184
+    LVALUE                         shift and go to state 18
+
+state 177
+
+    (9) FUNCDEF -> DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST . RIGHTBRACE
+
+    RIGHTBRACE      shift and go to state 185
+
+
+state 178
+
+    (12) PARAMLIST2 -> COMMA PARAMLIST .
+
+    RPARENTHESES    reduce using rule 12 (PARAMLIST2 -> COMMA PARAMLIST .)
+
+
+state 179
+
+    (39) EXPR_OR_FCALL -> LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .
+
+    SEMICOLON       reduce using rule 39 (EXPR_OR_FCALL -> LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+    RPARENTHESES    reduce using rule 39 (EXPR_OR_FCALL -> LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR .)
+
+
+state 180
+
+    (59) ALLOCEXPRESSION -> NEW TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .
+
+    SEMICOLON       reduce using rule 59 (ALLOCEXPRESSION -> NEW TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+    RPARENTHESES    reduce using rule 59 (ALLOCEXPRESSION -> NEW TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR .)
+
+
+state 181
+
+    (52) IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .
+
+    $end            reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    LEFTBRACE       reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    BREAK           reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    SEMICOLON       reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    PRINT           reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    READ            reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    RETURN          reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    IF              reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    INT             reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    FLOAT           reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    STRING          reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    IDENT           reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    FOR             reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+    RIGHTBRACE      reduce using rule 52 (IFSTAT -> IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT .)
+
+
+state 182
+
+    (53) ELSESTAT -> ELSE . LEFTBRACE STATELIST RIGHTBRACE
+
+    LEFTBRACE       shift and go to state 186
+
+
+state 183
+
+    (54) ELSESTAT -> empty .
+
+    $end            reduce using rule 54 (ELSESTAT -> empty .)
+    LEFTBRACE       reduce using rule 54 (ELSESTAT -> empty .)
+    BREAK           reduce using rule 54 (ELSESTAT -> empty .)
+    SEMICOLON       reduce using rule 54 (ELSESTAT -> empty .)
+    PRINT           reduce using rule 54 (ELSESTAT -> empty .)
+    READ            reduce using rule 54 (ELSESTAT -> empty .)
+    RETURN          reduce using rule 54 (ELSESTAT -> empty .)
+    IF              reduce using rule 54 (ELSESTAT -> empty .)
+    INT             reduce using rule 54 (ELSESTAT -> empty .)
+    FLOAT           reduce using rule 54 (ELSESTAT -> empty .)
+    STRING          reduce using rule 54 (ELSESTAT -> empty .)
+    IDENT           reduce using rule 54 (ELSESTAT -> empty .)
+    FOR             reduce using rule 54 (ELSESTAT -> empty .)
+    RIGHTBRACE      reduce using rule 54 (ELSESTAT -> empty .)
+
+
+state 184
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT . RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+
+    RPARENTHESES    shift and go to state 187
+
+
+state 185
+
+    (9) FUNCDEF -> DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .
+
+    DEF             reduce using rule 9 (FUNCDEF -> DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    $end            reduce using rule 9 (FUNCDEF -> DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+
+
+state 186
+
+    (53) ELSESTAT -> ELSE LEFTBRACE . STATELIST RIGHTBRACE
+    (56) STATELIST -> . STATEMENT OPT_STATELIST
+    (17) STATEMENT -> . VARDECL SEMICOLON
+    (18) STATEMENT -> . ATRIBSTAT SEMICOLON
+    (19) STATEMENT -> . PRINTSTAT SEMICOLON
+    (20) STATEMENT -> . READSTAT SEMICOLON
+    (21) STATEMENT -> . RETURNSTAT SEMICOLON
+    (22) STATEMENT -> . IFSTAT
+    (23) STATEMENT -> . FORSTAT
+    (24) STATEMENT -> . LEFTBRACE STATELIST RIGHTBRACE
+    (25) STATEMENT -> . BREAK SEMICOLON
+    (26) STATEMENT -> . SEMICOLON
+    (27) VARDECL -> . TYPE IDENT ARRAY_OPT
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (47) PRINTSTAT -> . PRINT EXPRESSION
+    (48) READSTAT -> . READ LVALUE
+    (49) RETURNSTAT -> . RETURN OPT_LVALUE
+    (52) IFSTAT -> . IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+    (55) FORSTAT -> . add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+    (2) add_loop_label -> .
+
+    LEFTBRACE       shift and go to state 13
+    BREAK           shift and go to state 14
+    SEMICOLON       shift and go to state 6
+    PRINT           shift and go to state 19
+    READ            shift and go to state 20
+    RETURN          shift and go to state 21
+    IF              shift and go to state 22
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    IDENT           shift and go to state 17
+    FOR             reduce using rule 2 (add_loop_label -> .)
+
+    STATELIST                      shift and go to state 188
+    STATEMENT                      shift and go to state 34
+    VARDECL                        shift and go to state 5
+    ATRIBSTAT                      shift and go to state 7
+    PRINTSTAT                      shift and go to state 8
+    READSTAT                       shift and go to state 9
+    RETURNSTAT                     shift and go to state 10
+    IFSTAT                         shift and go to state 11
+    FORSTAT                        shift and go to state 12
+    TYPE                           shift and go to state 16
+    LVALUE                         shift and go to state 18
+    add_loop_label                 shift and go to state 23
+
+state 187
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES . LEFTBRACE STATELIST RIGHTBRACE
+
+    LEFTBRACE       shift and go to state 189
+
+
+state 188
+
+    (53) ELSESTAT -> ELSE LEFTBRACE STATELIST . RIGHTBRACE
+
+    RIGHTBRACE      shift and go to state 190
+
+
+state 189
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE . STATELIST RIGHTBRACE
+    (56) STATELIST -> . STATEMENT OPT_STATELIST
+    (17) STATEMENT -> . VARDECL SEMICOLON
+    (18) STATEMENT -> . ATRIBSTAT SEMICOLON
+    (19) STATEMENT -> . PRINTSTAT SEMICOLON
+    (20) STATEMENT -> . READSTAT SEMICOLON
+    (21) STATEMENT -> . RETURNSTAT SEMICOLON
+    (22) STATEMENT -> . IFSTAT
+    (23) STATEMENT -> . FORSTAT
+    (24) STATEMENT -> . LEFTBRACE STATELIST RIGHTBRACE
+    (25) STATEMENT -> . BREAK SEMICOLON
+    (26) STATEMENT -> . SEMICOLON
+    (27) VARDECL -> . TYPE IDENT ARRAY_OPT
+    (30) ATRIBSTAT -> . LVALUE ASSIGN RIGHT_ATRIB
+    (47) PRINTSTAT -> . PRINT EXPRESSION
+    (48) READSTAT -> . READ LVALUE
+    (49) RETURNSTAT -> . RETURN OPT_LVALUE
+    (52) IFSTAT -> . IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT
+    (55) FORSTAT -> . add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE
+    (14) TYPE -> . INT
+    (15) TYPE -> . FLOAT
+    (16) TYPE -> . STRING
+    (90) LVALUE -> . IDENT OPT_ALLOC_EXPR
+    (2) add_loop_label -> .
+
+    LEFTBRACE       shift and go to state 13
+    BREAK           shift and go to state 14
+    SEMICOLON       shift and go to state 6
+    PRINT           shift and go to state 19
+    READ            shift and go to state 20
+    RETURN          shift and go to state 21
+    IF              shift and go to state 22
+    INT             shift and go to state 25
+    FLOAT           shift and go to state 26
+    STRING          shift and go to state 27
+    IDENT           shift and go to state 17
+    FOR             reduce using rule 2 (add_loop_label -> .)
+
+    add_loop_label                 shift and go to state 23
+    ATRIBSTAT                      shift and go to state 7
+    STATELIST                      shift and go to state 191
+    STATEMENT                      shift and go to state 34
+    VARDECL                        shift and go to state 5
+    PRINTSTAT                      shift and go to state 8
+    READSTAT                       shift and go to state 9
+    RETURNSTAT                     shift and go to state 10
+    IFSTAT                         shift and go to state 11
+    FORSTAT                        shift and go to state 12
+    TYPE                           shift and go to state 16
+    LVALUE                         shift and go to state 18
+
+state 190
+
+    (53) ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .
+
+    $end            reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    LEFTBRACE       reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    BREAK           reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    SEMICOLON       reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    PRINT           reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    READ            reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    RETURN          reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    IF              reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    INT             reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    FLOAT           reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    STRING          reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    IDENT           reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    FOR             reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+    RIGHTBRACE      reduce using rule 53 (ELSESTAT -> ELSE LEFTBRACE STATELIST RIGHTBRACE .)
+
+
+state 191
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST . RIGHTBRACE
+
+    RIGHTBRACE      shift and go to state 192
+
+
+state 192
+
+    (55) FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .
+
+    $end            reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    LEFTBRACE       reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    BREAK           reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    SEMICOLON       reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    PRINT           reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    READ            reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    RETURN          reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    IF              reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    INT             reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    FLOAT           reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    STRING          reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    IDENT           reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    FOR             reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+    RIGHTBRACE      reduce using rule 55 (FORSTAT -> add_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE .)
+

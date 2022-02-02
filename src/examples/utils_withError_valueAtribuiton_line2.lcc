@@ -1,0 +1,14 @@
+def calcAreaQuadrado(int lado){
+  int area = 10;
+  area = lado * lado;
+  return area;
+}
+
+def calcPerimetroQuadrado(int lado){
+  int perimetro;
+  perimetro = lado * 4;
+  return perimetro;
+}
+
+// a atribuição de valor pra uma variavel
+// nao pode ser feita na declaração dela - linha 2

@@ -30,9 +30,9 @@ STATEMENT : VARDECL ";"
           | "break" ";"
           | ";"
             
-VARDECL : TYPE "ident" ARRAY_OP
+VARDECL : TYPE "ident" ARRAY_OPT
          
-ARRAY_OP : "[" "int_constant" "]" ARRAY_OP
+ARRAY_OPT : "[" "int_constant" "]" ARRAY_OPT
            | &
           
 ATRIBSTAT : LVALUE "=" RIGHT_ATRIB
@@ -62,7 +62,10 @@ PRINTSTAT : "print" EXPRESSION
            
 READSTAT : "read" LVALUE
          
-RETURNSTAT : "return"
+RETURNSTAT : "return" OPT_LVALUE
+
+OPT_LVALUE    : LVALUE
+              | &
              
 IFSTAT : "if" "(" EXPRESSION ")" "{" STATELIST "}" ELSESTAT
            

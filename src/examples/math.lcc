@@ -1,62 +1,3 @@
-def gcd(int a, int b) {
-    int orig_a;
-    orig_a = a;
-    int iteration;
-    for(iteration = 0; a != b; iteration = iteration + 1) {
-        if (a > b) {
-            a = a - b;
-        } else {
-            b = b - a;
-        }
-    }
-    print "O GCD de";
-    print orig_a;
-    print " e ";
-    print b;
-    print "é:";
-    print a;
-
-    return;
-}
-
-def is_prime(int n) {
-    if(n <= 3){
-        if (n > 1) {
-            print "É primo";
-        } else {
-            print "Não é primo.\n";
-        }
-        return;
-    }
-
-    if (n % 2 == 0) {
-        print "Não é primo.\n";
-        return;
-    }
-
-     if (n % 3 == 0) {
-        print "Não é primo.\n";
-        return;
-     }
-
-    int i;
-    for (i = 5; n >= (i * i); i = i + 6){
-        if ((n % i) == 0) {
-            print "Não é primo\n";
-            return;
-        }
-        int tmp;
-        tmp = i + 2;
-        if ((n % tmp) == 0) {
-            print "Não é primo\n";
-            return;
-        }
-    }
-
-    print "É primo\n";
-    return;
-}
-
 def pow(int n, int e) {
     int output;
     output = 1;
@@ -67,41 +8,92 @@ def pow(int n, int e) {
 
     print "Resultado é ";
     print output;
-    print "\n";
+
+    return;
+}
+
+def isPrime(int n) {
+    if(n <= 3){
+        if (n > 1) {
+            print "É primo";
+        } else {
+            print "Não é primo.";
+        }
+        return;
+    }
+
+    if (n % 2 == 0) {
+        print "Não é primo.";
+        return;
+    }
+
+     if (n % 3 == 0) {
+        print "Não é primo.";
+        return;
+     }
+
+    int i;
+    for (i = 5; n >= (i * i); i = i + 6){
+        if ((n % i) == 0) {
+            print "Não é primo";
+            return;
+        }
+        int tmp;
+        tmp = i + 2;
+        if ((n % tmp) == 0) {
+            print "Não é primo";
+            return;
+        }
+    }
+
+    print "É primo";
+    return;
+}
+
+def sqrt(int n) {
+    float result;
+
+    result = n * (1/2);
+    print("A raiz quadrada de");
+    print(n);
+    print("é");
+    print(result);
 
     return;
 }
 
 def main() {
-    int aux_a;
-    int aux_b;
-    int return_value;
+    int auxA;
+    int auxB;
+    int returnValue;
 
-    print "Se 11 é primo:";
-    aux_a = 6;
-    return_value = is_prime(aux_a);
+    print "Se 7 é primo:";
+    auxA = 7;
+    returnValue = isPrime(auxA);
 
-    aux_a = 12;
-    print "Se 12 é primo:";
-    return_value = is_prime(aux_a);
+    print "Se 23 é primo:";
+    auxA = 23;
+    returnValue = isPrime(auxA);
 
-    aux_a = 5;
-    aux_b = 2; 
-    print "5 elevado a 2:";
-    return_value = pow(aux_a, aux_b);
+    auxA = 2;
+    auxB = 3; 
+    print "2 elevado a 3:";
+    returnValue = pow(auxA, auxB);
 
-    aux_a = 5;
-    aux_b = 5; 
+    auxA = 5;
+    auxB = 5; 
     print "5 elevado a 5";
-    return_value = pow(aux_a, aux_b);
+    returnValue = pow(auxA, auxB);
 
-    aux_a = 30;
-    aux_b = 27; 
-    print "GCD de 30 e 27";
-    return_value = gcd(aux_a, aux_b);
+    auxA = 4;
+    print "raiz quadrada de 4";
+    returnValue = sqrt(auxA);
 
-    aux_a = 97;
-    aux_b = 32; 
-    print "GCD de 97 e 32";
-    return_value = gcd(aux_a, aux_b);
+    auxA = 16 ;
+    print "raiz quadrada de 16";
+    returnValue = sqrt(auxA);
+
+    auxA = 25;
+    print "raiz quadrada de 25";
+    returnValue = sqrt(auxA);
 }

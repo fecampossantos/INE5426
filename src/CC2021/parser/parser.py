@@ -1,105 +1,64 @@
 import os
 from collections import deque
-from typing import List, Tuple, Optional
 
 from CC2021.ply.lex import LexToken
 from CC2021.LLC.proc import Proc
-
-_EMPTY_SYMBOL = '&'
-_END_SYMBOL = '$'
-
-_MAP = {
-    'DEF': 'def',
-    'IF': 'if',
-    'FOR': 'for',
-    'ELSE': 'else',
-    'NEW': 'new',
-    'INT': 'int',
-    'FLOAT': 'float',
-    'STRING': 'string',
-    'BREAK': 'break',
-    'READ': 'read',
-    'PRINT': 'print',
-    'RETURN': 'return',
-    'LEFTBRACE': '{',
-    'RIGHTBRACE': '}',
-    'LPARENTHESES': '(',
-    'RPARENTHESES': ')',
-    'LBRACKET': '[',
-    'RBRACKET': ']',
-    'GT': '>',
-    'LT': '<',
-    'GE': '>=',
-    'LE': '<=',
-    'EQUALS': '==',
-    'DIFFERENT': '!=',
-    'PLUS': '+',
-    'MINUS': '-',
-    'TIMES': '*',
-    'DIVIDE': '/',
-    'MOD': '%',
-    'SEMICOLON': ';',
-    'COMMA': ',',
-    'NULL': 'null',
-    'ASSIGN': '=',
-    'IDENT': 'ident',
-    'FLOATCONSTANT': 'float_constant',
-    'INTCONSTANT': 'int_constant',
-    'STRINGCONSTANT': 'string_constant',
-    'STACK_TOK': '$'
-}
-
-STACK_TOKEN = LexToken()
-STACK_TOKEN.type = 'STACK_TOK'
+from utils.utils import STACK_BOTTOM, EMPTY_SYMBOL, _MAP
 
 class Parser:
   def __init__(self):
-    path = os.path.join(os.path.dirname(__file__), '..','..','utils','grammar','cc2021.grammar')
+    llc_path = os.path.join(os.path.dirname(__file__), '..','..','utils','grammar','cc2021.grammar')
+    # cria o processador da gramatica
     proc = Proc()
-
-    proc.read_llc(path)
+    #cria a gramatica llc a partir do .grammar
+    proc.read_llc(llc_path)
 
     self.llc = proc.llc
     self.start_symbol = proc.llc.start_s
     self.table = proc.create_table()
-    self.empty_symbol = _EMPTY_SYMBOL
+    self.empty_symbol = EMPTY_SYMBOL
 
   def parse(self, tokens):
     stack = deque()
 
-    stack.append(_END_SYMBOL)     # stack begins with end stack symbol
-    stack.append(self.start_symbol)   # and then the starting symbol
+    stack.append(STACK_BOTTOM)        # o stack sempre comeca com o simbolo de fundo
+    stack.append(self.start_symbol)
 
     for tk in tokens  + [STACK_TOKEN]:
       mapped_token = _MAP[tk.type]
 
       while True:
-        # if the mapped token is the same as the last entrie (top) on the stack, pop
+        # se o token mapeado eh o mesmo do topo da stack, remove ele
         if mapped_token == stack[-1]:
           stack.pop()
           break
 
-        # if not, applies production
+        # se nao, aplica a producao definida na tabela
         prod = self.table.get_prod(stack[-1], mapped_token)
 
-        # if returns None, then it is a syntatic error
+        # caso um None seja retornado, indicando que nao existe uma
+        # producao, significa um erro
         if prod is None:
-          # print(reader)
+          print('Erro!')
+          print('Token -> %s' % mapped_token)
+          print('Topo da stack -> %s' % stack[-1])
           return(False, tk)
 
-        # if it got here, production was applied
-        # removes the top symbol
+        # producao foi aplicada, remove o topo
         stack.pop()
-        # and adds those that the production creates
+        # e adiciona simbolos gerados pela producao
         for symbol in reversed(prod.body):
           if symbol != self.empty_symbol:
             stack.append(symbol)
     
-    # if the stack is not empty, it is not correct
+    # se chega no final com o stack nao-vazio, ocorreu algum erro
     if len(stack) > 1:
       return (False, tk)
-    # else, everything is correct
+    # se nao, tudo certo
 
     return (True, None)
+
+STACK_TOKEN = LexToken()
+STACK_TOKEN.type = 'END_STACK_TOKEN'
 
 parser = Parser()
