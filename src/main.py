@@ -101,7 +101,7 @@ if __name__ == '__main__':
         # 'src/examples/exemplo1-professor.lcc',
         'src/examples/exemplo2-professor.lcc',
         'src/examples/prog1.lcc',
-        'src/examples/tdee.lcc',
+        'src/examples/utils3.lcc',
         'src/examples/utils.lcc',
         'src/examples/utils2.lcc',
         'src/examples/math.lcc',
