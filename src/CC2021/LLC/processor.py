@@ -5,7 +5,7 @@ from utils.utils import *
 
 ## classe que processa uma LLC
 
-class Proc:
+class Processor:
     def __init__(self):
         self.llc: LLC = None
         self.empty_symbol = EMPTY_SYMBOL

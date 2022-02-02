@@ -2,20 +2,20 @@ import os
 from collections import deque
 
 from CC2021.ply.lex import LexToken
-from CC2021.LLC.proc import Proc
+from CC2021.LLC.processor import Processor
 from utils.utils import STACK_BOTTOM, EMPTY_SYMBOL, _MAP
 
 class Parser:
   def __init__(self):
     llc_path = os.path.join(os.path.dirname(__file__), '..','..','utils','grammar','cc2021.grammar')
     # cria o processador da gramatica
-    proc = Proc()
+    processor = Processor()
     #cria a gramatica llc a partir do .grammar
-    proc.read_llc(llc_path)
+    processor.read_llc(llc_path)
 
-    self.llc = proc.llc
-    self.start_symbol = proc.llc.start_s
-    self.table = proc.create_table()
+    self.llc = processor.llc
+    self.start_symbol = processor.llc.start_s
+    self.table = processor.create_table()
     self.empty_symbol = EMPTY_SYMBOL
 
   def parse(self, tokens):
