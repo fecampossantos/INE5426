@@ -1,4 +1,6 @@
-from typing import List, Set
+import uuid
+from asyncio.windows_events import NULL
+from typing import List, Set, Dict, Optional, Union
 
 class Production:
   head: str
@@ -108,4 +110,31 @@ class ScopeList:
     else:
       return None
   
+class Node:
+  def __init__(self, value = NULL, left = NULL, right = NULL):
+      self.value = value
+      self.right = right
+      self.left = left
+      self.id = uuid.uuid4()
+
+  def get_id(self):
+    return self.id
+
+  def get_value(self):
+    return self.value
   
+  def get_left(self):
+    return self.left
+
+  def get_right(self):
+    return self.right
+
+  def set_value(self, value):
+    self.value = value
+  
+  def set_left(self, left):
+    self.left = left
+
+  def set_right(self, right):
+    self.right = right
+
