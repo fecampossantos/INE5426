@@ -61,6 +61,55 @@ class TableSyntaticAnalyser:
   def get_table(self):
     return self.table
 
+# structures for semantic analysis
+
+class Scope:
+  def __init__(self, previousScope = None, isLoop = False):
+    self.table = []
+    self.innerScopes = []
+
+    self.previousScope = previousScope
+    self.isLoop = isLoop
+  
+  def addInnerScope(self, scopeToAdd):
+    self.innerScopes.append(scopeToAdd)
+  
+  def doesVarAlreadyExists(self, identificator):
+    for l in self.table:
+      if l.label == identificator:
+        return True, l.line
+    
+    return False, -1
+  
+  def addToScopeTable(self, entryToAdd):
+    exists, line = self.doesVarAlreadyExists(entryToAdd.label)
+
+    if exists:
+      # return 0 indicating error, and error message
+      return 0, 'Essa variavel ja foi declarada nesse escopo!'
+    
+    self.table.append(entryToAdd)
+    # return 1 indicating succes, and empty string
+    return 1, ''
+
+class ScopeList:
+  def __init__(self):
+    self.list = []
+  def __len__(self):
+    return len(self.list)
+
+  def getLastScope(self):
+    return self.list.pop()
+
+  def appendScope(self, scope):
+    self.list.append(scope)
+  
+  def getLastScopeOrNoneIfEmpty(self):
+    if self.list:
+      return self.list[-1]
+    else:
+      return None
+  
 class Node:
   def __init__(self, value = NULL, left = NULL, right = NULL):
       self.value = value
@@ -88,3 +137,4 @@ class Node:
 
   def set_right(self, right):
     self.right = right
+

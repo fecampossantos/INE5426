@@ -87,6 +87,9 @@ def main(data):
         print('\n')
     else:
       print('Syntatic Analysis succesfull! \n')
+    
+    print('Starting semantic analysis:')
+    
 
     return
 
