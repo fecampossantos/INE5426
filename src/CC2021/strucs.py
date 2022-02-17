@@ -83,7 +83,7 @@ class Node:
   def set_value(self, value):
     self.value = value
   
-  def gset_left(self, left):
+  def set_left(self, left):
     self.left = left
 
   def set_right(self, right):
