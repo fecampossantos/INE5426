@@ -1,7 +1,8 @@
 # analisador semantico
 from CC2021.ply import yacc
 from CC2021.lexer.lexer import Lexer
-from src.CC2021.strucs import Scope, ScopeList
+from CC2021.strucs import Scope, ScopeList, Node, ScopeEntry
+from utils.utils import validOperationResults
 
 # usado pra controlar os escopos de codigo
 scope_list = ScopeList()
@@ -41,6 +42,15 @@ def getTypeOfVariable(identificator, lineNumber):
     # if has not been found until here, return error
     # that the variable has not been declared
     return -1, 'variavel nao foi declarada'
+
+def checkIfIsValid(leftType, rightType, op, lineNumber):
+    opResult = validOperationResults.get((leftType, op, rightType), None)
+
+    if opResult is None:
+        return -1, 'Essa operacao nao e valida'
+    
+    return 1, opResult
+
 
 
 ###########################################################
@@ -103,8 +113,8 @@ def p_funcdef(p: yacc.YaccProduction):
 
     # Add function declaration to current scope
     scope = scope_list.getLastScopeOrNoneIfEmpty()
-    # entry = TableEntry(p[2], 'function', [], p.lineno(2))
-    scope.addToScopeTable(entry)
+    scopeEntry = ScopeEntry(p[2], 'function', [], p.lineno(2))
+    scope.addToScopeTable(scopeEntry)
 
 
 def p_paralist_param(p: yacc.YaccProduction):
@@ -113,8 +123,8 @@ def p_paralist_param(p: yacc.YaccProduction):
     """
     if len(p) > 2:
         scope = scope_list.getLastScopeOrNoneIfEmpty()
-        entry = TableEntry(p[2], p[1], [], p.lineno(2))
-        scope.addToScopeTable(entry)
+        scopeEntry = ScopeEntry(p[2], p[1], [], p.lineno(2))
+        scope.addToScopeTable(scopeEntry)
 
 
 def p_paramlistaux_paramlist(p: yacc.YaccProduction):
@@ -196,9 +206,9 @@ def p_statement_end(p: yacc.YaccProduction):
 
 def p_vardecl(p: yacc.YaccProduction):
     """VARDECL : TYPE IDENT ARRAY_OPT"""
-    entry = TableEntry(p[2], p[1], p[3], p.lineno(2))
+    scopeEntry = ScopeEntry(p[2], p[1], p[3], p.lineno(2))
     scope = scope_list.getLastScopeOrNoneIfEmpty()
-    scope.addToScopeTable(entry)
+    scope.addToScopeTable(scopeEntry)
 
 
 def p_opt_vector(p: yacc.YaccProduction):
@@ -234,7 +244,7 @@ def p_funccall_or_exp_plus(p: yacc.YaccProduction):
         right_node.value *= -1
 
     if p[3]:
-        result_type = getTypeOfVariable(p[3]['node'],
+        result_type = checkIfIsValid(p[3]['node'],
                                  right_node,
                                  p[3]['operation'],
                                  p.lineno(1))
@@ -244,7 +254,7 @@ def p_funccall_or_exp_plus(p: yacc.YaccProduction):
                           result_type)
 
     if p[4]:
-        result_type = getTypeOfVariable(p[4]['node'],
+        result_type = checkIfIsValid(p[4]['node'],
                                  right_node,
                                  p[4]['operation'],
                                  p.lineno(1))
@@ -261,14 +271,14 @@ def p_funccal_or_exp_int_const(p: yacc.YaccProduction):
     node = Node(None, None, p[1], 'int')
 
     if p[2]:
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(2))
         node = Node(node, p[2]['node'], p[2]['operation'], result_type)
 
     if p[3]:
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[3]['node'],
                                  p[3]['operation'],
                                  p.lineno(2))
@@ -286,14 +296,14 @@ def p_funccal_or_exp_float_const(p: yacc.YaccProduction):
     node = Node(None, None, p[1], 'float')
 
     if p[2]:
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(2))
         node = Node(node, p[2]['node'], p[2]['operation'], result_type)
 
     if p[3]:
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[3]['node'],
                                  p[3]['operation'],
                                  p.lineno(2))
@@ -311,14 +321,14 @@ def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
     node = Node(None, None, p[1], 'string')
 
     if p[2]:
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(1))
         node = Node(node, p[2]['node'], p[2]['operation'], result_type)
 
     if p[3]:
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[3]['node'],
                                  p[3]['operation'],
                                  p.lineno(1))
@@ -341,14 +351,14 @@ def p_funccall_or_exp_parentesis(p: yacc.YaccProduction):
     node = p[2]['node']
 
     if p[4]:
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[4]['node'],
                                  p[4]['operation'],
                                  p.lineno(1))
         node = Node(node, p[4]['node'], p[4]['operation'], result_type)
 
     if p[5]:
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[5]['node'],
                                  p[5]['operation'],
                                  p.lineno(1))
@@ -370,7 +380,7 @@ def p_funccall_or_exp_ident(p: yacc.YaccProduction):
 
     if p[2]:
         node.value += p[2]['vec_access']
-        result_type = getTypeOfVariable(node,
+        result_type = checkIfIsValid(node,
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(1))
@@ -394,7 +404,7 @@ def p_follow_ident_alloc(p: yacc.YaccProduction):
             operation = p[3]['operation']
 
         else:
-            result_type = getTypeOfVariable(node,
+            result_type = checkIfIsValid(node,
                                      p[3]['node'],
                                      p[3]['operation'],
                                      p.lineno(0))
@@ -547,7 +557,7 @@ def p_numexp(p: yacc.YaccProduction):
         p[0] = p[1]
 
     else:
-        result_type = getTypeOfVariable(p[1]['node'],
+        result_type = checkIfIsValid(p[1]['node'],
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(1))
@@ -569,7 +579,7 @@ def p_rec_plus_minus(p: yacc.YaccProduction):
 
     elif p[3]:
         # Case there's another recursive operation being made
-        result_type = getTypeOfVariable(p[2]['node'],
+        result_type = checkIfIsValid(p[2]['node'],
                                  p[3]['node'],
                                  p[3]['operation'],
                                  p.lineno(1))
@@ -596,7 +606,7 @@ def p_term_unary_exp(p: yacc.YaccProduction):
     """TERM : UNARYEXPR OPT_UNARY_TERM"""
     if p[2]:
         # If there's another operation being made
-        result_type = getTypeOfVariable(p[1]['node'],
+        result_type = checkIfIsValid(p[1]['node'],
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(1))
@@ -690,5 +700,5 @@ def p_lvalue_ident(p: yacc.YaccProduction):
 _parser = yacc.yacc(start='PROGRAM', check_recursion=False)
 
 
-def parse(text: str):
+def semanticParse(text: str):
     return _parser.parse(text, lexer=lexer)

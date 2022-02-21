@@ -48,3 +48,24 @@ def merge(a, b):
     n = len(a)
     a |= b - {EMPTY_SYMBOL}
     return len(a) != n
+
+validOperationResults = {
+    ('int', '+', 'int'): 'int',
+    ('int', '-', 'int'): 'int',
+    ('int', '*', 'int'): 'int',
+    ('int', '/', 'int'): 'float',
+    ('int', '%', 'int'): 'int',
+    ('int', '+', 'float'): 'float',
+    ('int', '-', 'float'): 'float',
+    ('int', '*', 'float'): 'float',
+    ('int', '/', 'float'): 'float',
+    ('float', '+', 'float'): 'float',
+    ('float', '-', 'float'): 'float',
+    ('float', '*', 'float'): 'float',
+    ('float', '/', 'float'): 'float',
+    ('float', '+', 'int'): 'float',
+    ('float', '-', 'int'): 'float',
+    ('float', '*', 'int'): 'float',
+    ('float', '/', 'int'): 'float',
+    ('string', '+', 'string'): 'string',
+}

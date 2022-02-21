@@ -1,5 +1,4 @@
 import uuid
-from asyncio.windows_events import NULL
 from typing import List, Set, Dict, Optional, Union
 
 class Production:
@@ -111,7 +110,7 @@ class ScopeList:
       return None
   
 class Node:
-  def __init__(self, value = NULL, left = NULL, right = NULL):
+  def __init__(self, value = None, left = None, right = None):
       self.value = value
       self.right = right
       self.left = left
@@ -138,3 +137,37 @@ class Node:
   def set_right(self, right):
     self.right = right
 
+class ScopeEntry:
+  def __init__(self, label, type, size, line):
+      # nome da var, func, etc
+      self.label: str = label
+      # tipo (function, list, ...)
+      self.type: str = type
+      # se for lista, qual o tamanho dela
+      self.size: List[int] = size
+      self.line: int = line
+    
+  def get_label(self):
+    return self.label
+  def get_type(self):
+    return self.type
+  def get_size(self):
+    return self.size
+  def get_line(self):
+    return self.line
+  def set_label(self, newLabel):
+    self.label = newLabel
+  def set_type(self, newType):
+    self.type = newType
+  def set_size(self, newSize):
+    self.size = newSize
+  def set_line(self, newLine):
+    self.line = newLine
+
+  def getJSONvalue(self):
+    return {
+      'label' : self.label,
+      'type' : self.type,
+      'size' : self.size,
+      'line' : self.line
+    }

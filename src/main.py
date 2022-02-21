@@ -14,6 +14,7 @@ from prettytable import PrettyTable
 
 from CC2021.lexer.lexer import Lexer
 from CC2021.parser.parser import parser
+from CC2021.semantic.semantic import semanticParse
 
 from utils.printer import print_symbols_table, print_token_list, print_tokens_table
 
@@ -89,7 +90,8 @@ def main(data):
       print('Syntatic Analysis succesfull! \n')
     
     print('Starting semantic analysis:')
-    
+
+    semantic_rslt = semanticParse(data)
 
     return
 
