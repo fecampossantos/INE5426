@@ -90,6 +90,12 @@ class Scope:
     self.table.append(entryToAdd)
     # return 1 indicating succes, and empty string
     return 1, ''
+  
+  def getAsJSON(self):
+    return {
+      'table': [item.getAsJSON() for item in self.table],
+      'innerScopes':[scope.getAsJSON() for scope in self.innerScopes]
+    }
 
 class ScopeList:
   def __init__(self):
@@ -109,8 +115,9 @@ class ScopeList:
     else:
       return None
   
+  
 class Node:
-  def __init__(self, value = None, left = None, right = None):
+  def __init__(self, value = None, type = None, left = None, right = None):
       self.value = value
       self.right = right
       self.left = left
@@ -136,6 +143,21 @@ class Node:
 
   def set_right(self, right):
     self.right = right
+  
+  def getAsJSON(self):
+    left = None
+    right = None
+
+    if self.left is not None:
+      left = self.left.getAsJSON()
+    if self.right is not None:
+      right = self.right.getAsJSON()
+    
+    return {
+      'vaue': self.value,
+      'left': left,
+      'right': right
+    }
 
 class ScopeEntry:
   def __init__(self, label, type, size, line):
@@ -164,7 +186,7 @@ class ScopeEntry:
   def set_line(self, newLine):
     self.line = newLine
 
-  def getJSONvalue(self):
+  def getAsJSON(self):
     return {
       'label' : self.label,
       'type' : self.type,

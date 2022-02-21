@@ -1,14 +1,14 @@
 # analisador semantico
+
 from CC2021.ply import yacc
 from CC2021.lexer.lexer import Lexer
 from CC2021.strucs import Scope, ScopeList, Node, ScopeEntry
 from utils.utils import validOperationResults
 
-# usado pra controlar os escopos de codigo
+# controle dos escopos de codigo
 scope_list = ScopeList()
 numeric_expressions = []
 
-# instanciando yacc
 lexer = Lexer()
 lexer.build()
 tokens = lexer.tokens
@@ -17,7 +17,7 @@ def addNewScopeToList(isLoop):
     top_scope = scope_list.getLastScopeOrNoneIfEmpty()
     new_scope = Scope(top_scope, isLoop)
 
-    if top_scope: #if scope is not None
+    if top_scope:
         top_scope.addInnerScope(new_scope)
     
     scope_list.appendScope(new_scope)
@@ -41,7 +41,7 @@ def getTypeOfVariable(identificator, lineNumber):
 
     # if has not been found until here, return error
     # that the variable has not been declared
-    return -1, 'variavel nao foi declarada'
+    return -1, lineNumber
 
 def checkIfIsValid(leftType, rightType, op, lineNumber):
     opResult = validOperationResults.get((leftType, op, rightType), None)
@@ -85,10 +85,10 @@ def p_prog_statment(p: yacc.YaccProduction):
                | empty
     """
     global_scope = scope_list.getLastScope()
-    # p[0] = {
-    #     'scopes': global_scope.as_json(),
-    #     'numeric_expressions': num_expressions_as_json()
-    # }
+    p[0] = {
+        'scope_list': global_scope.getAsJSON(),
+        # 'numeric_expressions': num_expressions_as_json()
+    }
 
     # Grants that all all tables where used and popper correctly
     assert len(scope_list) == 0  # nosec
@@ -190,13 +190,14 @@ def p_statement_break(p: yacc.YaccProduction):
 
     # Go into upper scopes trying to find a for loop
     while True:
-        if current_scope.is_loop:
+        if current_scope.isLoop:
             break
 
-        current_scope = current_scope.upper_scope
+        current_scope = current_scope.previousScope
 
         if current_scope is None:
-            raise BreakWithoutLoopError(p.lineno(2))
+            # raise BreakWithoutLoopError(p.lineno(2))
+            print('not inside a loop')
 
 
 def p_statement_end(p: yacc.YaccProduction):
@@ -239,106 +240,103 @@ def p_atribright_alloc(p: yacc.YaccProduction):
 def p_funccall_or_exp_plus(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
                               | MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
-    right_node = p[2]['node']
+    right = p[2]['node']
     if p[1] == '-':
-        right_node.value *= -1
+        right.value *= -1
 
     if p[3]:
         result_type = checkIfIsValid(p[3]['node'],
-                                 right_node,
+                                 right,
                                  p[3]['operation'],
                                  p.lineno(1))
-        right_node = Node(p[3]['node'],
-                          right_node,
-                          p[3]['operation'],
-                          result_type)
+        right = Node(p[3]['operation'], result_type, p[3]['node'], right)
 
     if p[4]:
         result_type = checkIfIsValid(p[4]['node'],
-                                 right_node,
+                                 right,
                                  p[4]['operation'],
                                  p.lineno(1))
-        right_node = Node(p[4]['node'],
-                          right_node,
-                          p[4]['operation'],
-                          result_type)
+        right = Node(p[4]['operation'],
+                          result_type,p[4]['node'],
+                          right,
+                          )
 
-    numeric_expressions.append(right_node)
+    numeric_expressions.append(right)
 
 
 def p_funccal_or_exp_int_const(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
-    node = Node(None, None, p[1], 'int')
+    left = Node(value=p[1], type='int')
 
     if p[2]:
-        result_type = checkIfIsValid(node,
+        result_type = checkIfIsValid(left,
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(2))
-        node = Node(node, p[2]['node'], p[2]['operation'], result_type)
+        left = Node(p[2]['operation'], result_type,left, p[2]['node'])
 
     if p[3]:
-        result_type = checkIfIsValid(node,
+        result_type = checkIfIsValid(left,
                                  p[3]['node'],
                                  p[3]['operation'],
                                  p.lineno(2))
-        node = Node(node, p[3]['node'], p[3]['operation'], result_type)
+        left = Node(p[3]['operation'], result_type, left, p[3]['node'])
 
     p[0] = {
-        'node': node
+        'node': left
     }
 
-    numeric_expressions.append((node, p.lineno(2)))
+    numeric_expressions.append((left, p.lineno(2)))
 
 
 def p_funccal_or_exp_float_const(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
-    node = Node(None, None, p[1], 'float')
+    left = Node(value=p[1], type='float')
 
     if p[2]:
-        result_type = checkIfIsValid(node,
+        result_type = checkIfIsValid(left,
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(2))
-        node = Node(node, p[2]['node'], p[2]['operation'], result_type)
+        left = Node( p[2]['operation'], result_type,left, p[2]['node'])
 
     if p[3]:
-        result_type = checkIfIsValid(node,
+        result_type = checkIfIsValid(left,
                                  p[3]['node'],
                                  p[3]['operation'],
                                  p.lineno(2))
-        node = Node(node, p[3]['node'], p[3]['operation'], result_type)
+        left = Node(left, p[3]['node'], p[3]['operation'], result_type)
 
     p[0] = {
-        'node': node
+        'node': left
     }
 
-    numeric_expressions.append((node, p.lineno(2)))
+    numeric_expressions.append((left, p.lineno(2)))
 
 
 def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
-    node = Node(None, None, p[1], 'string')
+    left = Node(value=p[1],type= 'string')
 
     if p[2]:
-        result_type = checkIfIsValid(node,
+        result_type = checkIfIsValid(left,
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(1))
-        node = Node(node, p[2]['node'], p[2]['operation'], result_type)
+        left = Node(p[2]['operation'], result_type, left, p[2]['node'])
 
     if p[3]:
-        result_type = checkIfIsValid(node,
+        result_type = checkIfIsValid(left,
                                  p[3]['node'],
                                  p[3]['operation'],
                                  p.lineno(1))
-        node = Node(node, p[3]['node'], p[3]['operation'], result_type)
+        left = Node(p[3]['operation'], result_type, left, p[3]['node'], )
 
     p[0] = {
-        'node': node
+        'node': left
     }
 
-    numeric_expressions.append((node, p.lineno(1)))
+    numeric_expressions.append((left, p.lineno(1)))
 
 
 def p_funccall_or_exp_null(p: yacc.YaccProduction):
@@ -348,71 +346,71 @@ def p_funccall_or_exp_null(p: yacc.YaccProduction):
 
 def p_funccall_or_exp_parentesis(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
-    node = p[2]['node']
+    left = p[2]['node']
 
     if p[4]:
-        result_type = checkIfIsValid(node,
+        result_type = checkIfIsValid(left,
                                  p[4]['node'],
                                  p[4]['operation'],
                                  p.lineno(1))
-        node = Node(node, p[4]['node'], p[4]['operation'], result_type)
+        noleftde = Node(p[4]['operation'], result_type,left, p[4]['node'], )
 
     if p[5]:
-        result_type = checkIfIsValid(node,
+        result_type = checkIfIsValid(left,
                                  p[5]['node'],
                                  p[5]['operation'],
                                  p.lineno(1))
-        node = Node(node, p[5]['node'], p[5]['operation'], result_type)
+        left = Node(p[5]['operation'], result_type, left, p[5]['node'], )
 
     p[0] = {
-        'node': node
+        'node': left
     }
 
-    numeric_expressions.append((node, p.lineno(1)))
+    numeric_expressions.append((left, p.lineno(1)))
 
 
 def p_funccall_or_exp_ident(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : IDENT AFTER_IDENT"""
-    node = Node(None, None, p[1], getTypeOfVariable(p[1], p.lineno(1)))
+    left = Node(value=p[1],type= getTypeOfVariable(p[1], p.lineno(1)))
 
     if p[2] is None or p[2]['node'] == None:
         return
 
     if p[2]:
-        node.value += p[2]['vec_access']
-        result_type = checkIfIsValid(node,
+        left.value += p[2]['vec_access']
+        result_type = checkIfIsValid(left,
                                  p[2]['node'],
                                  p[2]['operation'],
                                  p.lineno(1))
-        node = Node(node, p[2]['node'], p[2]['operation'], result_type)
+        left = Node(p[2]['operation'], result_type, left, p[2]['node'])
 
-        numeric_expressions.append((node, p.lineno(1)))
+        numeric_expressions.append((left, p.lineno(1)))
 
 
 def p_follow_ident_alloc(p: yacc.YaccProduction):
     """AFTER_IDENT : OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
-    node = None
+    left = None
     operation = ''
 
     if p[2]:
-        node = p[2]['node']
+        left = p[2]['node']
         operation = p[2]['operation']
 
     if p[3]:
-        if node is None:
-            node = p[3]['node']
+        if left is None:
+            left = p[3]['node']
             operation = p[3]['operation']
 
         else:
-            result_type = checkIfIsValid(node,
+            result_type = checkIfIsValid(left,
                                      p[3]['node'],
                                      p[3]['operation'],
                                      p.lineno(0))
-            node = Node(node, p[3]['node'], p[3]['operation'], result_type)
+            left = Node(p[3]['operation'], result_type, left, p[3]['node'])
 
     p[0] = {
         'vec_access': p[1],
-        'node': node,
+        'node': left,
         'operation': operation
     }
 
@@ -473,7 +471,7 @@ def p_elsestat(p: yacc.YaccProduction):
 
 
 def p_forstat(p: yacc.YaccProduction):
-    """FORSTAT : FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES new_loop_scope LEFTBRACE STATELIST RIGHTBRACE"""
+    """FORSTAT : FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES new_loopScope LEFTBRACE STATELIST RIGHTBRACE"""
     scope_list.getLastScope()
 
 
@@ -562,10 +560,10 @@ def p_numexp(p: yacc.YaccProduction):
                                  p[2]['operation'],
                                  p.lineno(1))
         p[0] = {
-            'node': Node(p[1]['node'],
+            'node': Node(p[2]['operation'],
+                         result_type, p[1]['node'],
                          p[2]['node'],
-                         p[2]['operation'],
-                         result_type)
+                         )
         }
 
 
@@ -584,8 +582,7 @@ def p_rec_plus_minus(p: yacc.YaccProduction):
                                  p[3]['operation'],
                                  p.lineno(1))
         p[0] = {
-            'node': Node(p[2]['node'], p[3]['node'],
-                         p[3]['operation'], result_type),
+            'node': Node(p[3]['operation'], result_type, p[2]['node'], p[3]['node'],),
             'operation': p[1]['operation']
         }
     else:
@@ -611,7 +608,7 @@ def p_term_unary_exp(p: yacc.YaccProduction):
                                  p[2]['operation'],
                                  p.lineno(1))
         p[0] = {
-            'node': Node(p[1]['node'], p[2]['node'], p[2]['operation'], result_type),
+            'node': Node(p[2]['operation'], result_type, p[1]['node'], p[2]['node']),
             'operation': p[2]['operation']
         }
 
@@ -659,22 +656,22 @@ def p_rec_unaryexp_factor(p: yacc.YaccProduction):
 
 def p_factor_int_cte(p: yacc.YaccProduction):
     """FACTOR : INTCONSTANT"""
-    p[0] = {'node': Node(None, None, p[1], 'int')}
+    p[0] = {'node': Node(value=p[1], type='int')}
 
 
 def p_factor_float_cte(p: yacc.YaccProduction):
     """FACTOR : FLOATCONSTANT"""
-    p[0] = {'node': Node(None, None, p[1], 'float')}
+    p[0] = {'node': Node(value=p[1], type='float')}
 
 
 def p_factor_string_cte(p: yacc.YaccProduction):
     """FACTOR : STRINGCONSTANT"""
-    p[0] = {'node': Node(None, None, p[1], 'string')}
+    p[0] = {'node': Node(value=p[1], type='string')}
 
 
 def p_factor_null(p: yacc.YaccProduction):
     """FACTOR : NULL"""
-    p[0] = {'node': Node(None, None, None, 'null')}
+    p[0] = {'node': Node(value=None, type='null')}
 
 
 def p_factor_lvalue(p: yacc.YaccProduction):
@@ -692,13 +689,12 @@ def p_factor_expr(p: yacc.YaccProduction):
 def p_lvalue_ident(p: yacc.YaccProduction):
     """LVALUE : IDENT OPT_ALLOC_EXPR"""
     p[0] = {
-        'node': Node(None, None, p[1] + p[2],
-                     result_type=getTypeOfVariable(p[1], p.lineno(1)))
+        'node': Node(value=p[1] + p[2],
+                     type=getTypeOfVariable(p[1], p.lineno(1)))
     }
 
 
-_parser = yacc.yacc(start='PROGRAM', check_recursion=False)
+parser = yacc.yacc(start='PROGRAM', check_recursion=False)
 
-
-def semanticParse(text: str):
-    return _parser.parse(text, lexer=lexer)
+def semanticParse(data):
+    return parser.parse(data, lexer=lexer)

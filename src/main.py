@@ -93,6 +93,7 @@ def main(data):
 
     semantic_rslt = semanticParse(data)
 
+    print(semantic_rslt['scope_list'])
     return
 
 
