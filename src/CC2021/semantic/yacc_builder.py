@@ -43,6 +43,21 @@ def getTypeOfVariable(identificator, lineNumber):
     # if has not been found until here, return error
     # that the variable has not been declared
     return -1, lineNumber
+
+def num_expressions_as_json():
+    output = []
+
+    for exp, line in numeric_expressions:
+        if exp.left == None and exp.right == None:
+            continue
+
+        output.append({
+            'ID': str(exp),
+            'lineno': line,
+            'tree': exp.getAsJSON()
+        })
+
+    return output
 ###########################################################
 #                    yacc declarations                    #
 ###########################################################
@@ -77,7 +92,7 @@ def p_prog_statment(p: yacc.YaccProduction):
     global_scope = scope_list.getLastScope()
     p[0] = {
         'scope_list': global_scope.getAsJSON(),
-        # 'numeric_expressions': num_expressions_as_json()
+        'numeric_expressions': num_expressions_as_json()
     }
 
     # Grants that all all tables where used and popper correctly
@@ -527,7 +542,7 @@ def p_relop_lte(p: yacc.YaccProduction):
 
 def p_relop_gte(p: yacc.YaccProduction):
     """CMP : GE"""
-
+    pass
 
 def p_relop_eq(p: yacc.YaccProduction):
     """CMP : EQUALS"""

@@ -8,6 +8,7 @@
 ###############################################################
 
 
+import json
 import sys
 import os
 from prettytable import PrettyTable
@@ -15,6 +16,7 @@ from prettytable import PrettyTable
 from CC2021.lexer.lexer import Lexer
 from CC2021.parser.parser import parser
 from CC2021.semantic.semantic import semantic_parse
+from CC2021.semantic.gci import code
 
 from utils.printer import print_symbols_table, print_token_list, print_tokens_table
 
@@ -89,11 +91,24 @@ def main(data):
     else:
       print('Syntatic Analysis succesfull! \n')
     
-    print('Starting semantic analysis:')
+    print('Starting semantic analysis -->')
 
     semantic_rslt = semantic_parse(data)
 
-    print(semantic_rslt['scope_list'])
+    # print(semantic_rslt['scope_list'])
+    with open('semantic_analysis.json', 'w') as f:
+        json.dump(semantic_rslt['scope_list'], f, indent=2, sort_keys=False)
+
+    print('Análise Semântica exportada para o arquivo semantic_analysis.json')
+
+    intermediary_code = code(data)
+
+   
+    with open('intermediary_code.txt', 'w') as f:
+        f.write(intermediary_code)
+
+    print('Código Intermediário exportado para o arquivo intermediary_code.txt')
+
     return
 
 
