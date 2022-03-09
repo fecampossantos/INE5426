@@ -2,7 +2,7 @@ from CC2021.ply import yacc
 from CC2021.lexer.lexer import Lexer
 from CC2021.strucs import Scope, ScopeList, Node, ScopeEntry
 from CC2021.semantic.helper import checkIfIsValid
-
+from CC2021.exceptions import BreakOutsideLoopException
 
 # controle dos escopos de codigo
 scope_list = ScopeList()
@@ -201,8 +201,7 @@ def p_statement_break(p: yacc.YaccProduction):
         current_scope = current_scope.previousScope
 
         if current_scope is None:
-            # raise BreakWithoutLoopError(p.lineno(2))
-            print('not inside a loop')
+            raise BreakOutsideLoopException(p.lineno(2))
 
 
 def p_statement_end(p: yacc.YaccProduction):

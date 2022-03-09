@@ -1,5 +1,6 @@
 import uuid
 from typing import List, Set, Dict, Optional, Union
+from CC2021.exceptions import InvalidIdentifierDeclarationException
 
 class Production:
   head: str
@@ -84,8 +85,7 @@ class Scope:
     exists, line = self.doesVarAlreadyExists(entryToAdd.label)
 
     if exists:
-      # return 0 indicating error, and error message
-      return 0, 'Essa variavel ja foi declarada nesse escopo!'
+      raise InvalidIdentifierDeclarationException(line)
     
     self.table.append(entryToAdd)
     # return 1 indicating succes, and empty string
