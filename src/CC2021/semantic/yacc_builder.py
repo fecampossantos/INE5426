@@ -2,12 +2,13 @@ from CC2021.ply import yacc
 from CC2021.lexer.lexer import Lexer
 from CC2021.strucs import Scope, ScopeList, Node, ScopeEntry
 from CC2021.semantic.helper import checkIfIsValid
-from CC2021.exceptions import BreakOutsideLoopException
+from CC2021.exceptions import ExceptionAsBreakOutsideLoop
 
 # controle dos escopos de codigo
 scope_list = ScopeList()
-numeric_expressions = []
+arithm_expressions = []
 
+# necessario pra instanciar o yacc
 lexer = Lexer()
 lexer.build()
 tokens = lexer.tokens
@@ -44,20 +45,20 @@ def getTypeOfVariable(identificator, lineNumber):
     # that the variable has not been declared
     return -1, lineNumber
 
-def num_expressions_as_json():
-    output = []
+def arithm_expressions_as_json():
+    expression_list = []
 
-    for exp, line in numeric_expressions:
+    for exp, line in arithm_expressions:
         if exp.left == None and exp.right == None:
             continue
 
-        output.append({
-            'ID': str(exp),
-            'lineno': line,
-            'tree': exp.getAsJSON()
+        expression_list.append({
+            'id': str(exp),
+            'exp_tree': exp.getAsJSON(),
+            'line_declared': line
         })
 
-    return output
+    return expression_list
 ###########################################################
 #                    yacc declarations                    #
 ###########################################################
@@ -82,8 +83,6 @@ def p_newLoopScope(p: yacc.YaccProduction):
     addNewScopeToList(True)
 
 # productions to instantiate the grammar
-
-
 def p_prog_statment(p: yacc.YaccProduction):
     """PROGRAM : new_scope STATEMENT
                | new_scope FUNCLIST
@@ -92,7 +91,7 @@ def p_prog_statment(p: yacc.YaccProduction):
     global_scope = scope_list.getLastScope()
     p[0] = {
         'scope_list': global_scope.getAsJSON(),
-        'numeric_expressions': num_expressions_as_json()
+        'arithm_expressions': arithm_expressions_as_json()
     }
 
     # Grants that all all tables where used and popper correctly
@@ -201,7 +200,7 @@ def p_statement_break(p: yacc.YaccProduction):
         current_scope = current_scope.previousScope
 
         if current_scope is None:
-            raise BreakOutsideLoopException(p.lineno(2))
+            raise ExceptionAsBreakOutsideLoop(p.lineno(2))
 
 
 def p_statement_end(p: yacc.YaccProduction):
@@ -265,7 +264,7 @@ def p_funccall_or_exp_plus(p: yacc.YaccProduction):
                           right,
                           )
 
-    numeric_expressions.append(right)
+    arithm_expressions.append(right)
 
 
 def p_funccal_or_exp_int_const(p: yacc.YaccProduction):
@@ -290,7 +289,7 @@ def p_funccal_or_exp_int_const(p: yacc.YaccProduction):
         'node': left
     }
 
-    numeric_expressions.append((left, p.lineno(2)))
+    arithm_expressions.append((left, p.lineno(2)))
 
 
 def p_funccal_or_exp_float_const(p: yacc.YaccProduction):
@@ -315,7 +314,7 @@ def p_funccal_or_exp_float_const(p: yacc.YaccProduction):
         'node': left
     }
 
-    numeric_expressions.append((left, p.lineno(2)))
+    arithm_expressions.append((left, p.lineno(2)))
 
 
 def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
@@ -340,7 +339,7 @@ def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
         'node': left
     }
 
-    numeric_expressions.append((left, p.lineno(1)))
+    arithm_expressions.append((left, p.lineno(1)))
 
 
 def p_funccall_or_exp_null(p: yacc.YaccProduction):
@@ -370,7 +369,7 @@ def p_funccall_or_exp_parentesis(p: yacc.YaccProduction):
         'node': left
     }
 
-    numeric_expressions.append((left, p.lineno(1)))
+    arithm_expressions.append((left, p.lineno(1)))
 
 
 def p_funccall_or_exp_ident(p: yacc.YaccProduction):
@@ -388,7 +387,7 @@ def p_funccall_or_exp_ident(p: yacc.YaccProduction):
                                  p.lineno(1))
         left = Node(p[2]['operation'], result_type, left, p[2]['node'])
 
-        numeric_expressions.append((left, p.lineno(1)))
+        arithm_expressions.append((left, p.lineno(1)))
 
 
 def p_follow_ident_alloc(p: yacc.YaccProduction):
@@ -493,7 +492,7 @@ def p_opt_statelist(p: yacc.YaccProduction):
 
 def p_allocexp(p: yacc.YaccProduction):
     """ALLOCEXPRESSION : NEW TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR"""
-    numeric_expressions.append((p[4]['node'], p.lineno(1)))
+    arithm_expressions.append((p[4]['node'], p.lineno(1)))
 
 
 def p_opt_allocexp(p: yacc.YaccProduction):
@@ -505,12 +504,12 @@ def p_opt_allocexp(p: yacc.YaccProduction):
     else:
         p[0] = '[' + str(p[2]) + ']' + p[4]
 
-        numeric_expressions.append((p[2]['node'], p.lineno(1)))
+        arithm_expressions.append((p[2]['node'], p.lineno(1)))
 
 
 def p_expression(p: yacc.YaccProduction):
     """EXPRESSION : NUMEXPRESSION OPT_CMP_EXPR"""
-    numeric_expressions.append((p[1]['node'], p.lineno(1)))
+    arithm_expressions.append((p[1]['node'], p.lineno(1)))
 
 
 def p_opt_rel_op_num_expr(p: yacc.YaccProduction):
@@ -521,7 +520,7 @@ def p_opt_rel_op_num_expr(p: yacc.YaccProduction):
         pass
 
     else:
-        numeric_expressions.append((p[2]['node'], p.lineno(1)))
+        arithm_expressions.append((p[2]['node'], p.lineno(1)))
 
 
 def p_relop_lt(p: yacc.YaccProduction):
@@ -687,7 +686,7 @@ def p_factor_expr(p: yacc.YaccProduction):
     """FACTOR : LPARENTHESES NUMEXPRESSION RPARENTHESES"""
     p[0] = p[2]
 
-    numeric_expressions.append((p[2]['node'], p.lineno(1)))
+    arithm_expressions.append((p[2]['node'], p.lineno(1)))
 
 
 def p_lvalue_ident(p: yacc.YaccProduction):
