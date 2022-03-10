@@ -1,4 +1,4 @@
-from src.CC2021.exceptions import ExceptionAsInvalidOperation
+from CC2021.exceptions import ExceptionAsInvalidOperation
 from utils.utils import validOperationResults
 
 def checkIfIsValid(leftType, rightType, op, lineNumber):
