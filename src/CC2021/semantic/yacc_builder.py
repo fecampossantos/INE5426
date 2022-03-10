@@ -2,7 +2,7 @@ from CC2021.ply import yacc
 from CC2021.lexer.lexer import Lexer
 from CC2021.strucs import Scope, ScopeList, Node, ScopeEntry
 from CC2021.semantic.helper import checkIfIsValid
-from CC2021.exceptions import ExceptionAsBreakOutsideLoop
+from CC2021.exceptions import ExceptionAsBreakOutsideLoop, ExceptionAsVariableNotDeclared
 
 # controle dos escopos de codigo
 scope_list = ScopeList()
@@ -32,7 +32,7 @@ def getTypeOfVariable(identificator, lineNumber):
             if l.label == identificator:
                 # found variable we were looking for
                 # returns 1 indicating succes and type
-                return 1, l.type
+                return l.type
         
         # if it has not been found in that scope, check for the parents scope
         sp = sp.previousScope
@@ -43,7 +43,7 @@ def getTypeOfVariable(identificator, lineNumber):
 
     # if has not been found until here, return error
     # that the variable has not been declared
-    return -1, lineNumber
+    raise ExceptionAsVariableNotDeclared(f'{identificator}, {lineNumber}')
 
 def arithm_expressions_as_json():
     expression_list = []
@@ -259,10 +259,7 @@ def p_funccall_or_exp_plus(p: yacc.YaccProduction):
                                  right,
                                  p[4]['operation'],
                                  p.lineno(1))
-        right = Node(p[4]['operation'],
-                          result_type,p[4]['node'],
-                          right,
-                          )
+        right = Node(p[4]['operation'], result_type, p[4]['node'], right)
 
     arithm_expressions.append(right)
 

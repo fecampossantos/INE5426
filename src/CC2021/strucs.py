@@ -122,6 +122,7 @@ class Node:
       self.right = right
       self.left = left
       self.id = uuid.uuid4()
+      self.type = type
 
   def get_id(self):
     return self.id

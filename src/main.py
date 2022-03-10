@@ -114,6 +114,11 @@ def main(data):
         print("ERROR: Caught invalid operation between " + left + " and " + right + " at line " + line)
         sys.exit(1)
 
+    except ExceptionAsVariableNotDeclared as e:
+        var, line = str(e).split(',')
+        print("ERROR: Caught undeclared variable " + var + " at line " + line)
+        sys.exit(1)
+
     
     with open('semantic_analysis.json', 'w') as f:
             json.dump(semantic_rslt, f, indent=2, sort_keys=False)

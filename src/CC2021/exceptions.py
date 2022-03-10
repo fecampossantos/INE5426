@@ -7,3 +7,6 @@ class ExceptionAsInvalidIdentifierDeclaration(Exception):
 
 class ExceptionAsInvalidOperation(Exception):
     """Thrown when there is an invalid operation between two variable types"""
+
+class ExceptionAsVariableNotDeclared(Exception):
+    """Thrown when there is access to a not declared variable"""
