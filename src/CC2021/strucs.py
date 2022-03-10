@@ -154,7 +154,7 @@ class Node:
       right = self.right.getAsJSON()
     
     return {
-      'vaue': self.value,
+      'value': self.value,
       'left': left,
       'right': right
     }

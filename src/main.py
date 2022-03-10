@@ -17,7 +17,7 @@ from CC2021.lexer.lexer import Lexer
 from CC2021.parser.parser import parser
 from CC2021.semantic.semantic import semantic_parse
 from CC2021.semantic.gci import code
-from src.CC2021.exceptions import BreakOutsideLoopException, InvalidIdentifierDeclarationException
+from CC2021.exceptions import BreakOutsideLoopException, InvalidIdentifierDeclarationException
 
 from utils.printer import print_symbols_table, print_token_list, print_tokens_table
 
@@ -98,7 +98,7 @@ def main(data):
         semantic_rslt = semantic_parse(data)
         # print(semantic_rslt['scope_list'])
         with open('semantic_analysis.json', 'w') as f:
-            json.dump(semantic_rslt['scope_list'], f, indent=2, sort_keys=False)
+            json.dump(semantic_rslt, f, indent=2, sort_keys=False)
 
     except BreakOutsideLoopException as e:
         print("Caught break ouside loop at line " + e)
