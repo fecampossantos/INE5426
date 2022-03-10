@@ -98,21 +98,29 @@ def main(data):
         semantic_rslt = semantic_parse(data)
 
         print('Success! All break statement is in for scope')
+        print('All arithmetic expressions are valid.')
+        print('Variable declarations by scope are valid.')
 
     except ExceptionAsBreakOutsideLoop as e:
-        print("Caught break ouside loop at line " + e)
+        print("ERROR: Caught break ouside loop at line " + e)
+        sys.exit(1)
+
     except ExceptionAsInvalidIdentifierDeclaration as e:
-        print("Caught invalid identifier declaration inside scope at line " + e)
+        print("ERROR: Caught invalid identifier declaration inside scope at line " + e)
+        sys.exit(1)
 
+    except ExceptionAsInvalidOperation as e:
+        left, right, line = str(e).split(',')
+        print("ERROR: Caught invalid operation between " + left + " and " + right + " at line " + line)
+        sys.exit(1)
 
-    print('All arithmetic expressions are valid.')
-    print('Variable declarations by scope are valid.')
-    print('Semantic Analysis exported to semantic_analysis.json')
     
     with open('semantic_analysis.json', 'w') as f:
             json.dump(semantic_rslt, f, indent=2, sort_keys=False)
-    intermediary_code = code(data)
 
+    print('Semantic Analysis exported to semantic_analysis.json')
+    
+    intermediary_code = code(data)
    
     with open('intermediary_code.txt', 'w') as f:
         f.write(intermediary_code)
