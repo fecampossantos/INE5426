@@ -144,6 +144,9 @@ class Node:
   def set_right(self, right):
     self.right = right
   
+  def __str__(self) -> str:
+      return f'node_id({self.id})'
+  
   def getAsJSON(self):
     left = None
     right = None
