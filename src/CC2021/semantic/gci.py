@@ -39,7 +39,7 @@ def clean_var(var):
     free_var.append(var)
 
 
-def new_label():
+def generate_new_label():
     global label_num
     label = f'LABEL{label_num}'
     label_num += 1
@@ -52,7 +52,7 @@ def p_empty(p: yacc.YaccProduction):
 
 def p_new_for_loop_label(p: yacc.YaccProduction):
     """new_for_loop_label :"""
-    new_label = new_label()
+    new_label = generate_new_label()
     gci.label = new_label
 
 def p_prog_statment(p: yacc.YaccProduction):
@@ -60,7 +60,8 @@ def p_prog_statment(p: yacc.YaccProduction):
                | FUNCLIST
                | empty
     """
-
+    print(type(p[0]))
+    print(type(p[1]))
     p[0] = p[1]['code']
 
 def p_funclist_funcdef(p: yacc.YaccProduction):
@@ -81,7 +82,7 @@ def p_FUNCLIST2_funclist(p: yacc.YaccProduction):
 
 def p_funcdef(p: yacc.YaccProduction):
     """FUNCDEF : DEF IDENT LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE"""
-    next_label = new_label()
+    next_label = generate_new_label()
     if len(p) < 3:
         p[0] = {'code': ''}
 
@@ -386,7 +387,7 @@ def p_returnstat(p: yacc.YaccProduction):
 def p_ifstat(p: yacc.YaccProduction):
     """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT"""
     temp_var = p[3]['temp_var']
-    next_label = new_label()
+    next_label = generate_new_label()
 
     else_start_label = p[8].get('start_label', None)
     cond_false_next_label = else_start_label if else_start_label else next_label
@@ -410,7 +411,7 @@ def p_elsestat(p: yacc.YaccProduction):
             'code': "",
         }
     else:
-        start_label = new_label()
+        start_label = generate_new_label()
         p[0] = {
             'code': start_label + ':\n' + p[3]['code'],
             'start_label': start_label
@@ -419,7 +420,7 @@ def p_elsestat(p: yacc.YaccProduction):
 
 def p_forstat(p: yacc.YaccProduction):
     """FORSTAT : FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES new_for_loop_label LEFTBRACE STATELIST RIGHTBRACE"""
-    start_label = new_label()
+    start_label = generate_new_label()
     next_label = gci.label
     cond_code_body = p[6]['code']
     cond_temp_var = p[6]['temp_var']
