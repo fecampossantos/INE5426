@@ -60,8 +60,6 @@ def p_prog_statment(p: yacc.YaccProduction):
                | FUNCLIST
                | empty
     """
-    print(type(p[0]))
-    print(type(p[1]))
     p[0] = p[1]['code']
 
 def p_funclist_funcdef(p: yacc.YaccProduction):
@@ -220,8 +218,11 @@ def p_funccall_or_exp_plus(p: yacc.YaccProduction):
     }
 
 def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
-    """EXPR_OR_FCALL : STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
-
+    """EXPR_OR_FCALL : INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                     | STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+                     | FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
+    """
+    
     lvalue = temp_variable()
     code = f'{lvalue} = {p[1]}\n'
     for i in range(2, 5):
@@ -419,7 +420,7 @@ def p_elsestat(p: yacc.YaccProduction):
 
 
 def p_forstat(p: yacc.YaccProduction):
-    """FORSTAT : FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES new_for_loop_label LEFTBRACE STATELIST RIGHTBRACE"""
+    """FORSTAT : new_for_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE"""
     start_label = generate_new_label()
     next_label = gci.label
     cond_code_body = p[6]['code']

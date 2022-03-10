@@ -9,6 +9,7 @@
 
 
 import json
+import linecache
 import sys
 import os
 from prettytable import PrettyTable
@@ -17,10 +18,9 @@ from CC2021.lexer.lexer import Lexer
 from CC2021.parser.parser import parser
 from CC2021.semantic.semantic import semantic_parse
 from CC2021.semantic.gci import code
-from CC2021.exceptions import ExceptionAsBreakOutsideLoop, ExceptionAsInvalidIdentifierDeclaration
+from CC2021.exceptions import *
 
 from utils.printer import print_symbols_table, print_token_list, print_tokens_table
-
 
 def get_info(lexer):
     TYPES_CHECK = ['int', 'float', 'string', 'def']
@@ -87,8 +87,8 @@ def main(data):
     if not passed_parsing:
         print('Syntatic error on line %s' % wrong_token.lineno)
         print('Token: %s' % wrong_token)
-        print('\n')
-        print('\n')
+        print('\n\n')
+        sys.exit(1)
     else:
       print('Syntatic Analysis succesfull! \n')
     
@@ -96,23 +96,28 @@ def main(data):
 
     try:
         semantic_rslt = semantic_parse(data)
-        with open('semantic_analysis.json', 'w') as f:
-            json.dump(semantic_rslt, f, indent=2, sort_keys=False)
+
+        print('Success! All break statement is in for scope')
 
     except ExceptionAsBreakOutsideLoop as e:
         print("Caught break ouside loop at line " + e)
     except ExceptionAsInvalidIdentifierDeclaration as e:
         print("Caught invalid identifier declaration inside scope at line " + e)
 
-    print('Análise Semântica exportada para o arquivo semantic_analysis.json')
 
+    print('All arithmetic expressions are valid.')
+    print('Variable declarations by scope are valid.')
+    print('Semantic Analysis exported to semantic_analysis.json')
+    
+    with open('semantic_analysis.json', 'w') as f:
+            json.dump(semantic_rslt, f, indent=2, sort_keys=False)
     intermediary_code = code(data)
 
    
     with open('intermediary_code.txt', 'w') as f:
         f.write(intermediary_code)
 
-    print('Código Intermediário exportado para o arquivo intermediary_code.txt')
+    print('Intermediate code exported to intermediary_code.txt file')
 
     return
 
