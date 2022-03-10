@@ -379,11 +379,15 @@ def p_readstat(p: yacc.YaccProduction):
         }
 
 def p_returnstat(p: yacc.YaccProduction):
-    """RETURNSTAT : RETURN"""
+    """RETURNSTAT : RETURN OPT_LVALUE"""
     p[0] = {
         'code': f'{p[1]}\n'
         }
 
+def p_opt_lvalue(p: yacc.YaccProduction):
+    """OPT_LVALUE : LVALUE
+                    | empty"""
+    p[0] = p[1]
 
 def p_ifstat(p: yacc.YaccProduction):
     """IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE ELSESTAT"""
