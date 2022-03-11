@@ -142,7 +142,6 @@ if __name__ == '__main__':
       paths = [
         'src/examples/exemplo1.lcc',
         'src/examples/exemplo2.lcc',
-        # 'src/examples/exemplo1-professor.lcc',
         'src/examples/exemplo2-professor.lcc',
         'src/examples/prog1.lcc',
         'src/examples/utils3.lcc',

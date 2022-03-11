@@ -9,6 +9,7 @@ filepath=src/examples/exemplo1.lcc
 run: 
 		rm -rf venv/
 		rm -rf semantic_analysis.json
+		rm -rf intermediary_code.txt
 		python3 -m venv $(VENV)
 		. $(VENV)/bin/activate
 		$(PIP) install -r requirements.txt
