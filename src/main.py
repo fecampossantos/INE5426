@@ -9,18 +9,13 @@
 
 
 import json
-import linecache
 import sys
-import os
-from prettytable import PrettyTable
 
 from CC2021.lexer.lexer import Lexer
 from CC2021.parser.parser import parser
 from CC2021.semantic.semantic import semantic_parse
 from CC2021.semantic.gci import code
 from CC2021.exceptions import *
-
-from utils.printer import print_symbols_table, print_token_list, print_tokens_table
 
 def get_info(lexer):
     TYPES_CHECK = ['int', 'float', 'string', 'def']
@@ -78,9 +73,23 @@ def main(data):
     lexer.input(data)
 
     token_list, tokens_values, tokens_table, symbols_table = get_info(lexer)
-    # print_tokens_table(tokens_table)
-    # print_token_list(tokens_values)
-    # print_symbols_table(symbols_table)
+
+    with open('token_list.txt', 'w') as f:
+        f.write(str(token_list))
+    print('Tokens list exported to token_list.txt')
+
+    with open('tokens_values.json', 'w') as f:
+            json.dump(tokens_values, f, indent=2, sort_keys=False)
+    print('Tokens values exported to tokens_values.json')
+
+    with open('tokens_table.json', 'w') as f:
+            json.dump(tokens_table, f, indent=2, sort_keys=False)
+    print('Tokens table exported to tokens_table.json')
+
+    with open('symbols_table.json', 'w') as f:
+            json.dump(symbols_table, f, indent=2, sort_keys=False)
+    print('Symbols table exported to symbols_table.json')
+
 
     passed_parsing, wrong_token = parser.parse(tokens=token_list)
 
