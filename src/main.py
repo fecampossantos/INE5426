@@ -102,11 +102,11 @@ def main(data):
         print('Variable declarations by scope are valid.')
 
     except ExceptionAsBreakOutsideLoop as e:
-        print("ERROR: Caught break ouside loop at line " + e)
+        print("ERROR: Caught break ouside loop at line " + str(e))
         sys.exit(1)
 
     except ExceptionAsInvalidIdentifierDeclaration as e:
-        print("ERROR: Caught invalid identifier declaration inside scope at line " + e)
+        print("ERROR: Caught invalid identifier declaration inside scope at line " + str(e))
         sys.exit(1)
 
     except ExceptionAsInvalidOperation as e:

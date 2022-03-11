@@ -1,0 +1,6 @@
+def mockFunction(int A) {
+    int C;
+    C = A + 5;
+    int C;
+    return C;
+}
