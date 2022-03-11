@@ -1,0 +1,19 @@
+VARDECL : TYPE "ident" ARRAY_OPT
+           
+TYPE : "int"
+         | "float"
+         | "string"
+            
+         
+ARRAY_OPT : "[" "int_constant" "]" ARRAY_OPT
+           | &
+
+
+FUNCDEF : "def" "ident" "(" PARAMLIST ")" "{" STATELIST "}"
+
+
+PARAMLIST : TYPE "ident" PARAMLIST2
+          | &
+       
+PARAMLIST2 : "," PARAMLIST
+             | &

@@ -1,0 +1,319 @@
+scope_list = ScopeStack()
+arithm_expressions: List[Tuple[Node, int]] = []
+getTypeOfVariable(ident, lineno)
+arithm_expressions_as_json()
+addNewScopeToList(is_loop: bool)
+checkIfIsValid(left, right, operation, lineno)
+
+
+new_loopScope : & { addNewScopeToList(is_loop=True) }
+addNewScopeToList : & { addNewScopeToList(is_loop=False) }
+
+PROGRAM : addNewScopeToList STATEMENT { PROGRAM.scopes = global_scope.as_json(); PROGRAM.arithm_expressions = arithm_expressions_as_json() }
+PROGRAM : addNewScopeToList FUNCLIST { PROGRAM.scopes = global_scope.as_json(); PROGRAM.arithm_expressions = arithm_expressions_as_json() }
+PROGRAM : & { global_scope = scope_list.pop() { PROGRAM.scopes = global_scope.as_json(); PROGRAM.arithm_expressions = arithm_expressions_as_json() }
+
+FUNCDEF : DEF IDENT addNewScopeToList LPARENTHESES PARAMLIST RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE { scope_list.pop(); scope = scope_list.seek(); entry = TableEntry(IDENT, 'function', [], lineno(IDENT)); scope.add_entry(entry); }
+
+PARAMLIST : TYPE IDENT PARAMLISTAUX { scope = scope_list.seek(); entry = TableEntry(IDENT, TYPE, [], lineno(IDENT)); scope.add_entry(entry) }
+
+TYPE : INT_KEYWORD { TYPE.sin = 'int' }
+
+TYPE : FLOAT_KEYWORD { TYPE.sin = 'float' }
+
+TYPE : STRING_KEYWORD { TYPE.sin = 'string' }
+
+STATEMENT : addNewScopeToList LEFTBRACE STATELIST RIGHTBRACE { scope_list.pop() }
+
+STATEMENT : BREAK SEMICOLON { 
+    current_scope = scope_list.seek();
+
+    while True:
+        if current_scope.is_loop:
+            break
+
+        current_scope = current_scope.upper_scope
+
+        if current_scope is None:
+            raise BreakWithoutLoopError(lineno(SEMICOLON)) }
+
+VARDECL : TYPE IDENT ARRAY_OPT { entry = TableEntry(IDENT, TYPE, ARRAY_OPT, lineno(IDENT))
+    scope = scope_list.seek()
+    scope.add_entry(entry)
+
+ARRAY_OPT : LBRACKET INTCONSTANT RBRACKET ARRAY_OPT1 { ARRAY_OPT.sin = [INTCONSTANT.sin, *ARRAY_OPT1.sin] }
+
+ARRAY_OPT : & { ARRAY_OPT.sin = [] }
+
+EXPR_OR_FCALL : PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR { 
+    right_node = FACTOR.node;
+
+    if OPT_UNARY_TERM.node:
+        result_type = checkIfIsValid(OPT_UNARY_TERM.node,
+                                 right_node,
+                                 OPT_UNARY_TERM.operation,
+                                 lineno(PLUS))
+
+        right_node = Node(OPT_UNARY_TERM.node,
+                          right_node,
+                          OPT_UNARY_TERM.operation,
+                          result_type)
+
+    if OPT_ARITHM.node:
+        result_type = checkIfIsValid(OPT_ARITHM.node,
+                                 right_node,
+                                 OPT_ARITHM.operation,
+                                 lineno(PLUS))
+        right_node = Node(OPT_ARITHM.node,
+                          right_node,
+                          OPT_ARITHM.operation,
+                          result_type)
+
+    arithm_expressions.append(right_node) }
+
+EXPR_OR_FCALL : MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR { 
+    right_node = FACTOR.node;
+    right_node.value *= -1
+
+    if OPT_UNARY_TERM.node:
+        result_type = checkIfIsValid(OPT_UNARY_TERM.node,
+                                 right_node,
+                                 OPT_UNARY_TERM.operation,
+                                 lineno(PLUS))
+
+        right_node = Node(OPT_UNARY_TERM.node,
+                          right_node,
+                          OPT_UNARY_TERM.operation,
+                          result_type)
+
+    if OPT_ARITHM.node:
+        result_type = checkIfIsValid(OPT_ARITHM.node,
+                                 right_node,
+                                 OPT_ARITHM.operation,
+                                 lineno(PLUS))
+        right_node = Node(OPT_ARITHM.node,
+                          right_node,
+                          OPT_ARITHM.operation,
+                          result_type)
+
+    arithm_expressions.append(right_node) }
+
+
+
+EXPR_OR_FCALL : INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR { 
+    node = Node(None, None, INTCONSTANT.sin, 'int');
+
+    if OPT_UNARY_TERM.node:
+        result_type = checkIfIsValid(node,
+                                 OPT_UNARY_TERM.node,
+                                 OPT_UNARY_TERM.operation,
+                                 lineno(OPT_UNARY_TERM))
+        node = Node(node, OPT_UNARY_TERM.node, OPT_UNARY_TERM.operation, result_type)
+
+    if OPT_ARITHM.node:
+        result_type = checkIfIsValid(node,
+                                 OPT_ARITHM.node,
+                                 OPT_ARITHM.operation,
+                                 lineno(OPT_ARITHM))
+        node = Node(node, OPT_ARITHM.node, OPT_ARITHM.operation, result_type)
+
+    EXPR_OR_FCALL.node = node
+
+    arithm_expressions.append((node, lineno(OPT_ARITHM))) }
+
+
+
+EXPR_OR_FCALL : FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR { 
+    node = Node(None, None, FLOATCONSTANT.sin, 'float');
+
+    if OPT_UNARY_TERM.node:
+        result_type = checkIfIsValid(node,
+                                 OPT_UNARY_TERM.node,
+                                 OPT_UNARY_TERM.operation,
+                                 lineno(OPT_UNARY_TERM))
+        node = Node(node, OPT_UNARY_TERM.node, OPT_UNARY_TERM.operation, result_type)
+
+    if OPT_ARITHM.node:
+        result_type = checkIfIsValid(node,
+                                 OPT_ARITHM.node,
+                                 OPT_ARITHM.operation,
+                                 lineno(OPT_ARITHM))
+        node = Node(node, OPT_ARITHM.node, OPT_ARITHM.operation, result_type)
+
+    EXPR_OR_FCALL.node = node
+
+    arithm_expressions.append((node, lineno(OPT_ARITHM))) }
+
+
+EXPR_OR_FCALL : STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR {
+    node = Node(None, None, STRINGCONSTANT.sin, 'string');
+
+    if OPT_UNARY_TERM.node:
+        result_type = checkIfIsValid(node,
+                                 OPT_UNARY_TERM.node,
+                                 OPT_UNARY_TERM.operation,
+                                 lineno(OPT_UNARY_TERM))
+        node = Node(node, OPT_UNARY_TERM.node, OPT_UNARY_TERM.operation, result_type)
+
+    if OPT_ARITHM.node:
+        result_type = checkIfIsValid(node,
+                                 OPT_ARITHM.node,
+                                 OPT_ARITHM.operation,
+                                 lineno(OPT_ARITHM))
+        node = Node(node, OPT_ARITHM.node, OPT_ARITHM.operation, result_type)
+
+    EXPR_OR_FCALL.node = node
+
+    arithm_expressions.append((node, lineno(OPT_ARITHM))) }
+
+EXPR_OR_FCALL : LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR { 
+    node = NUMEXPRESSION.node;
+
+    if OPT_UNARY_TERM:
+        result_type = checkIfIsValid(node,
+                                 OPT_UNARY_TERM.node,
+                                 OPT_UNARY_TERM.operation,
+                                 lineno(LPARENTHESES))
+        node = Node(node, OPT_UNARY_TERM.node, OPT_UNARY_TERM.operation, result_type)
+
+    if OPT_ARITHM:
+        result_type = checkIfIsValid(node,
+                                 OPT_ARITHM.node,
+                                 OPT_ARITHM.operation,
+                                 lineno(LPARENTHESES))
+        node = Node(node, OPT_ARITHM.node, OPT_ARITHM.operation, result_type)
+
+    EXPR_OR_FCALL.node = node;
+    arithm_expressions.append((node, lineno(LPARENTHESES))) }
+
+EXPR_OR_FCALL : IDENT AFTER_IDENT { 
+    node = Node(None, None, IDENT, getTypeOfVariable(IDENT, lineno(IDENT)));
+    if AFTER_IDENT:
+        node.value += AFTER_IDENT.vec_access
+        result_type = checkIfIsValid(node,
+                                 AFTER_IDENT.node,
+                                 AFTER_IDENT.operation,
+                                 lineno(IDENT))
+        node = Node(node, AFTER_IDENT.node, AFTER_IDENT.operation, result_type)
+        arithm_expressions.append((node, lineno(IDENT))) }
+
+AFTER_IDENT : OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR { 
+    node = None;
+    operation = '';
+    if OPT_UNARY_TERM:
+        node = OPT_UNARY_TERM.node
+        operation = OPT_UNARY_TERM.operation
+
+    if OPT_ARITHM:
+        if node is None:
+            node = OPT_ARITHM.node
+            operation = OPT_ARITHM.operation
+
+        else:
+            result_type = checkIfIsValid(node,
+                                     OPT_ARITHM.node,
+                                     OPT_ARITHM.operation,
+                                     lineno(AFTER_IDENT))
+            node = Node(node, OPT_ARITHM.node, OPT_ARITHM.operation, result_type)
+
+    AFTER_IDENT.vec_access = OPT_ALLOC_EXPR.sin
+    AFTER_IDENT.node = node
+    AFTER_IDENT.operation = operation}
+
+IFSTAT : IF LPARENTHESES EXPRESSION RPARENTHESES addNewScopeToList LEFTBRACE STATELIST RIGHTBRACE ELSESTAT { scope_list.pop() }
+
+ELSESTAT : ELSE addNewScopeToList LEFTBRACE STATELIST RIGHTBRACE { scope_list.pop() }
+
+FORSTAT : FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES new_loopScope LEFTBRACE STATELIST RIGHTBRACE { scope_list.pop() }
+
+ALLOCEXPRESSION : NEW TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR { arithm_expressions.append((NUMEXPRESSION.node, lineno(NEW))) }
+
+OPT_ALLOC_EXPR : & { OPT_ALLOC_EXPR.sin = ''
+
+OPT_ALLOC_EXPR : LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_NUMEXP1 { OPT_ALLOC_EXPR.sin = '[' + NUMEXPRESSION.node.id + ']' + OPT_ALLOC_NUMEXP1.sin; arithm_expressions.append((NUMEXPRESSION.node, lineno(NEW))) }
+
+EXPRESSION : NUMEXPRESSION OPT_CMP_EXPR { arithm_expressions.append((NUMEXPRESSION.node, lineno(NUMEXPRESSION))) }
+
+OPT_CMP_EXPR : CMP NUMEXPRESSION { arithm_expressions.append((NUMEXPRESSION.node, lineno(CMP))) }
+
+NUMEXPRESSION : TERM OPT_ARITHM {
+    if OPT_ARITHM.node:
+        NUMEXPRESSION.node = TERM.node
+
+    else:
+        result_type = checkIfIsValid(TERM.node,
+                                 OPT_ARITHM.node,
+                                 OPT_ARITHM.operation,
+                                 lineno(TERM))
+        NUMEXPRESSION.node = Node(TERM.node,
+                                  OPT_ARITHM.node,
+                                  OPT_ARITHM.operation,
+                                  result_type)}
+
+
+
+OPT_ARITHM : ARITHM TERM OPT_ARITHM1 { 
+    if OPT_ARITHM1.node:
+        result_type = checkIfIsValid(TERM.node,
+                                 OPT_ARITHM1.node,
+                                 OPT_ARITHM1.operation,
+                                 lineno(ARITHM))
+
+        OPT_ARITHM.node = Node(TERM.node, OPT_ARITHM1.node,
+                                        OPT_ARITHM1.operation, result_type),
+        OPT_ARITHM.operation = ARITHM.operation
+
+    else:
+        OPT_ARITHM.node = TERM.node,
+        OPT_ARITHM.operation = ARITHM.operation}
+
+
+
+ARITHM : PLUS { ARITHM.operation = '+' }
+
+
+ARITHM : MINUS { ARITHM.operation = '-' }
+
+TERM : UNARYEXPR OPT_UNARY_TERM {
+    if OPT_UNARY_TERM.node:
+        result_type = checkIfIsValid(UNARYEXPR.node,
+                                 OPT_UNARY_TERM.node,
+                                 OPT_UNARY_TERM.operation,
+                                 lineno(UNARYEXPR))
+
+        TERM.node = Node(UNARYEXPR.node, OPT_UNARY_TERM.node, OPT_UNARY_TERM.operation, result_type),
+        TERM.operation = OPT_UNARY_TERM.operation
+
+    else:
+        TERM.node = UNARYEXPR.node}
+
+
+
+OPT_UNARY_TERM : OPT_UNARY TERM { OPT_UNARY_TERM.node = TERM.node; OPT_UNARY_TERM.operation = OPT_UNARY.operation }
+
+OPT_UNARY : TIMES { OPT_UNARY.operation = '*' }
+
+OPT_UNARY : MODULE { OPT_UNARY.operation = '%' }
+
+OPT_UNARY : DIVIDE { OPT_UNARY.operation = '/' }
+
+UNARYEXPR : ARITHM FACTOR { 
+    if ARITHM.operation == '-':
+        FACTORnode.value *= -1
+    UNARYEXPR.node = FACTOR.node}
+
+UNARYEXPR : FACTOR { UNARYEXPR.node = FACTOR.node }
+
+FACTOR : INTCONSTANT { FACTOR.node = Node(None, None, INTCONSTANT.val, 'int') }
+
+FACTOR : FLOATCONSTANT { FACTOR.node = Node(None, None, FLOATCONSTANT.val, 'float') }
+
+FACTOR : STRINGCONSTANT { FACTOR.node = Node(None, None, STRINGCONSTANT.val, 'string') }
+
+FACTOR : NULL { FACTOR.node = Node(None, None, NULL.val, 'null') }
+
+FACTOR : LVALUE { FACTOR.node = LVALUE.node }
+
+FACTOR : LPARENTHESES NUMEXPRESSION RPARENTHESES { FACTOR.node = NUMEXPRESSION.node; arithm_expressions.append((NUMEXPRESSION.node, lineno(LPARENTHESES))) }
+
+LVALUE : IDENT OPT_ALLOC_EXPR { LVALUE.node = Node(None, None, IDENT.val + OPT_ALLOC_EXPR.sin, result_type=getTypeOfVariable(IDENT.val, lineno(IDENT))) }

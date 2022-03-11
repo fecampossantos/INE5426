@@ -1,0 +1,18 @@
+
+producao:
+    VARDECL : TYPE "ident" ARRAY_OPT { VARDECL.sin = addToScopeTable(ident.text, TYPE.type, ARRAY_OPT.sin, ident.lineno) }
+
+producao:
+    TYPE : "int" {TYPE.type = "int"}
+
+producao:
+    TYPE : "float" { TYPE.type = "float" }
+    
+producao:
+    TYPE : "string" { TYPE.type = "string" }
+
+producao:     
+    ARRAY_OPT : "[" "int_constant" "]" OPT_VECTOR1 { ARRAY_OPT.sin = concatena([int_constant.value], OPT_VECTOR1.sin) }
+
+producao:
+    ARRAY_OPT : & { ARRAY_OPT.sin = [] }

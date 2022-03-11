@@ -1,0 +1,31 @@
+addToScopeTable(identifier_label: str, datatype: str, dimesions: List[int], line: int)
+
+producao:
+    VARDECL : TYPE "ident" ARRAY_OPT
+regras semanticas:
+    VARDECL.sin = addToScopeTable(ident.text, TYPE.type, ARRAY_OPT.sin, ident.lineno)
+
+producao:
+    TYPE : "int"
+regras semanticas:
+    TYPE.type = "int"
+
+producao:
+    TYPE : "float"
+regras semanticas:
+    TYPE.type = "float"
+
+producao:
+    TYPE : "string"
+regras semanticas:
+    TYPE.type = "string"
+
+producao:     
+    ARRAY_OPT : "[" "int_constant" "]" \
+regras semanticas:
+    ARRAY_OPT.sin = concatena([int_constant.value], OPT_VECTOR1.sin)
+
+producao:
+    ARRAY_OPT : &
+regras semanticas:
+    ARRAY_OPT.sin = []
