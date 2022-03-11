@@ -1,6 +1,5 @@
 from CC2021.ply import yacc
 from CC2021.lexer.lexer import Lexer
-from CC2021.strucs import Scope, ScopeList, Node, ScopeEntry
 
 lexer = Lexer()
 lexer.build()
@@ -18,7 +17,6 @@ class GCI():
 gci = GCI()
 
 def temp_variable():
-    
     if len(free_var) > 1:
         var = free_var[:-1]
         fill_var.append(var)
