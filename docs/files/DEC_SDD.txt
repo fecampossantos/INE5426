@@ -1,4 +1,4 @@
-addToScopeTable(identifier_label: str, datatype: str, dimesions: List[int], line: int)
+addToScopeTable(identifier_label: str, type: str, dimesions: List[int], line: int)
 
 producao:
     VARDECL : TYPE "ident" ARRAY_OPT
