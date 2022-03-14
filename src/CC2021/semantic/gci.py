@@ -5,9 +5,9 @@ lexer = Lexer()
 lexer.build()
 tokens = lexer.tokens
 
-free_var = []   
-fill_var = []   
-label_num = 0   
+free_variables = []   
+already_used_variables = []   
+label_count = 0   
 
 class GCI():
     def __init__(self):
@@ -17,9 +17,9 @@ class GCI():
 gci = GCI()
 
 def temp_variable():
-    if len(free_var) > 1:
-        var = free_var[:-1]
-        fill_var.append(var)
+    if len(free_variables) > 1:
+        var = free_variables[:-1]
+        already_used_variables.append(var)
 
         return var
 
@@ -27,20 +27,16 @@ def temp_variable():
         i = 0
         while True:
             var = f't{i}'
-            if var not in fill_var:
-                fill_var.append(var)
+            if var not in already_used_variables:
+                already_used_variables.append(var)
                 return var
             i += 1
 
-def clean_var(var):
-    fill_var.remove(var)
-    free_var.append(var)
-
 
 def generate_new_label():
-    global label_num
-    label = f'LABEL{label_num}'
-    label_num += 1
+    global label_count
+    label = f'LABEL{label_count}'
+    label_count += 1
 
     return label
 
@@ -48,8 +44,8 @@ def p_empty(p: yacc.YaccProduction):
     """empty :"""
     pass
 
-def p_new_for_loop_label(p: yacc.YaccProduction):
-    """new_for_loop_label :"""
+def p_create_for_loop_label(p: yacc.YaccProduction):
+    """create_for_loop_label :"""
     new_label = generate_new_label()
     gci.label = new_label
 
@@ -60,14 +56,14 @@ def p_prog_statment(p: yacc.YaccProduction):
     """
     p[0] = p[1]['code']
 
-def p_funclist_funcdef(p: yacc.YaccProduction):
+def p_funclist(p: yacc.YaccProduction):
     """FUNCLIST : FUNCDEF FUNCLIST2"""
 
     p[0] = {
         'code': p[1]['code'] + p[2]['code']
     }
 
-def p_FUNCLIST2_funclist(p: yacc.YaccProduction):
+def p_funclist2(p: yacc.YaccProduction):
     """FUNCLIST2 : FUNCLIST
                    | empty
     """
@@ -87,7 +83,7 @@ def p_funcdef(p: yacc.YaccProduction):
             'code': f'goto {next_label}\n{p[2]}:\n{p[4]["code"]}{p[7]["code"]}\n{next_label}:\n'
         }
 
-def p_paralist_param(p: yacc.YaccProduction):
+def p_paralist(p: yacc.YaccProduction):
     """PARAMLIST : TYPE IDENT PARAMLIST2
                  | empty
     """
@@ -99,7 +95,7 @@ def p_paralist_param(p: yacc.YaccProduction):
             'code': 'from_params ' + p[2] + '\n' + p[3]['code']
         }
 
-def p_paramlistaux_paramlist(p: yacc.YaccProduction):
+def p_paramlist2(p: yacc.YaccProduction):
     """PARAMLIST2 : COMMA PARAMLIST
                     | empty
     """
@@ -109,7 +105,7 @@ def p_paramlistaux_paramlist(p: yacc.YaccProduction):
     else:
         p[0] = {'code': p[2]['code']}
 
-def p_datatype(p: yacc.YaccProduction):
+def p_type(p: yacc.YaccProduction):
     """TYPE : INT
                 | FLOAT
                 | STRING
@@ -120,29 +116,29 @@ def p_statement_vardecl(p: yacc.YaccProduction):
     """STATEMENT : VARDECL SEMICOLON"""
     p[0] = {'code': p[1]['code']}
 
-def p_statement_atrib(p: yacc.YaccProduction):
+def p_statement_atribstat(p: yacc.YaccProduction):
     """STATEMENT : ATRIBSTAT SEMICOLON"""
     p[0] = {'code': p[1]['code']}
 
-def p_statement_print(p: yacc.YaccProduction):
+def p_statement_printstat(p: yacc.YaccProduction):
     """STATEMENT : PRINTSTAT SEMICOLON"""
     p[0] = {'code': p[1]['code']}
 
-def p_statement_read(p: yacc.YaccProduction):
+def p_statement_readstat(p: yacc.YaccProduction):
     """STATEMENT : READSTAT SEMICOLON"""
     p[0] = {'code': p[1]['code']}
 
-def p_statement_return(p: yacc.YaccProduction):
+def p_statement_returnstat(p: yacc.YaccProduction):
     """STATEMENT : RETURNSTAT SEMICOLON"""
     p[0] = {'code': p[1]['code']}
 
-def p_statement_if(p: yacc.YaccProduction):
+def p_statement_ifstat(p: yacc.YaccProduction):
     """STATEMENT : IFSTAT"""
     p[0] = {
         'code': p[1]['code']
     }
 
-def p_statement_for(p: yacc.YaccProduction):
+def p_statement_forstat(p: yacc.YaccProduction):
     """STATEMENT : FORSTAT"""
     p[0] = {
         'code': p[1]['code']
@@ -172,7 +168,7 @@ def p_vardecl(p: yacc.YaccProduction):
         'code': f'{p[1]["code"]} {p[2]}{p[3]["code"]}\n'
     }
 
-def p_opt_vector(p: yacc.YaccProduction):
+def p_array_opt(p: yacc.YaccProduction):
     """ARRAY_OPT : LBRACKET INTCONSTANT RBRACKET ARRAY_OPT
                   | empty
     """
@@ -189,15 +185,15 @@ def p_atribstat(p: yacc.YaccProduction):
         'code': p[3]['code'] + p[1]['code'] + f'{p[1]["var_name"]} = {p[3]["temp_var"]}\n'
     }
 
-def p_atribright_func_or_exp(p: yacc.YaccProduction):
+def p_right_atrib_func_or_exp(p: yacc.YaccProduction):
     """RIGHT_ATRIB : EXPR_OR_FCALL"""
     p[0] = p[1]
 
-def p_atribright_alloc(p: yacc.YaccProduction):
+def p_right_atrib_alloc(p: yacc.YaccProduction):
     """RIGHT_ATRIB : ALLOCEXPRESSION"""
     p[0] = p[1]
 
-def p_funccall_or_exp_plus(p: yacc.YaccProduction):
+def p_expr_or_fcall_plusMinus(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
                               | MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     code = ''
@@ -215,7 +211,7 @@ def p_funccall_or_exp_plus(p: yacc.YaccProduction):
         'code': code
     }
 
-def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
+def p_expr_or_fcall_intStringFloat(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
                      | STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
                      | FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
@@ -236,7 +232,7 @@ def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
         'code': code
     }
 
-def p_funccall_or_exp_null(p: yacc.YaccProduction):
+def p_expr_or_fcall_null(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : NULL OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
 
     code = ''
@@ -254,7 +250,7 @@ def p_funccall_or_exp_null(p: yacc.YaccProduction):
         'code': code
     }
 
-def p_funccall_or_exp_parentesis(p: yacc.YaccProduction):
+def p_expr_or_fcall_parentheses(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
 
     code = p[2]['code']
@@ -272,7 +268,7 @@ def p_funccall_or_exp_parentesis(p: yacc.YaccProduction):
         'code': code
     }
 
-def p_funccall_or_exp_ident(p: yacc.YaccProduction):
+def p_expr_or_fcall_ident(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : IDENT AFTER_IDENT"""
 
     if p[2]['funcall']:
@@ -296,7 +292,7 @@ def p_funccall_or_exp_ident(p: yacc.YaccProduction):
             'temp_var': p[1]
         }
 
-def p_follow_ident_alloc(p: yacc.YaccProduction):
+def p_after_ident_optAlloc(p: yacc.YaccProduction):
     """AFTER_IDENT : OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
 
     idx = ''
@@ -321,7 +317,7 @@ def p_follow_ident_alloc(p: yacc.YaccProduction):
             'funcall': False
         }
 
-def p_follow_ident_parentesis(p: yacc.YaccProduction):
+def p_after_ident_parentheses(p: yacc.YaccProduction):
     """AFTER_IDENT : LPARENTHESES PARAMLISTCALL RPARENTHESES """
 
     func_ident = p[-1]
@@ -349,7 +345,7 @@ def p_paramlistcall_ident(p: yacc.YaccProduction):
             'nparams': p[2]['nparams']
         }
 
-def p_paramlistcallaux(p: yacc.YaccProduction):
+def p_paramlistcall2(p: yacc.YaccProduction):
     """PARAMLISTCALL2 : COMMA PARAMLISTCALL
                         | empty
     """
@@ -422,25 +418,25 @@ def p_elsestat(p: yacc.YaccProduction):
 
 
 def p_forstat(p: yacc.YaccProduction):
-    """FORSTAT : new_for_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE"""
-    start_label = generate_new_label()
+    """FORSTAT : create_for_loop_label FOR LPARENTHESES ATRIBSTAT SEMICOLON EXPRESSION SEMICOLON ATRIBSTAT RPARENTHESES LEFTBRACE STATELIST RIGHTBRACE"""
+    starting_label = generate_new_label()
     next_label = gci.label
-    cond_code_body = p[6]['code']
-    cond_temp_var = p[6]['temp_var']
+    code_conditionalBody = p[6]['code']
+    temporary_variable = p[6]['temp_var']
 
-    first_atrib_code = p[4]['code'] + '\n'
-    cond_code = f'if False {cond_temp_var} goto {next_label}\n'
-    body_code = p[11]['code']
-    increment_code = p[8]['code']
-    go_to_start_code = f'goto {start_label}\n'
+    code_loopFirstAtribution = p[4]['code'] + '\n'
+    code_conditional = f'if False {temporary_variable} goto {next_label}\n'
+    code_body = p[11]['code']
+    code_incrementVar = p[8]['code']
+    code_gotoStart = f'goto {starting_label}\n'
 
-    code = first_atrib_code +\
-        start_label + ':\n' +\
-        cond_code_body +\
-        cond_code +\
-        body_code +\
-        increment_code +\
-        go_to_start_code +\
+    code = code_loopFirstAtribution +\
+        starting_label + ':\n' +\
+        code_conditionalBody +\
+        code_conditional +\
+        code_body +\
+        code_incrementVar +\
+        code_gotoStart +\
         next_label + ':\n'
 
     p[0] = {
@@ -465,7 +461,7 @@ def p_opt_statelist(p: yacc.YaccProduction):
         p[0] = {'code': ''}
 
 
-def p_allocexp(p: yacc.YaccProduction):
+def p_allocexpression(p: yacc.YaccProduction):
     """ALLOCEXPRESSION : NEW TYPE LBRACKET NUMEXPRESSION RBRACKET OPT_ALLOC_EXPR"""
 
     temp_var = temp_variable()
@@ -511,7 +507,7 @@ def p_expression(p: yacc.YaccProduction):
     }
 
 
-def p_opt_rel_op_num_expr(p: yacc.YaccProduction):
+def p_opt_cmp_expr(p: yacc.YaccProduction):
     """OPT_CMP_EXPR : CMP NUMEXPRESSION
                     | empty
     """
@@ -526,32 +522,32 @@ def p_opt_rel_op_num_expr(p: yacc.YaccProduction):
         }
 
 
-def p_relop_lt(p: yacc.YaccProduction):
+def p_cmp_lt(p: yacc.YaccProduction):
     """CMP : LT"""
     p[0] = {'code': '<'}
 
 
-def p_relop_gt(p: yacc.YaccProduction):
+def p_cmp_gt(p: yacc.YaccProduction):
     """CMP : GT"""
     p[0] = {'code': '>'}
 
 
-def p_relop_lte(p: yacc.YaccProduction):
+def p_cmp_le(p: yacc.YaccProduction):
     """CMP : LE"""
     p[0] = {'code': '<='}
 
 
-def p_relop_gte(p: yacc.YaccProduction):
+def p_cmp_ge(p: yacc.YaccProduction):
     """CMP : GE"""
     p[0] = {'code': '>='}
 
 
-def p_relop_eq(p: yacc.YaccProduction):
+def p_cmp_eq(p: yacc.YaccProduction):
     """CMP : EQUALS"""
     p[0] = {'code': '=='}
 
 
-def p_relop_neq(p: yacc.YaccProduction):
+def p_cmp_different(p: yacc.YaccProduction):
     """CMP : DIFFERENT"""
     p[0] = {'code': '!='}
 
@@ -572,7 +568,7 @@ def p_numexp(p: yacc.YaccProduction):
         }
 
 
-def p_rec_plus_minus(p: yacc.YaccProduction):
+def p_opt_arithm(p: yacc.YaccProduction):
     """OPT_ARITHM : ARITHM TERM OPT_ARITHM
                     | empty
     """
@@ -599,7 +595,7 @@ def p_rec_plus_minus(p: yacc.YaccProduction):
         }
 
 
-def p_operators(p: yacc.YaccProduction):
+def p_plus(p: yacc.YaccProduction):
     """ARITHM : PLUS
                      | MINUS
        OPT_UNARY : TIMES
@@ -624,7 +620,7 @@ def p_term_unary_exp(p: yacc.YaccProduction):
         p[0] = p[1]
 
 
-def p_rec_unaryexp_op(p: yacc.YaccProduction):
+def p_opt_unary_term(p: yacc.YaccProduction):
     """OPT_UNARY_TERM : OPT_UNARY TERM
                      | empty
     """
@@ -639,7 +635,7 @@ def p_rec_unaryexp_op(p: yacc.YaccProduction):
         }
 
 
-def p_rec_unaryexp_plusminus(p: yacc.YaccProduction):
+def p_unaryexpr_arithm_factor(p: yacc.YaccProduction):
     """UNARYEXPR : ARITHM FACTOR"""
     p[0] = {
         'code': p[2]['code'] + f'{p[1]["code"]}{p[2]["code"]}\n',
@@ -647,12 +643,12 @@ def p_rec_unaryexp_plusminus(p: yacc.YaccProduction):
     }
 
 
-def p_rec_unaryexp_factor(p: yacc.YaccProduction):
+def p_unaryexp_factor(p: yacc.YaccProduction):
     """UNARYEXPR : FACTOR"""
     p[0] = p[1]
 
 
-def p_factor_const(p: yacc.YaccProduction):
+def p_factor_constants_or_null(p: yacc.YaccProduction):
     """FACTOR : INTCONSTANT
               | FLOATCONSTANT
               | STRINGCONSTANT
@@ -672,7 +668,7 @@ def p_factor_lvalue(p: yacc.YaccProduction):
     }
 
 
-def p_factor_expr(p: yacc.YaccProduction):
+def p_factor_parentheses(p: yacc.YaccProduction):
     """FACTOR : LPARENTHESES NUMEXPRESSION RPARENTHESES"""
     p[0] = p[2]
 

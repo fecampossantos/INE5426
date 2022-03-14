@@ -138,7 +138,7 @@ def p_paramlistaux_paramlist(p: yacc.YaccProduction):
     pass
 
 
-def p_datatype(p: yacc.YaccProduction):
+def p_type(p: yacc.YaccProduction):
     """TYPE : INT
                 | FLOAT
                 | STRING
