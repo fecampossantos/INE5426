@@ -185,7 +185,7 @@ def p_atribstat(p: yacc.YaccProduction):
         'code': p[3]['code'] + p[1]['code'] + f'{p[1]["var_name"]} = {p[3]["temp_var"]}\n'
     }
 
-def p_right_atrib_func_or_exp(p: yacc.YaccProduction):
+def p_right_atrib_expr_or_fcall(p: yacc.YaccProduction):
     """RIGHT_ATRIB : EXPR_OR_FCALL"""
     p[0] = p[1]
 

@@ -103,7 +103,7 @@ def p_funclist_funcdef(p: yacc.YaccProduction):
     pass
 
 
-def p_FUNCLIST2_funclist(p: yacc.YaccProduction):
+def p_funclist2(p: yacc.YaccProduction):
     """FUNCLIST2 : FUNCLIST
                    | empty
     """
@@ -121,7 +121,7 @@ def p_funcdef(p: yacc.YaccProduction):
     scope.addToScopeTable(scopeEntry)
 
 
-def p_paralist_param(p: yacc.YaccProduction):
+def p_paralist(p: yacc.YaccProduction):
     """PARAMLIST : TYPE IDENT PARAMLIST2
                  | empty
     """
@@ -131,7 +131,7 @@ def p_paralist_param(p: yacc.YaccProduction):
         scope.addToScopeTable(scopeEntry)
 
 
-def p_paramlistaux_paramlist(p: yacc.YaccProduction):
+def p_paramlist2(p: yacc.YaccProduction):
     """PARAMLIST2 : COMMA PARAMLIST
                     | empty
     """
@@ -151,32 +151,32 @@ def p_statement_vardecl(p: yacc.YaccProduction):
     pass
 
 
-def p_statement_atrib(p: yacc.YaccProduction):
+def p_statement_atribstat(p: yacc.YaccProduction):
     """STATEMENT : ATRIBSTAT SEMICOLON"""
     pass
 
 
-def p_statement_print(p: yacc.YaccProduction):
+def p_statement_printstat(p: yacc.YaccProduction):
     """STATEMENT : PRINTSTAT SEMICOLON"""
     pass
 
 
-def p_statement_read(p: yacc.YaccProduction):
+def p_statement_readstat(p: yacc.YaccProduction):
     """STATEMENT : READSTAT SEMICOLON"""
     pass
 
 
-def p_statement_return(p: yacc.YaccProduction):
+def p_statement_returnstat(p: yacc.YaccProduction):
     """STATEMENT : RETURNSTAT SEMICOLON"""
     pass
 
 
-def p_statement_if(p: yacc.YaccProduction):
+def p_statement_ifstat(p: yacc.YaccProduction):
     """STATEMENT : IFSTAT"""
     pass
 
 
-def p_statement_for(p: yacc.YaccProduction):
+def p_statement_forstat(p: yacc.YaccProduction):
     """STATEMENT : FORSTAT"""
     pass
 
@@ -215,7 +215,7 @@ def p_vardecl(p: yacc.YaccProduction):
     scope.addToScopeTable(scopeEntry)
 
 
-def p_opt_vector(p: yacc.YaccProduction):
+def p_array_opt(p: yacc.YaccProduction):
     """ARRAY_OPT : LBRACKET INTCONSTANT RBRACKET ARRAY_OPT
                   | empty
     """
@@ -230,17 +230,17 @@ def p_atribstat(p: yacc.YaccProduction):
     pass
 
 
-def p_atribright_func_or_exp(p: yacc.YaccProduction):
+def p_right_atrib_expr_or_fcall(p: yacc.YaccProduction):
     """RIGHT_ATRIB : EXPR_OR_FCALL"""
     pass
 
 
-def p_atribright_alloc(p: yacc.YaccProduction):
+def p_right_atrib_alloc(p: yacc.YaccProduction):
     """RIGHT_ATRIB : ALLOCEXPRESSION"""
     pass
 
 
-def p_funccall_or_exp_plus(p: yacc.YaccProduction):
+def p_expr_or_fcall_plus(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : PLUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR
                               | MINUS FACTOR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     right = p[2]['node']
@@ -264,7 +264,7 @@ def p_funccall_or_exp_plus(p: yacc.YaccProduction):
     arithm_expressions.append(right)
 
 
-def p_funccal_or_exp_int_const(p: yacc.YaccProduction):
+def p_expr_or_fcall_int_const(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : INTCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     left = Node(value=p[1], type='int')
 
@@ -289,7 +289,7 @@ def p_funccal_or_exp_int_const(p: yacc.YaccProduction):
     arithm_expressions.append((left, p.lineno(2)))
 
 
-def p_funccal_or_exp_float_const(p: yacc.YaccProduction):
+def p_expr_or_fcall_float_const(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : FLOATCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     left = Node(value=p[1], type='float')
 
@@ -314,7 +314,7 @@ def p_funccal_or_exp_float_const(p: yacc.YaccProduction):
     arithm_expressions.append((left, p.lineno(2)))
 
 
-def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
+def p_expr_or_fcall_string_const(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : STRINGCONSTANT OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     left = Node(value=p[1],type= 'string')
 
@@ -339,12 +339,12 @@ def p_funccal_or_exp_string_const(p: yacc.YaccProduction):
     arithm_expressions.append((left, p.lineno(1)))
 
 
-def p_funccall_or_exp_null(p: yacc.YaccProduction):
+def p_expr_or_fcall_null(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : NULL OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     pass
 
 
-def p_funccall_or_exp_parentesis(p: yacc.YaccProduction):
+def p_expr_or_fcall_parentheses(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : LPARENTHESES NUMEXPRESSION RPARENTHESES OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     left = p[2]['node']
 
@@ -369,7 +369,7 @@ def p_funccall_or_exp_parentesis(p: yacc.YaccProduction):
     arithm_expressions.append((left, p.lineno(1)))
 
 
-def p_funccall_or_exp_ident(p: yacc.YaccProduction):
+def p_expr_or_fcall_ident(p: yacc.YaccProduction):
     """EXPR_OR_FCALL : IDENT AFTER_IDENT"""
     left = Node(value=p[1],type= getTypeOfVariable(p[1], p.lineno(1)))
 
@@ -387,7 +387,7 @@ def p_funccall_or_exp_ident(p: yacc.YaccProduction):
         arithm_expressions.append((left, p.lineno(1)))
 
 
-def p_follow_ident_alloc(p: yacc.YaccProduction):
+def p_after_ident_alloc(p: yacc.YaccProduction):
     """AFTER_IDENT : OPT_ALLOC_EXPR OPT_UNARY_TERM OPT_ARITHM OPT_CMP_EXPR"""
     left = None
     operation = ''
@@ -415,7 +415,7 @@ def p_follow_ident_alloc(p: yacc.YaccProduction):
     }
 
 
-def p_follow_ident_parentesis(p: yacc.YaccProduction):
+def p_after_ident_parentheses(p: yacc.YaccProduction):
     """AFTER_IDENT : LPARENTHESES PARAMLISTCALL RPARENTHESES """
     pass
 
@@ -427,7 +427,7 @@ def p_paramlistcall_ident(p: yacc.YaccProduction):
     pass
 
 
-def p_paramlistcallaux(p: yacc.YaccProduction):
+def p_paramlistcall22(p: yacc.YaccProduction):
     """PARAMLISTCALL2 : COMMA PARAMLISTCALL
                         | empty
     """
@@ -509,7 +509,7 @@ def p_expression(p: yacc.YaccProduction):
     arithm_expressions.append((p[1]['node'], p.lineno(1)))
 
 
-def p_opt_rel_op_num_expr(p: yacc.YaccProduction):
+def p_opt_cmp_num_expr(p: yacc.YaccProduction):
     """OPT_CMP_EXPR : CMP NUMEXPRESSION
                     | empty
     """
@@ -520,31 +520,31 @@ def p_opt_rel_op_num_expr(p: yacc.YaccProduction):
         arithm_expressions.append((p[2]['node'], p.lineno(1)))
 
 
-def p_relop_lt(p: yacc.YaccProduction):
+def p_cmp_lt(p: yacc.YaccProduction):
     """CMP : LT"""
     pass
 
 
-def p_relop_gt(p: yacc.YaccProduction):
+def p_cmp_gt(p: yacc.YaccProduction):
     """CMP : GT"""
     pass
 
 
-def p_relop_lte(p: yacc.YaccProduction):
+def p_cmp_le(p: yacc.YaccProduction):
     """CMP : LE"""
     pass
 
 
-def p_relop_gte(p: yacc.YaccProduction):
+def p_cmp_ge(p: yacc.YaccProduction):
     """CMP : GE"""
     pass
 
-def p_relop_eq(p: yacc.YaccProduction):
+def p_cmp_eq(p: yacc.YaccProduction):
     """CMP : EQUALS"""
     pass
 
 
-def p_relop_neq(p: yacc.YaccProduction):
+def p_cmp_different(p: yacc.YaccProduction):
     """CMP : DIFFERENT"""
     pass
 
@@ -567,7 +567,7 @@ def p_numexp(p: yacc.YaccProduction):
         }
 
 
-def p_rec_plus_minus(p: yacc.YaccProduction):
+def p_opt_arithm(p: yacc.YaccProduction):
     """OPT_ARITHM : ARITHM TERM OPT_ARITHM
                     | empty
     """
@@ -634,14 +634,14 @@ def p_rec_unaryexp_op(p: yacc.YaccProduction):
         }
 
 
-def p_rec_unaryexp_times(p: yacc.YaccProduction):
+def p_rec_unaryexp_timesDivideMod(p: yacc.YaccProduction):
     """OPT_UNARY : TIMES
                     | DIVIDE
                     | MOD """
     p[0] = {'operation': p[1]}
 
 
-def p_rec_unaryexp_plusminus(p: yacc.YaccProduction):
+def p_rec_unaryexp_arithmfactor(p: yacc.YaccProduction):
     """UNARYEXPR : ARITHM FACTOR"""
     if p[1]['operation'] == '-':
         p[2]['node'].value *= -1
@@ -654,17 +654,17 @@ def p_rec_unaryexp_factor(p: yacc.YaccProduction):
     p[0] = p[1]
 
 
-def p_factor_int_cte(p: yacc.YaccProduction):
+def p_factor_int_constant(p: yacc.YaccProduction):
     """FACTOR : INTCONSTANT"""
     p[0] = {'node': Node(value=p[1], type='int')}
 
 
-def p_factor_float_cte(p: yacc.YaccProduction):
+def p_factor_float_constant(p: yacc.YaccProduction):
     """FACTOR : FLOATCONSTANT"""
     p[0] = {'node': Node(value=p[1], type='float')}
 
 
-def p_factor_string_cte(p: yacc.YaccProduction):
+def p_factor_string_constant(p: yacc.YaccProduction):
     """FACTOR : STRINGCONSTANT"""
     p[0] = {'node': Node(value=p[1], type='string')}
 
